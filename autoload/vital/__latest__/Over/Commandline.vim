@@ -163,6 +163,15 @@ function! s:base.execute()
 endfunction
 
 
+function! s:base.exit(...)
+	let self.variables.exit = get(a:, 1, 0)
+endfunction
+
+
+function! s:base.is_exit()
+	return has_key(self.variables, "exit")
+endfunction
+
 function! s:base.start(...)
 	try
 		call self._init()
@@ -178,6 +187,10 @@ function! s:base.start(...)
 				return
 			else
 				call self.insert(self.variables.input)
+			endif
+
+			if self.is_exit()
+				return
 			endif
 
 			call self._inputkey()

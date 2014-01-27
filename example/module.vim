@@ -6,12 +6,11 @@ let s:my = s:cmdline.make("$ ")
 
 
 " モジュールの生成
-" <C-v> で @* をペーストする
-let s:paste = {}
+let s:module = {}
 
 
-" キーが入力されて文字が挿入される前
-function! s:paste.on_charpre(cmdline)
+" キーが入力されて文字が挿入される前に呼ばれる関数
+function! s:module.on_charpre(cmdline)
 	" キー入力の判定
 	if a:cmdline.is_input("\<C-v>")
 		" コマンドラインに @* を挿入
@@ -19,12 +18,15 @@ function! s:paste.on_charpre(cmdline)
 
 		" 入力された文字が挿入されないように削除
 		call a:cmdline.setchar('')
+	elseif a:cmdline.is_input("\<C-c>")
+		" コマンドラインを終了する
+		call a:cmdline.exit()
 	endif
 endfunction
 
 
 " モジュールを追加
-call s:my.connect(s:paste)
+call s:my.connect(s:module)
 
 
 " コマンドラインの開始
