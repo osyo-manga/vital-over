@@ -205,6 +205,12 @@ function! s:base._init()
 endfunction
 
 
+function! s:base._finish()
+	call s:_hl_cursor_on()
+	let &t_ve = s:old_t_ve
+endfunction
+
+
 function! s:base.connect(module)
 	call add(self.modules, a:module)
 endfunction
@@ -334,7 +340,7 @@ function! s:base.start(...)
 	catch
 		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
 	finally
-		call s:_hl_cursor_on()
+		call self._finish()
 		call histadd("cmd", self.getline())
 		call self._leave()
 	endtry
