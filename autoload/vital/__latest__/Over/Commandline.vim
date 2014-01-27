@@ -3,6 +3,25 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+function! s:_vital_loaded(V)
+	let s:V = a:V
+	let s:Scroll = s:V.import('Over.Commandline.Scroll')
+	let s:CursorMove = s:V.import('Over.Commandline.CursorMove')
+	let s:Delete = s:V.import('Over.Commandline.Delete')
+	let s:Paste = s:V.import('Over.Commandline.Paste')
+endfunction
+
+
+function! s:_vital_depends()
+	return [
+\		'Over.Commandline.Scroll',
+\		'Over.Commandline.CursorMove',
+\		'Over.Commandline.Delete',
+\		'Over.Commandline.Paste',
+\	]
+endfunction
+
+
 
 let s:base = {
 \	"prompt" : "> ",
@@ -98,6 +117,7 @@ function! s:base.connect(module)
 	call add(self.modules, a:module)
 endfunction
 
+
 for s:_ in ["enter", "leave", "char", "charpre", "executepre", "execute", "cancel"]
 	execute join([
 \		"function! s:base._" . s:_ . "()",
@@ -111,6 +131,7 @@ for s:_ in ["enter", "leave", "char", "charpre", "executepre", "execute", "cance
 	endfunction
 endfor
 unlet s:_
+
 
 " Overridable
 function! s:base.keymappings()
@@ -243,105 +264,23 @@ endfunction
 
 
 
-
-
-
-
-
-
-let s:scroll = {}
-function! s:scroll.on_charpre(cmdline)
-	if a:cmdline.is_input("\<Plug>(over-cmdline-scroll-y)")
-		execute "normal! \<C-y>"
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<Plug>(over-cmdline-scroll-u)")
-		execute "normal! \<C-u>"
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<Plug>(over-cmdline-scroll-f)")
-		execute "normal! \<C-f>"
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<Plug>(over-cmdline-scroll-e)")
-		execute "normal! \<C-e>"
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<Plug>(over-cmdline-scroll-d)")
-		execute "normal! \<C-d>"
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<Plug>(over-cmdline-scroll-b)")
-		execute "normal! \<C-b>"
-		call a:cmdline.setchar('')
-	endif
-endfunction
-
-
 function! s:module_scroll()
-	return deepcopy(s:scroll)
-endfunction
-
-
-let s:cursor_move = {}
-function! s:cursor_move.on_charpre(cmdline)
-	if a:cmdline.is_input("\<C-f>")
-		call a:cmdline.line.next()
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-b>")
-		call a:cmdline.line.prev()
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-d>")
-		call a:cmdline.line.remove_pos()
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-a>")
-		call a:cmdline.setline(0)
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-e>")
-		call a:cmdline.setline(a:cmdline.line.length())
-		call a:cmdline.setchar('')
-	endif
+	return s:Scroll.make()
 endfunction
 
 
 function! s:module_cursor_move()
-	return deepcopy(s:cursor_move)
-endfunction
-
-
-
-let s:delete = {}
-function! s:delete.on_charpre(cmdline)
-	if a:cmdline.is_input("\<C-h>")
-		if a:cmdline.line.length() == 0
-			call a:cmdline.exit()
-		endif
-		call a:cmdline.line.remove_prev()
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-w>")
-		let backward = matchstr(a:cmdline.backward(), '^\zs.\{-}\ze\(\(\w*\)\|\(.\)\)$')
-		call a:cmdline.setline(backward . a:cmdline.line.pos_word() . a:cmdline.forward())
-		call a:cmdline.setline(strchars(backward))
-		call a:cmdline.setchar('')
-	elseif a:cmdline.is_input("\<C-u>")
-		call a:cmdline.setline(a:cmdline.line.pos_word() . a:cmdline.forward())
-		call a:cmdline.setline(0)
-		call a:cmdline.setchar('')
-	endif
+	return s:CursorMove.make()
 endfunction
 
 
 function! s:module_delete()
-	return deepcopy(s:delete)
-endfunction
-
-
-let s:paste = {}
-function! s:paste.on_charpre(cmdline)
-	if a:cmdline.is_input("\<C-v>")
-		call a:cmdline.insert(@*)
-		call a:cmdline.setchar('')
-	endif
+	return s:Delete.make()
 endfunction
 
 
 function! s:module_paste()
-	return deepcopy(s:paste)
+	return s:Paste.make()
 endfunction
 
 
