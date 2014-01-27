@@ -141,7 +141,7 @@ function! s:_echo_cmdline(cmdline)
 		execute "echohl" a:cmdline.highlights.Cursor
 		echon  ' '
 	else
-		execute "echohl" a:cmdline.highlights.CursornseInsert
+		execute "echohl" a:cmdline.highlights.CursorInsert
 		echon a:cmdline.line.pos_word()
 	endif
 	echohl NONE
@@ -183,6 +183,7 @@ function! s:base.start(...)
 
 		while !self.is_input(self.keys.quit)
 			if self.is_input(self.keys.enter)
+				call s:_redraw()
 				call self.execute()
 				return
 			else
@@ -190,6 +191,7 @@ function! s:base.start(...)
 			endif
 
 			if self.is_exit()
+				call s:_redraw()
 				return
 			endif
 
@@ -276,10 +278,10 @@ function! s:module_scroll()
 endfunction
 
 
-let s:move = {}
-function! s:move.on_charpre(cmdline)
+let s:cursor_move = {}
+function! s:cursor_move.on_charpre(cmdline)
 	if a:cmdline.is_input("\<C-f>")
-		call self.line.next()
+		call a:cmdline.line.next()
 		call a:cmdline.setchar('')
 	elseif a:cmdline.is_input("\<C-b>")
 		call a:cmdline.line.prev()
@@ -297,8 +299,8 @@ function! s:move.on_charpre(cmdline)
 endfunction
 
 
-function! s:module_move()
-	return deepcopy(s:move)
+function! s:module_cursor_move()
+	return deepcopy(s:cursor_move)
 endfunction
 
 
@@ -306,6 +308,9 @@ endfunction
 let s:delete = {}
 function! s:delete.on_charpre(cmdline)
 	if a:cmdline.is_input("\<C-h>")
+		if a:cmdline.line.length() == 0
+			call a:cmdline.exit()
+		endif
 		call a:cmdline.line.remove_prev()
 		call a:cmdline.setchar('')
 	elseif a:cmdline.is_input("\<C-w>")
