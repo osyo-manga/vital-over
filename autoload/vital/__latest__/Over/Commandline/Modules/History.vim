@@ -3,6 +3,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:module = {
+\	"name" : "History",
 \	"mode" : "cmd",
 \}
 

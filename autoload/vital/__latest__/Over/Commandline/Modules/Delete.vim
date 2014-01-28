@@ -3,7 +3,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:module = {}
+let s:module = {
+\	"name" : "Delete",
+\}
 function! s:module.on_charpre(cmdline)
 	if a:cmdline.is_input("\<C-h>")
 		if a:cmdline.line.length() == 0

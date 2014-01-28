@@ -10,6 +10,7 @@ let s:modules = [
 \	"Paste",
 \	"HistAdd",
 \	"History",
+\	"Incsearch",
 \]
 
 
@@ -39,7 +40,7 @@ let s:base = {
 \		"Cursor" : "OverCommandLineDefaultCursor",
 \		"CursorInsert" : "OverCommandLineDefaultCursorInsert"
 \	},
-\	"modules" : [],
+\	"modules" : {},
 \	"keys" : {
 \		"quit"  : "\<Esc>",
 \		"enter" : "\<CR>",
@@ -118,7 +119,7 @@ endfunction
 
 
 function! s:base.connect(module)
-	call add(self.modules, a:module)
+	let self.modules[a:module.name] = a:module
 endfunction
 
 
@@ -222,6 +223,7 @@ function! s:base.get(...)
 			else
 				call self.insert(self.variables.input)
 			endif
+			call self._char()
 
 			if self.is_exit()
 				call s:_redraw()
@@ -259,7 +261,7 @@ endfunction
 
 
 function! s:base._finish()
-	call s:_hl_cursor_on()
+	cal s:_hl_cursor_on()
 	let &t_ve = s:old_t_ve
 endfunction
 

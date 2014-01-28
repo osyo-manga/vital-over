@@ -4,11 +4,12 @@ set cpo&vim
 
 
 let s:module = {
+\	"name" : "HistAdd",
 \	"mode" : "cmd"
 \}
 
 function! s:module.on_leave(cmdline)
-	call histadd("cmd", a:cmdline.getline())
+	call histadd(self.mode, a:cmdline.getline())
 endfunction
 
 
