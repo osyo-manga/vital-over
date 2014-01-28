@@ -11,6 +11,18 @@ let s:modules = [
 \	"HistAdd",
 \	"History",
 \	"Incsearch",
+\	"BufferComplete",
+\]
+
+let s:modules_snake = [
+\	"scroll",
+\	"cursor_move",
+\	"delete",
+\	"paste",
+\	"histadd",
+\	"history",
+\	"incsearch",
+\	"buffer_complete",
 \]
 
 
@@ -86,6 +98,7 @@ endfunction
 function! s:base.wait_keyinput_off(key)
 	if self.variables.wait_key == a:key
 		let self.variables.wait_key = ""
+		return 1
 	endif
 endfunction
 
@@ -104,7 +117,7 @@ endfunction
 
 function! s:base.insert(word, ...)
 	if a:0
-		call self.set(a:1)
+		call self.line.set(a:1)
 	endif
 	call self.line.input(a:word)
 endfunction
@@ -149,7 +162,7 @@ function! s:make(prompt)
 	let result.prompt = a:prompt
 	return result
 endfunction
-
+" '<,'>s#\%V\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g
 
 function! s:make_simple(prompt)
 	let result = s:make(a:prompt)
@@ -158,6 +171,7 @@ function! s:make_simple(prompt)
 	call result.connect(s:module_cursor_move())
 	call result.connect(s:module_histadd())
 	call result.connect(s:module_history())
+	call result.connect(s:module_buffer_complete())
 	return result
 endfunction
 
@@ -280,14 +294,14 @@ endfunction
 
 
 
-for s:_ in s:modules
+for s:i in range(len(s:modules_snake))
 	execute join([
-\		"function! s:module_" . tolower(s:_) . "(...)",
-\		"	return call(s:" . s:_ . ".make, a:000, s:" . s:_ . ")",
+\		"function! s:module_" . s:modules_snake[s:i] . "(...)",
+\		"	return call(s:" . s:modules[s:i] . ".make, a:000, s:" . s:modules[s:i] . ")",
 \		"endfunction",
 \	], "\n")
 endfor
-unlet s:_
+unlet s:i
 
 
 
