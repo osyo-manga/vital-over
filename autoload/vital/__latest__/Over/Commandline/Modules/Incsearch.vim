@@ -4,10 +4,6 @@ set cpo&vim
 
 
 
-function! s:search_hl_on(pattern)
-endfunction
-
-
 let s:module = {
 \	"name" : "Incsearch",
 \	"highlights" : {
@@ -26,21 +22,20 @@ function! s:module.search_hl_off()
 	endif
 endfunction
 
+
 function! s:module.search_hl_on(pattern)
 	call self.search_hl_off()
 	let self.search_hl_id = matchadd(self.highlights.incserach, a:pattern)
 endfunction
+
 
 function! s:module.on_enter(...)
 	let self.old_pos = getpos(".")
 endfunction
 
 
-function! s:module.on_executepre(...)
-	call setpos(".", self.old_pos)
-endfunction
-
 function! s:module.on_leave(...)
+	call setpos(".", self.old_pos)
 	call self.search_hl_off()
 endfunction
 
@@ -50,8 +45,11 @@ function! s:module.on_char(cmdline)
 	let line = a:cmdline.getline()
 	let result = get(matchlist(line, self.pattern), 1, "")
 	if result != ""
-		call self.search_hl_on((&ignorecase ? '\c' : "") . result)
-		call search(result, self.search_flag)
+		let pos = searchpos(result, self.search_flag)
+		if pos == [0, 0]
+			return
+		endif
+		call self.search_hl_on('\%' . pos[0] . 'l' . (&ignorecase ? '\c' : "") . result)
 	endif
 endfunction
 

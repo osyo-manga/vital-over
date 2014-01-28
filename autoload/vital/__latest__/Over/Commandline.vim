@@ -183,7 +183,7 @@ function! s:base.execute()
 		execute self.getline()
 	catch
 		echohl ErrorMsg
-		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
+		echo v:throwpoint . " " . v:exception
 		echohl None
 	finally
 		call self._execute()
