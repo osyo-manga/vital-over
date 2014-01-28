@@ -9,6 +9,7 @@ function! s:_vital_loaded(V)
 	let s:CursorMove = s:V.import('Over.Commandline.Modules.CursorMove')
 	let s:Delete     = s:V.import('Over.Commandline.Modules.Delete')
 	let s:Paste      = s:V.import('Over.Commandline.Modules.Paste')
+	let s:HistAdd    = s:V.import('Over.Commandline.Modules.HistAdd')
 endfunction
 
 
@@ -18,6 +19,7 @@ function! s:_vital_depends()
 \		'Over.Commandline.Modules.CursorMove',
 \		'Over.Commandline.Modules.Delete',
 \		'Over.Commandline.Modules.Paste',
+\		'Over.Commandline.Modules.HistAdd',
 \	]
 endfunction
 
@@ -150,7 +152,8 @@ function! s:make_simple(prompt)
 	let result = s:make(a:prompt)
 	call result.connect(s:module_scroll())
 	call result.connect(s:module_delete())
-	call result.connect(s:module_move())
+	call result.connect(s:module_cursor_move())
+	call result.connect(s:module_histadd())
 	return result
 endfunction
 
@@ -193,7 +196,17 @@ function! s:base.is_exit()
 	return has_key(self.variables, "exit")
 endfunction
 
+
 function! s:base.start(...)
+	let result = call(self.get, a:000, self)
+	if result == ""
+		return
+	endif
+	call self.execute()
+endfunction
+
+
+function! s:base.get(...)
 	try
 		call self._init()
 		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
@@ -202,16 +215,14 @@ function! s:base.start(...)
 
 		while !self.is_input(self.keys.quit)
 			if self.is_input(self.keys.enter)
-				call s:_redraw()
-				call self.execute()
-				return
+				return self.getline()
 			else
 				call self.insert(self.variables.input)
 			endif
 
 			if self.is_exit()
 				call s:_redraw()
-				return
+				return ""
 			endif
 
 			call self._inputkey()
@@ -222,11 +233,10 @@ function! s:base.start(...)
 		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
 	finally
 		call self._finish()
-		call histadd("cmd", self.getline())
 		call self._leave()
 	endtry
+	return ""
 endfunction
-
 
 
 function! s:base._init()
@@ -279,6 +289,11 @@ endfunction
 
 function! s:module_paste()
 	return s:Paste.make()
+endfunction
+
+
+function! s:module_histadd(...)
+	return call(s:HistAdd.make, a:000, s:HistAdd)
 endfunction
 
 
