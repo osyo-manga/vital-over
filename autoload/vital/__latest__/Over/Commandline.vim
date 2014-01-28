@@ -125,7 +125,7 @@ endfunction
 
 for s:_ in ["enter", "leave", "char", "charpre", "executepre", "execute", "cancel"]
 	execute join([
-\		"function! s:base._" . s:_ . "()",
+\		"function! s:base._on_" . s:_ . "()",
 \		"	call map(copy(self.modules), 'has_key(v:val, \"on_" . s:_ . "\") ? v:val.on_" . s:_ . "(self) : 0')",
 \		"	call self.on_" . s:_ . "()",
 \		"endfunction",
@@ -178,16 +178,7 @@ endfunction
 
 
 function! s:base.execute()
-	call self._executepre()
-	try
-		execute self.getline()
-	catch
-		echohl ErrorMsg
-		echo v:throwpoint . " " . v:exception
-		echohl None
-	finally
-		call self._execute()
-	endtry
+	execute self.getline()
 endfunction
 
 
@@ -206,7 +197,7 @@ function! s:base.start(...)
 	if result == ""
 		return
 	endif
-	call self.execute()
+	call self._execute()
 endfunction
 
 
@@ -214,7 +205,7 @@ function! s:base.get(...)
 	try
 		call self._init()
 		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
-		call self._enter()
+		call self._on_enter()
 		call self._inputkey()
 
 		while !self.is_input(self.keys.quit)
@@ -223,7 +214,7 @@ function! s:base.get(...)
 			else
 				call self.insert(self.variables.input)
 			endif
-			call self._char()
+			call self._on_char()
 
 			if self.is_exit()
 				call s:_redraw()
@@ -232,13 +223,13 @@ function! s:base.get(...)
 
 			call self._inputkey()
 		endwhile
-		call self._cancel()
+		call self._on_cancel()
 		call s:_redraw()
 	catch
 		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
 	finally
 		call self._finish()
-		call self._leave()
+		call self._on_leave()
 	endtry
 	return ""
 endfunction
@@ -260,6 +251,20 @@ function! s:base._init()
 endfunction
 
 
+function! s:base._execute()
+	call self._on_executepre()
+	try
+		call self.execute()
+	catch
+		echohl ErrorMsg
+		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
+		echohl None
+	finally
+		call self._on_execute()
+	endtry
+endfunction
+
+
 function! s:base._finish()
 	cal s:_hl_cursor_on()
 	let &t_ve = s:old_t_ve
@@ -270,7 +275,7 @@ function! s:base._inputkey()
 	call s:_echo_cmdline(self)
 	let self.variables.char = s:_getchar()
 	call self.setchar(self.variables.char)
-	call self._charpre()
+	call self._on_charpre()
 endfunction
 
 
