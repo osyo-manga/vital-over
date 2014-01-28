@@ -197,8 +197,6 @@ function! s:base.start(...)
 	try
 		call self._init()
 		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
-	
-		call s:_hl_cursor_off()
 		call self._enter()
 		call self._inputkey()
 
