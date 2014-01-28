@@ -3,24 +3,26 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+let s:modules = [
+\	"Scroll",
+\	"CursorMove",
+\	"Delete",
+\	"Paste",
+\	"HistAdd",
+\	"History",
+\]
+
+
 function! s:_vital_loaded(V)
 	let s:V = a:V
-	let s:Scroll     = s:V.import('Over.Commandline.Modules.Scroll')
-	let s:CursorMove = s:V.import('Over.Commandline.Modules.CursorMove')
-	let s:Delete     = s:V.import('Over.Commandline.Modules.Delete')
-	let s:Paste      = s:V.import('Over.Commandline.Modules.Paste')
-	let s:HistAdd    = s:V.import('Over.Commandline.Modules.HistAdd')
+	for module in s:modules
+		let s:{module} = s:V.import('Over.Commandline.Modules.' . module)
+	endfor
 endfunction
 
 
 function! s:_vital_depends()
-	return [
-\		'Over.Commandline.Modules.Scroll',
-\		'Over.Commandline.Modules.CursorMove',
-\		'Over.Commandline.Modules.Delete',
-\		'Over.Commandline.Modules.Paste',
-\		'Over.Commandline.Modules.HistAdd',
-\	]
+	return map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
 endfunction
 
 
@@ -154,6 +156,7 @@ function! s:make_simple(prompt)
 	call result.connect(s:module_delete())
 	call result.connect(s:module_cursor_move())
 	call result.connect(s:module_histadd())
+	call result.connect(s:module_history())
 	return result
 endfunction
 
@@ -270,33 +273,14 @@ endfunction
 
 
 
-
-
-function! s:module_scroll()
-	return s:Scroll.make()
-endfunction
-
-
-function! s:module_cursor_move()
-	return s:CursorMove.make()
-endfunction
-
-
-function! s:module_delete()
-	return s:Delete.make()
-endfunction
-
-
-function! s:module_paste()
-	return s:Paste.make()
-endfunction
-
-
-function! s:module_histadd(...)
-	return call(s:HistAdd.make, a:000, s:HistAdd)
-endfunction
-
-
+for s:_ in s:modules
+	execute join([
+\		"function! s:module_" . tolower(s:_) . "(...)",
+\		"	return call(s:" . s:_ . ".make, a:000, s:" . s:_ . ")",
+\		"endfunction",
+\	], "\n")
+endfor
+unlet s:_
 
 
 
