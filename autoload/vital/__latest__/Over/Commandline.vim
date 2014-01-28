@@ -5,19 +5,19 @@ set cpo&vim
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
-	let s:Scroll = s:V.import('Over.Commandline.Scroll')
-	let s:CursorMove = s:V.import('Over.Commandline.CursorMove')
-	let s:Delete = s:V.import('Over.Commandline.Delete')
-	let s:Paste = s:V.import('Over.Commandline.Paste')
+	let s:Scroll     = s:V.import('Over.Commandline.Modules.Scroll')
+	let s:CursorMove = s:V.import('Over.Commandline.Modules.CursorMove')
+	let s:Delete     = s:V.import('Over.Commandline.Modules.Delete')
+	let s:Paste      = s:V.import('Over.Commandline.Modules.Paste')
 endfunction
 
 
 function! s:_vital_depends()
 	return [
-\		'Over.Commandline.Scroll',
-\		'Over.Commandline.CursorMove',
-\		'Over.Commandline.Delete',
-\		'Over.Commandline.Paste',
+\		'Over.Commandline.Modules.Scroll',
+\		'Over.Commandline.Modules.CursorMove',
+\		'Over.Commandline.Modules.Delete',
+\		'Over.Commandline.Modules.Paste',
 \	]
 endfunction
 
