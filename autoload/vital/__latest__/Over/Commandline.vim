@@ -162,7 +162,7 @@ function! s:make(prompt)
 	let result.prompt = a:prompt
 	return result
 endfunction
-" '<,'>s#\%V\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g
+
 
 function! s:make_simple(prompt)
 	let result = s:make(a:prompt)
