@@ -39,6 +39,25 @@ function! s:_vital_depends()
 endfunction
 
 
+function! s:make(prompt)
+	let result = deepcopy(s:base)
+	let result.prompt = a:prompt
+	return result
+endfunction
+
+
+function! s:make_simple(prompt)
+	let result = s:make(a:prompt)
+	call result.connect(s:module_scroll())
+	call result.connect(s:module_delete())
+	call result.connect(s:module_cursor_move())
+	call result.connect(s:module_histadd())
+	call result.connect(s:module_history())
+	call result.connect(s:module_buffer_complete())
+	return result
+endfunction
+
+
 
 let s:base = {
 \	"prompt" : "> ",
@@ -159,25 +178,6 @@ function! s:base.keymappings()
 endfunction
 
 
-function! s:make(prompt)
-	let result = deepcopy(s:base)
-	let result.prompt = a:prompt
-	return result
-endfunction
-
-
-function! s:make_simple(prompt)
-	let result = s:make(a:prompt)
-	call result.connect(s:module_scroll())
-	call result.connect(s:module_delete())
-	call result.connect(s:module_cursor_move())
-	call result.connect(s:module_histadd())
-	call result.connect(s:module_history())
-	call result.connect(s:module_buffer_complete())
-	return result
-endfunction
-
-
 function! s:_echo_cmdline(cmdline)
 	redraw
 	execute "echohl" a:cmdline.highlights.prompt
@@ -206,11 +206,6 @@ function! s:base.exit(...)
 endfunction
 
 
-function! s:base.is_exit()
-	return self.variables.exit
-endfunction
-
-
 function! s:base.start(...)
 	let result = call(self.get, a:000, self)
 	if result == ""
@@ -235,7 +230,7 @@ function! s:base.get(...)
 			endif
 			call self._on_char()
 
-			if self.is_exit()
+			if self._is_exit()
 				call s:_redraw()
 				return ""
 			endif
@@ -296,6 +291,11 @@ function! s:base._inputkey()
 	let self.variables.char = s:_getchar()
 	call self.setchar(self.variables.char)
 	call self._on_charpre()
+endfunction
+
+
+function! s:base._is_exit()
+	return self.variables.exit
 endfunction
 
 
