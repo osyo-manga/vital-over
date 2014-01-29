@@ -47,6 +47,7 @@ let s:base = {
 \		"char" : "",
 \		"input" : "",
 \		"wait_key" : "",
+\		"exit" : 0,
 \	},
 \	"highlights" : {
 \		"Cursor" : "OverCommandLineDefaultCursor",
@@ -197,12 +198,12 @@ endfunction
 
 
 function! s:base.exit(...)
-	let self.variables.exit = get(a:, 1, 0)
+	let self.variables.exit = get(a:, 1, 1)
 endfunction
 
 
 function! s:base.is_exit()
-	return has_key(self.variables, "exit")
+	return self.variables.exit
 endfunction
 
 
@@ -253,6 +254,7 @@ function! s:base._init()
 	let self.variables.wait_key = ""
 	let self.variables.char = ""
 	let self.variables.input = ""
+	let self.variables.exit = 0
 	let hl_cursor = s:_hl_cursor_off()
 	if !hlexists("OverCommandLineDefaultCursor")
 		execute "highlight OverCommandLineDefaultCursor " . hl_cursor
