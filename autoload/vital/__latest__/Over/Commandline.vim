@@ -207,10 +207,7 @@ endfunction
 
 function! s:base.start(...)
 	let result = call(self.get, a:000, self)
-	if result == ""
-		return
-	endif
-	call self._execute()
+	return self._execute()
 endfunction
 
 

@@ -75,7 +75,7 @@ exit()				*Vital.Over.Commandline-object-exit()*
 	コマンドラインを終了します。
 
 
-OVERRIDABLE			*Vital.Over.Commandline-object-overridable*
+CALLBACK			*Vital.Over.Commandline-object-callback*
 
 keymappings()			*Vital.Over.Commandline-object-keymappings()*
 	キーマッピングの辞書を返します。
@@ -96,12 +96,18 @@ on_char()			*Vital.Over.Commandline-object-on_char()*
 
 on_execute_pre()		*Vital.Over.Commandline-object-on_execute_pre()*
 	コマンドラインでコマンドが実行される直前に呼ばれる関数です。
+	コマンドラインが空でも呼ばれます。
 
 on_execute()			*Vital.Over.Commandline-object-on_execute()*
 	コマンドラインでコマンドが実行された後に呼ばれる関数です。
+	コマンドラインが空でも呼ばれます。
+
+on_execute_failed()	*Vital.Over.Commandline-object-on_execute_failed()*
+	コマンドラインでコマンドを実行し、失敗した時に呼ばれる関数です。
+	コマンドラインが空でも呼ばれます。
 
 on_cancel()			*Vital.Over.Commandline-object-on_cancel()*
-	コマンドラインがキャンセルされた時に呼ばれる関数です。
+	コマンドラインがキャンセル（<Esc>）された時に呼ばれる関数です。
 	exit() で終了された時には呼ばれません。
 
 
