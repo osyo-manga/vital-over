@@ -17,7 +17,7 @@ function! s:module.enter(...)
 	let s:count = 0
 endfunction
 
-function! s:module.on_charpre(cmdline)
+function! s:module.on_char_pre(cmdline)
 	if !a:cmdline.is_input("\<C-p>") && !a:cmdline.is_input("\<C-n>")
 		let s:cmdhist = []
 		let s:count = 0

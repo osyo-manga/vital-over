@@ -6,7 +6,7 @@ set cpo&vim
 let s:module = {
 \	"name" : "Scroll"
 \}
-function! s:module.on_charpre(cmdline)
+function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<Plug>(over-cmdline-scroll-y)")
 		execute "normal! \<C-y>"
 		call a:cmdline.setchar('')

@@ -157,7 +157,7 @@ function! s:base.connect(module)
 endfunction
 
 
-for s:_ in ["enter", "leave", "char", "charpre", "executepre", "execute", "cancel"]
+for s:_ in ["enter", "leave", "char", "char_pre", "execute_pre", "execute_failed", "execute", "cancel"]
 	execute join([
 \		"function! s:base._on_" . s:_ . "()",
 \		"	call map(copy(self.modules), 'has_key(v:val, \"on_" . s:_ . "\") ? v:val.on_" . s:_ . "(self) : 0')",
@@ -166,7 +166,6 @@ for s:_ in ["enter", "leave", "char", "charpre", "executepre", "execute", "cance
 \	], "\n")
 	
 	execute "function! s:base.on_" . s:_ . "()"
-		
 	endfunction
 endfor
 unlet s:_
@@ -267,13 +266,14 @@ endfunction
 
 
 function! s:base._execute()
-	call self._on_executepre()
+	call self._on_execute_pre()
 	try
 		call self.execute()
 	catch
 		echohl ErrorMsg
 		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
 		echohl None
+		call self._on_execute_failed()
 	finally
 		call self._on_execute()
 	endtry
@@ -290,7 +290,7 @@ function! s:base._inputkey()
 	call s:_echo_cmdline(self)
 	let self.variables.char = s:_getchar()
 	call self.setchar(self.variables.char)
-	call self._on_charpre()
+	call self._on_char_pre()
 endfunction
 
 

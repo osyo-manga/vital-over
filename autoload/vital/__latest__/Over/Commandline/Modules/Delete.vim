@@ -6,7 +6,7 @@ set cpo&vim
 let s:module = {
 \	"name" : "Delete",
 \}
-function! s:module.on_charpre(cmdline)
+function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-h>")
 		if a:cmdline.line.length() == 0
 			call a:cmdline.exit()

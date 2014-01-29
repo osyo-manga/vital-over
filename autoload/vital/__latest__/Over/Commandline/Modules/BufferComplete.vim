@@ -97,7 +97,7 @@ function! s:_finish()
 endfunction
 
 
-function! s:module.on_charpre(cmdline)
+function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<Tab>")
 		if self.complete(a:cmdline) == -1
 			call s:_finish()
@@ -121,7 +121,7 @@ function! s:module.on_charpre(cmdline)
 		endif
 	else
 		if a:cmdline.wait_keyinput_off("Completion")
-			call a:cmdline._on_charpre()
+			call a:cmdline._on_char_pre()
 		endif
 		call s:_finish()
 		return

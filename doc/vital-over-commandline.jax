@@ -86,7 +86,7 @@ on_enter()			*Vital.Over.Commandline-object-on_enter()*
 on_leave()			*Vital.Over.Commandline-object-on_leave()*
 	コマンドラインが終了された時に呼ばれる関数です
 
-on_charpre()			*Vital.Over.Commandline-object-on_charpre()*
+on_char_pre()			*Vital.Over.Commandline-object-on_char_pre()*
 	コマンドラインで文字が入力され、コマンドラインに挿入される前にに呼ばれ
 	る関数です
 
@@ -94,7 +94,7 @@ on_char()			*Vital.Over.Commandline-object-on_char()*
 	コマンドラインで文字が入力され、コマンドラインに挿入された後に呼ばれる
 	関数です。
 
-on_executepre()			*Vital.Over.Commandline-object-on_executepre()*
+on_execute_pre()		*Vital.Over.Commandline-object-on_execute_pre()*
 	コマンドラインでコマンドが実行される直前に呼ばれる関数です。
 
 on_execute()			*Vital.Over.Commandline-object-on_execute()*
