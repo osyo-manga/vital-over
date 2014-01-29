@@ -340,7 +340,7 @@ function! s:_hl_cursor_off()
 		silent highlight Cursor
 		redir END
 		let hl = substitute(matchstr(cursor, 'xxx \zs.*'), '[ \t\n]\+\|cleared', ' ', 'g')
-		if mode(1) == 'ce'
+		if &verbose != 0
 			let hl = substitute(hl, '\sLast\sset\sfrom.*', '', '')
 		endif
 		if !empty(substitute(hl, '\s', '', 'g'))
