@@ -50,8 +50,9 @@ let s:base = {
 \		"exit" : 0,
 \	},
 \	"highlights" : {
-\		"Cursor" : "OverCommandLineDefaultCursor",
-\		"CursorInsert" : "OverCommandLineDefaultCursorInsert"
+\		"prompt" : "NONE",
+\		"cursor" : "OverCommandLineDefaultCursor",
+\		"cursor_insert" : "OverCommandLineDefaultCursorInsert"
 \	},
 \	"modules" : {},
 \	"keys" : {
@@ -179,12 +180,15 @@ endfunction
 
 function! s:_echo_cmdline(cmdline)
 	redraw
-	echon a:cmdline.prompt . a:cmdline.backward()
+	execute "echohl" a:cmdline.highlights.prompt
+	echon a:cmdline.prompt
+	echohl NONE
+	echon a:cmdline.backward()
 	if empty(a:cmdline.line.pos_word())
-		execute "echohl" a:cmdline.highlights.Cursor
+		execute "echohl" a:cmdline.highlights.cursor
 		echon  ' '
 	else
-		execute "echohl" a:cmdline.highlights.CursorInsert
+		execute "echohl" a:cmdline.highlights.cursor_insert
 		echon a:cmdline.line.pos_word()
 	endif
 	echohl NONE
