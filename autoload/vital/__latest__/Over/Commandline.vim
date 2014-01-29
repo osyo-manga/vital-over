@@ -161,7 +161,7 @@ for s:_ in ["enter", "leave", "char", "char_pre", "execute_pre", "execute_failed
 	execute join([
 \		"function! s:base._on_" . s:_ . "()",
 \		"	call map(copy(self.modules), 'has_key(v:val, \"on_" . s:_ . "\") ? v:val.on_" . s:_ . "(self) : 0')",
-\		"	call self.on_" . s:_ . "()",
+\		"	return self.on_" . s:_ . "()",
 \		"endfunction",
 \	], "\n")
 	
@@ -272,7 +272,7 @@ function! s:base._execute()
 		echohl None
 		call self._on_execute_failed()
 	finally
-		call self._on_execute()
+		return self._on_execute()
 	endtry
 endfunction
 
