@@ -121,7 +121,7 @@ function! s:module.on_charpre(cmdline)
 		endif
 	else
 		if a:cmdline.wait_keyinput_off("Completion")
-			call a:cmdline.setchar('')
+			call a:cmdline._on_charpre()
 		endif
 		call s:_finish()
 		return
