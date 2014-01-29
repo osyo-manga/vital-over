@@ -6,7 +6,9 @@ let s:my = s:cmdline.make("$ ")
 
 
 " モジュールの生成
-let s:module = {}
+let s:module = {
+\   "name" : "Custom",
+\}
 
 
 " キーが入力されて文字が挿入される前に呼ばれる関数
