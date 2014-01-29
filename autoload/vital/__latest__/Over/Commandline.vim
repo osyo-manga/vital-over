@@ -242,8 +242,8 @@ function! s:base.get(...)
 
 			call self._inputkey()
 		endwhile
-		call self._on_cancel()
 		call s:_redraw()
+		call self._on_cancel()
 	catch
 		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
 	finally
