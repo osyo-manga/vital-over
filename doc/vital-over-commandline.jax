@@ -1,0 +1,109 @@
+*vital-over-commandline.txt*		独自コマンドラインを定義するフレームワーク
+
+
+
+
+==============================================================================
+インターフェース			*Vital.Over.Commandline-interface*
+
+------------------------------------------------------------------------------
+関数					*Vital.Over.Commandline-functions*
+
+make({prompt})				*Vital.Over.Commandline-make()*
+	コマンドラインのオブジェクトを生成します。
+	これは |Vital.Over.Commandline-object| の辞書を保持しています。
+
+
+------------------------------------------------------------------------------
+commandline				*Vital.Over.Commandline-object*
+
+CORE				*Vital.Over.Commandline-object-core*
+
+getline()			*Vital.Over.Commandline-object-getline()*
+	コマンドラインの文字列を返します
+
+setline({line})			*Vital.Over.Commandline-object-setline()*
+    コマンドラインに {line} を設定します
+
+char()					*Vital.Over.Commandline-object-char()*
+	入力された文字を返します
+
+setchar({char})			*Vital.Over.Commandline-object-setchar()*
+	コマンドラインに挿入される文字{char}を設定します
+	コマンドラインに文字を挿入したくない場合は空の文字を設定して下さい
+
+getpos()			*Vital.Over.Commandline-object-getpos()*
+    コマンドラインのカーソル位置を返します
+
+setpos({col})			*Vital.Over.Commandline-object-setpos()*
+    コマンドラインのカーソル位置を {col} 設定します
+
+is_input({key})			*Vital.Over.Commandline-object-input()*
+	{key} が入力されたかどうかを判定します。
+	入力されたかどうかの判定は char() と比較するのではなくて is_input() を
+	使用して下さい。
+Example: >
+	" a が押されたら a が変える
+    is_input("a")
+
+    " <C-c> が押されたら 1 が変える
+    is_input("\<C-c>")
+<
+
+forward()			*Vital.Over.Commandline-object-forward()*
+	カーソル位置より前方のコマンドラインの文字列を返します。
+	カーソル上の文字は含みません。
+
+backward()			*Vital.Over.Commandline-object-backward()*
+	カーソル位置より後方のコマンドラインの文字列を返します。
+	カーソル上の文字を含みます。
+
+connect({module})		*Vital.Over.Commandline-object-connect()*
+	コマンドラインに {module} を追加します。
+
+
+start()				*Vital.Over.Commandline-object-start()*
+	コマンドラインの入力を開始します。
+	<CR> で入力されたコマンドを実行します。
+
+get()				*Vital.Over.Commandline-object-get()*
+	コマンドラインの入力を開始します。
+	<CR> で入力されたコマンドの文字列を返します。
+
+
+exit()				*Vital.Over.Commandline-object-exit()*
+	コマンドラインを終了します。
+
+
+OVERRIDABLE			*Vital.Over.Commandline-object-overridable*
+
+keymappings()			*Vital.Over.Commandline-object-keymappings()*
+	キーマッピングの辞書を返します。
+
+on_enter()			*Vital.Over.Commandline-object-on_enter()*
+	コマンドラインが開始された時に呼ばれる関数です。
+
+on_leave()			*Vital.Over.Commandline-object-on_leave()*
+	コマンドラインが終了された時に呼ばれる関数です
+
+on_charpre()			*Vital.Over.Commandline-object-on_charpre()*
+	コマンドラインで文字が入力され、コマンドラインに挿入される前にに呼ばれ
+	る関数です
+
+on_char()			*Vital.Over.Commandline-object-on_char()*
+	コマンドラインで文字が入力され、コマンドラインに挿入された後に呼ばれる
+	関数です。
+
+on_executepre()			*Vital.Over.Commandline-object-on_executepre()*
+	コマンドラインでコマンドが実行される直前に呼ばれる関数です。
+
+on_execute()			*Vital.Over.Commandline-object-on_execute()*
+	コマンドラインでコマンドが実行された後に呼ばれる関数です。
+
+on_cancel()			*Vital.Over.Commandline-object-on_cancel()*
+	コマンドラインがキャンセルされた時に呼ばれる関数です。
+	exit() で終了された時には呼ばれません。
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
