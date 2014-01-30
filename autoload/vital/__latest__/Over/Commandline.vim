@@ -231,7 +231,7 @@ function! s:base.get(...)
 
 			if self._is_exit()
 				call s:_redraw()
-				return self.getline()
+				return ""
 			endif
 
 			call self._inputkey()
