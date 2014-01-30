@@ -8,9 +8,6 @@ let s:module = {
 \}
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-h>")
-		if a:cmdline.line.length() == 0
-			call a:cmdline.exit()
-		endif
 		call a:cmdline.line.remove_prev()
 		call a:cmdline.setchar('')
 	elseif a:cmdline.is_input("\<C-w>")
