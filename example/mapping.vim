@@ -2,7 +2,7 @@ let s:cmdline = vital#of("vital").import("Over.Commandline")
 
 
 " コマンドラインのオブジェクトを生成
-let s:my = s:cmdline.make("$ ")
+let s:my = s:cmdline.make_plain("$ ")
 
 
 " 使用したいモジュールを追加

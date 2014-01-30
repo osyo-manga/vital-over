@@ -2,7 +2,7 @@ let s:cmdline = vital#of("vital").import("Over.Commandline")
 
 
 " コマンドラインのオブジェクトを生成
-let s:my = s:cmdline.make("$ ")
+let s:my = s:cmdline.make_plain("$ ")
 
 
 " モジュールの生成
@@ -12,16 +12,17 @@ let s:module = {
 
 
 " キーが入力されて文字が挿入される前に呼ばれる関数
-function! s:module.on_charpre(cmdline)
+function! s:module.on_char_pre(cmdline)
 	" キー入力の判定
+	" コマンドラインに @* を挿入
 	if a:cmdline.is_input("\<C-v>")
-		" コマンドラインに @* を挿入
 		call a:cmdline.insert(@*)
 
 		" 入力された文字が挿入されないように削除
 		call a:cmdline.setchar('')
+
+	" コマンドラインを終了する
 	elseif a:cmdline.is_input("\<C-c>")
-		" コマンドラインを終了する
 		call a:cmdline.exit()
 	endif
 endfunction

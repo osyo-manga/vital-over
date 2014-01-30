@@ -45,11 +45,6 @@ function! s:_vital_depends()
 endfunction
 
 
-function! s:make(prompt)
-	return s:make_plain(a:prompt)
-endfunction
-
-
 function! s:make_plain(prompt)
 	let result = deepcopy(s:base)
 	let result.prompt = a:prompt
@@ -71,6 +66,10 @@ function! s:make_simple(prompt)
 	return result
 endfunction
 
+
+function! s:make(prompt)
+	return s:make_simple(a:prompt)
+endfunction
 
 
 let s:base = {
