@@ -46,6 +46,11 @@ endfunction
 
 
 function! s:make(prompt)
+	return s:make_plain(a:prompt)
+endfunction
+
+
+function! s:make_plain(prompt)
 	let result = deepcopy(s:base)
 	let result.prompt = a:prompt
 	call result.connect(s:module_cancel())
@@ -55,7 +60,7 @@ endfunction
 
 
 function! s:make_simple(prompt)
-	let result = s:make(a:prompt)
+	let result = s:make_plain(a:prompt)
 	call result.connect(s:module_scroll())
 	call result.connect(s:module_delete())
 	call result.connect(s:module_cursor_move())
