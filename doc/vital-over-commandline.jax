@@ -95,6 +95,7 @@ cancel()			*Vital.Over.Commandline-object-cancel()*
 	コマンドラインを中断します。
 	exit() とは違い exit_code に 0 以外が設定され on_cancel() が呼び出され
 	ます。
+	<Esc> や <C-c> が入力された場合にこの処理で中断されます。
 
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
