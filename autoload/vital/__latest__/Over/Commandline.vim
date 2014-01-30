@@ -356,13 +356,16 @@ function! s:_hl_cursor_off()
 	endif
 	let s:old_hi_cursor = "cterm=reverse"
 	if hlexists("Cursor")
-		redir => cursor
-		silent highlight Cursor
-		redir END
+		let save_verbose = &verbose
+		let &verbose = 0
+		try
+			redir => cursor
+			silent highlight Cursor
+			redir END
+		finally
+			let &verbose = save_verbose
+		endtry
 		let hl = substitute(matchstr(cursor, 'xxx \zs.*'), '[ \t\n]\+\|cleared', ' ', 'g')
-		if mode(1) == 'ce'
-			let hl = substitute(hl, '\sLast\sset\sfrom.*', '', '')
-		endif
 		if !empty(substitute(hl, '\s', '', 'g'))
 			let s:old_hi_cursor = hl
 		endif
