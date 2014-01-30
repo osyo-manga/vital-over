@@ -282,6 +282,7 @@ function! s:base._main(...)
 	finally
 		call self._finish()
 		call self._on_leave()
+		call s:_redraw()
 	endtry
 	return self.exit_code()
 endfunction
