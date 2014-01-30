@@ -63,8 +63,10 @@ backward()			*Vital.Over.Commandline-object-backward()*
 	カーソル位置より後方のコマンドラインの文字列を返します。
 	カーソル上の文字を含みます。
 
-connect({module})		*Vital.Over.Commandline-object-connect()*
-	コマンドラインに {module} を追加します。
+connect({module} [, {name}])	*Vital.Over.Commandline-object-connect()*
+	コマンドラインに {name} という名前の {module} を追加します。
+	{name} は disconnect() 時に使用されます。
+	{name} がなければ {module} の "name" キーの値が使用されます。
 
 disconnect({name})		*Vital.Over.Commandline-object-disconnect()*
 	{name} のモジュールを削除します。

@@ -14,6 +14,7 @@ let s:modules = [
 \	"BufferComplete",
 \	"Cancel",
 \	"Enter",
+\	"NoInsert",
 \]
 
 let s:modules_snake = [
@@ -27,6 +28,7 @@ let s:modules_snake = [
 \	"buffer_complete",
 \	"cancel",
 \	"enter",
+\	"no_insert",
 \]
 
 
@@ -60,6 +62,7 @@ function! s:make_simple(prompt)
 	call result.connect(s:module_histadd())
 	call result.connect(s:module_history())
 	call result.connect(s:module_buffer_complete())
+	call result.connect(s:NoInsert.make_special_chars())
 	return result
 endfunction
 
@@ -158,8 +161,9 @@ function! s:base.backward()
 endfunction
 
 
-function! s:base.connect(module)
-	let self.modules[a:module.name] = a:module
+function! s:base.connect(module, ...)
+	let name = get(a:, 1, a:module.name)
+	let self.modules[name] = a:module
 endfunction
 
 
@@ -326,9 +330,6 @@ for s:i in range(len(s:modules_snake))
 \	], "\n")
 endfor
 unlet s:i
-
-
-
 
 
 function! s:_redraw()
