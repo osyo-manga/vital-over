@@ -12,6 +12,8 @@ let s:modules = [
 \	"History",
 \	"Incsearch",
 \	"BufferComplete",
+\	"Cancel",
+\	"Enter",
 \]
 
 let s:modules_snake = [
@@ -23,6 +25,8 @@ let s:modules_snake = [
 \	"history",
 \	"incsearch",
 \	"buffer_complete",
+\	"cancel",
+\	"enter",
 \]
 
 
@@ -42,6 +46,8 @@ endfunction
 function! s:make(prompt)
 	let result = deepcopy(s:base)
 	let result.prompt = a:prompt
+	call result.connect(s:module_cancel())
+	call result.connect(s:module_enter())
 	return result
 endfunction
 
@@ -157,6 +163,11 @@ function! s:base.connect(module)
 endfunction
 
 
+function! s:base.disconnect(name)
+	unlet self.modules[a:name] = a:module
+endfunction
+
+
 for s:_ in ["enter", "leave", "char", "char_pre", "execute_pre", "execute_failed", "execute", "cancel"]
 	execute join([
 \		"function! s:base._on_" . s:_ . "()",
@@ -177,73 +188,41 @@ function! s:base.keymappings()
 endfunction
 
 
-function! s:_echo_cmdline(cmdline)
-	redraw
-	execute "echohl" a:cmdline.highlights.prompt
-	echon a:cmdline.prompt
-	echohl NONE
-	echon a:cmdline.backward()
-	if empty(a:cmdline.line.pos_word())
-		execute "echohl" a:cmdline.highlights.cursor
-		echon  ' '
-	else
-		execute "echohl" a:cmdline.highlights.cursor_insert
-		echon a:cmdline.line.pos_word()
-	endif
-	echohl NONE
-	echon a:cmdline.forward()
-endfunction
-
-
 function! s:base.execute()
 	execute self.getline()
 endfunction
 
 
 function! s:base.exit(...)
-	let self.variables.exit = get(a:, 1, 1)
+	let self.variables.exit = 1
+	let self.variables.exit_code = get(a:, 1, 0)
+endfunction
+
+
+function! s:base.cancel()
+	call self.exit(1)
+	call self._on_cancel()
+endfunction
+
+
+function! s:base.exit_code()
+	return self.variables.exit_code
 endfunction
 
 
 function! s:base.start(...)
-	let result = call(self.get, a:000, self)
-	if result == ""
-		return
+	let exit_code = call(self._main, a:000, self)
+	if exit_code == 0
+		call self._execute()
 	endif
-	call self._execute()
 endfunction
 
 
 function! s:base.get(...)
-	try
-		call self._init()
-		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
-		call self._on_enter()
-		call self._inputkey()
-
-		while !self.is_input(self.keys.quit)
-			if self.is_input(self.keys.enter)
-				return self.getline()
-			else
-				call self.insert(self.variables.input)
-			endif
-			call self._on_char()
-
-			if self._is_exit()
-				call s:_redraw()
-				return ""
-			endif
-
-			call self._inputkey()
-		endwhile
-		call s:_redraw()
-		call self._on_cancel()
-	catch
-		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
-	finally
-		call self._finish()
-		call self._on_leave()
-	endtry
+	let exit_code = call(self._main, a:000, self)
+	if exit_code == 0
+		return self.getline()
+	endif
 	return ""
 endfunction
 
@@ -253,6 +232,7 @@ function! s:base._init()
 	let self.variables.char = ""
 	let self.variables.input = ""
 	let self.variables.exit = 0
+	let self.variables.exit_code = 1
 	let hl_cursor = s:_hl_cursor_off()
 	if !hlexists("OverCommandLineDefaultCursor")
 		execute "highlight OverCommandLineDefaultCursor " . hl_cursor
@@ -266,6 +246,7 @@ endfunction
 
 
 function! s:base._execute()
+	call s:_redraw()
 	call self._on_execute_pre()
 	try
 		call self.execute()
@@ -280,17 +261,53 @@ function! s:base._execute()
 endfunction
 
 
+function! s:base._main(...)
+	try
+		call self._init()
+		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
+		call self._on_enter()
+
+		while !self._is_exit()
+			call s:_echo_cmdline(self)
+
+			let self.variables.char = s:_getchar()
+			call self.setchar(self.variables.char)
+
+			call self._on_char_pre()
+			call self.insert(self.variables.input)
+			call self._on_char()
+		endwhile
+	catch
+		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
+	finally
+		call self._finish()
+		call self._on_leave()
+	endtry
+	return self.exit_code()
+endfunction
+
+
 function! s:base._finish()
 	cal s:_hl_cursor_on()
 	let &t_ve = s:old_t_ve
 endfunction
 
 
-function! s:base._inputkey()
-	call s:_echo_cmdline(self)
-	let self.variables.char = s:_getchar()
-	call self.setchar(self.variables.char)
-	call self._on_char_pre()
+function! s:_echo_cmdline(cmdline)
+	call s:_redraw()
+	execute "echohl" a:cmdline.highlights.prompt
+	echon a:cmdline.prompt
+	echohl NONE
+	echon a:cmdline.backward()
+	if empty(a:cmdline.line.pos_word())
+		execute "echohl" a:cmdline.highlights.cursor
+		echon  ' '
+	else
+		execute "echohl" a:cmdline.highlights.cursor_insert
+		echon a:cmdline.line.pos_word()
+	endif
+	echohl NONE
+	echon a:cmdline.forward()
 endfunction
 
 

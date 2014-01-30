@@ -1,6 +1,11 @@
 *vital-over-commandline.txt*		独自コマンドラインを定義するフレームワーク
 
+==============================================================================
+目次						*vital-over-commandline-contents*
 
+インターフェース		|Vital.Over.Commandline-interface|
+  関数				  |Vital.Over.Commandline-functions|
+  commandline			  |Vital.Over.Commandline-object|
 
 
 ==============================================================================
@@ -61,18 +66,35 @@ backward()			*Vital.Over.Commandline-object-backward()*
 connect({module})		*Vital.Over.Commandline-object-connect()*
 	コマンドラインに {module} を追加します。
 
+disconnect({name})		*Vital.Over.Commandline-object-disconnect()*
+	{name} のモジュールを削除します。
 
 start()				*Vital.Over.Commandline-object-start()*
 	コマンドラインの入力を開始します。
-	<CR> で入力されたコマンドを実行します。
+	コマンドラインが正常終了した場合、入力した文字列を |:execute| で実行し
+	ます。
 
 get()				*Vital.Over.Commandline-object-get()*
 	コマンドラインの入力を開始します。
-	<CR> で入力されたコマンドの文字列を返します。
+	コマンドラインが正常終了した場合に入力された文字列を返します。
+	異常終了した場合は空の文字列を返します。
 
 
-exit()				*Vital.Over.Commandline-object-exit()*
+exit([{exitcode}])		*Vital.Over.Commandline-object-exit()*
 	コマンドラインを終了します。
+	{exitcode} は exit_code() が返す値になります。
+	引数がなければ 0 が設定されます。
+	また、この関数で終了した場合は on_cancel() は呼び出されません。
+
+exit_code()			*Vital.Over.Commandline-object-exit_code()*
+	終了コードを返します。
+	0	: 正常終了
+	0 以外	: 異常終了(e.g. cancel() が呼ばれた場合など)
+
+cancel()			*Vital.Over.Commandline-object-cancel()*
+	コマンドラインを中断します。
+	exit() とは違い exit_code に 0 以外が設定され on_cancel() が呼び出され
+	ます。
 
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
