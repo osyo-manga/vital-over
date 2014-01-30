@@ -62,7 +62,7 @@ function! s:make_simple(prompt)
 	call result.connect(s:module_histadd())
 	call result.connect(s:module_history())
 	call result.connect(s:module_buffer_complete())
-	call result.connect(s:NoInsert.make_special_chars())
+	call result.connect(s:module_no_insert_special_chars())
 	return result
 endfunction
 
@@ -330,6 +330,10 @@ for s:i in range(len(s:modules_snake))
 \	], "\n")
 endfor
 unlet s:i
+
+function! s:module_no_insert_special_chars()
+	return s:NoInsert.make_special_chars()
+endfunction
 
 
 function! s:_redraw()
