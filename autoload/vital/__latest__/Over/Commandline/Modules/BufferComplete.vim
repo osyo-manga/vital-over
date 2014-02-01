@@ -107,13 +107,13 @@ function! s:module.on_char_pre(cmdline)
 		call a:cmdline.setchar('')
 		call a:cmdline.wait_keyinput_on("Completion")
 	elseif a:cmdline.is_input("\<Tab>", "Completion")
-\		|| a:cmdline.is_input("\<C-f>", "Completion")
+\		|| a:cmdline.is_input("\<Right>", "Completion")
 		call a:cmdline.setchar('')
 		let s:count += 1
 		if s:count >= len(s:complete_list)
 			let s:count = 0
 		endif
-	elseif a:cmdline.is_input("\<C-b>", "Completion")
+	elseif a:cmdline.is_input("\<Left>", "Completion")
 		call a:cmdline.setchar('')
 		let s:count -= 1
 		if s:count < 0
