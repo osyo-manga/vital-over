@@ -6,8 +6,9 @@ set cpo&vim
 let s:module = {
 \	"name" : "Paste"
 \}
+
 function! s:module.on_char_pre(cmdline)
-	if a:cmdline.is_input("\<C-v>")
+	if a:cmdline.is_input("<Over>(paste)")
 		call a:cmdline.insert(@*)
 		call a:cmdline.setchar('')
 	endif

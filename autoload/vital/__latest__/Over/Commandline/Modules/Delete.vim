@@ -8,6 +8,7 @@ let s:module = {
 \}
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-h>")
+\	|| a:cmdline.is_input("\<BS>")
 		call a:cmdline.line.remove_prev()
 		call a:cmdline.setchar('')
 	elseif a:cmdline.is_input("\<C-w>")

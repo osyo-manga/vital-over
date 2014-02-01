@@ -8,6 +8,8 @@ let s:module = {
 
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<CR>")
+\	|| a:cmdline.is_input("\<NL>")
+\	|| a:cmdline.is_input("\<C-j>")
 		call a:cmdline.exit(0)
 		call a:cmdline.setchar("")
 	endif
