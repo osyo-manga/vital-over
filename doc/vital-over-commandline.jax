@@ -14,15 +14,24 @@
 ------------------------------------------------------------------------------
 関数					*Vital.Over.Commandline-functions*
 
+make_basic({prompt})			*Vital.Over.Commandline-make_basic()*
+	標準のコマンドラインの挙動に準じたコマンドラインオブジェクトを生成しま
+	す。
+	オブジェクトの内容は |Vital.Over.Commandline-object| を参照して下さ
+	い。
+
+make_plain({prompt})			*Vital.Over.Commandline-make_plain()*
+	独自のコマンドラインを作りたい場合はこれを元にするとよいでしょう。
+
 make({prompt})				*Vital.Over.Commandline-make()*
-	コマンドラインのオブジェクトを生成します。
-	これは |Vital.Over.Commandline-object| の辞書を保持しています。
+	|Vital.Over.Commandline-object| のオブジェクトを生成します。
+	NOTE: この関数で生成したオブジェクトは何も行いません。
+	キャンセルや実行などもできないので注意して下さい。
 
+==============================================================================
+コマンドライン				*Vital.Over.Commandline-object*
 
-------------------------------------------------------------------------------
-commandline				*Vital.Over.Commandline-object*
-
-CORE				*Vital.Over.Commandline-object-core*
+CORE					*Vital.Over.Commandline-object-core*
 
 getline()			*Vital.Over.Commandline-object-getline()*
 	コマンドラインの文字列を返します
@@ -99,6 +108,20 @@ cancel()			*Vital.Over.Commandline-object-cancel()*
 	ます。
 	<Esc> や <C-c> が入力された場合にこの処理で中断されます。
 
+cmap({lhs}, {rhs})		*Vital.Over.Commandline-object-cmap()*
+	{lhs} に {rhs} のキーを割り当てます。
+Example: >
+	call s:my.cmap("\<C-f>", "\<Right>")
+	call s:my.cmap("\<C-b>", "\<Left>")
+<
+
+cnoremap({lhs}, {rhs})		*Vital.Over.Commandline-object-cnoremap()*
+	{lhs} に {rhs} のキーを割り当てます。
+	cmap() とは違い再マップされません。
+
+cunmap({lhs})			*Vital.Over.Commandline-object-cunmap()*
+	{lhs} に割り当てられたキーマップを削除します。
+
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
 
@@ -134,6 +157,54 @@ on_execute_failed()	*Vital.Over.Commandline-object-on_execute_failed()*
 on_cancel()			*Vital.Over.Commandline-object-on_cancel()*
 	コマンドラインがキャンセル（<Esc>）された時に呼ばれる関数です。
 	exit() で終了された時には呼ばれません。
+
+
+==============================================================================
+キーマッピング				*Vital.Over.Commandline-keymapping*
+
+コマンドライン上での独自のキーマッピングを cmap()/cnoremap()、もしくは辞書で定
+義することができます。
+定義した辞書は各コマンドラインの |Vital.Over.Commandline-object-keymapping()|
+で返すことでそのコマンドラインに反映されます。
+辞書はキーに {lrh} を値に {rhs} を設定します。
+
+Example: >
+	let s:cmdline  = vital#of("vital").import("Over.Commandline")
+	let s:my = s:cmdline.make_basic("$ ")
+	
+	" キーマッピングを設定する
+	function! s:my.keymapping()
+		" <C-f> に <Right>
+		" <C-b> に <Left> を割り当てる
+		return {
+	\		"\<C-f>" : "\<Right>",
+	\		"\<C-b>" : "\<Left>",
+	\	}
+	endfunction
+<
+
+また、再マップされないようにする場合は次のように {rhs} に辞書を設定して下さ
+い。
+
+Example: >
+	function! s:my.keymapping()
+		" <C-f> は再マップされない
+		return {
+	\		"\<C-f>" : {
+	\			"key" : "\<Right>",
+	\			"noremap" : 1,
+	\		},
+	\		"\<C-b>" : "\<Left>",
+	\		"\<Right>" : "\<Left>",
+	\	}
+	endfunction
+<
+
+
+==============================================================================
+モジュール				*Vital.Over.Commandline-modules*
+
+
 
 
 ==============================================================================
