@@ -78,7 +78,7 @@ let s:base = {
 \	"variables" : {
 \		"char" : "",
 \		"input" : "",
-\		"wait_key" : "",
+\		"tap_key" : "",
 \		"exit" : 0,
 \	},
 \	"highlights" : {
@@ -124,27 +124,27 @@ function! s:base.setpos(pos)
 endfunction
 
 
-function! s:base.wait_keyinput_on(key)
-	let self.variables.wait_key = a:key
+function! s:base.tap_keyinput(key)
+	let self.variables.tap_key = a:key
 endfunction
 
 
-function! s:base.wait_keyinput_off(key)
-	if self.variables.wait_key == a:key
-		let self.variables.wait_key = ""
+function! s:base.untap_keyinput(key)
+	if self.variables.tap_key == a:key
+		let self.variables.tap_key = ""
 		return 1
 	endif
 endfunction
 
 
-function! s:base.get_wait_keyinput()
-	return self.variables.wait_key
+function! s:base.get_tap_key()
+	return self.variables.tap_key
 endfunction
 
 
 function! s:base.is_input(key, ...)
 	let prekey = get(a:, 1, "")
-	return self.get_wait_keyinput() == prekey
+	return self.get_tap_key() == prekey
 \		&& s:_unmap(self._get_keymapping(), self.char()) == a:key
 endfunction
 
@@ -236,7 +236,7 @@ endfunction
 
 
 function! s:base._init()
-	let self.variables.wait_key = ""
+	let self.variables.tap_key = ""
 	let self.variables.char = ""
 	let self.variables.input = ""
 	let self.variables.exit = 0
