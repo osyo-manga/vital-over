@@ -13,7 +13,7 @@ call s:my.connect(s:cmdline.module_cursor_move())
 " 任意のマッピングの辞書を返す
 " <C-f>, <C-b> でカーソル移動
 " <C-n>, <C-p> でスクロールする
-function! s:my.keymappings()
+function! s:my.keymapping()
 	return {
 \		"\<C-f>" : "\<Right>",
 \		"\<C-b>" : "\<Left>",

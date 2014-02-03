@@ -145,7 +145,7 @@ endfunction
 function! s:base.is_input(key, ...)
 	let prekey = get(a:, 1, "")
 	return self.get_wait_keyinput() == prekey
-\		&& get(self.keymappings(), self.char(), self.char()) == a:key
+\		&& s:_unmap(self._get_keymapping(), self.char()) == a:key
 endfunction
 
 
@@ -191,7 +191,7 @@ unlet s:_
 
 
 " Overridable
-function! s:base.keymappings()
+function! s:base.keymapping()
 	return {}
 endfunction
 
@@ -287,11 +287,12 @@ function! s:base._main(...)
 		endwhile
 	catch
 		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
+		return -1
 	finally
 		call self._finish()
 		call self._on_leave()
-		call s:_redraw()
 	endtry
+	call s:_redraw()
 	return self.exit_code()
 endfunction
 
@@ -324,6 +325,39 @@ function! s:base._is_exit()
 	return self.variables.exit
 endfunction
 
+
+function! s:_as_key_config(config)
+	let base = {
+\		"noremap" : 0,
+\	}
+	return type(a:config) == type({}) ? extend(base, a:config)
+\		 : extend(base, {
+\		 	"key" : a:config,
+\		 })
+endfunction
+
+
+function! s:_unmap(mapping, key)
+	if !has_key(a:mapping, a:key)
+		return a:key
+	endif
+	let rhs = s:_as_key_config(a:mapping[a:key])
+	if rhs.noremap
+		return rhs.key
+	endif
+	return s:_unmap(a:mapping, rhs.key)
+endfunction
+
+
+function! s:base._get_keymapping()
+	let result = {}
+	for module in values(self.modules)
+		if has_key(module, "keymapping")
+			call extend(result, module.keymapping(self))
+		endif
+	endfor
+	return extend(result, self.keymapping())
+endfunction
 
 
 for s:i in range(len(s:modules_snake))

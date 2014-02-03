@@ -102,7 +102,7 @@ cancel()			*Vital.Over.Commandline-object-cancel()*
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
 
-keymappings()			*Vital.Over.Commandline-object-keymappings()*
+keymapping()			*Vital.Over.Commandline-object-keymapping()*
 	キーマッピングの辞書を返します。
 
 on_enter()			*Vital.Over.Commandline-object-on_enter()*
