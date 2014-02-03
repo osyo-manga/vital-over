@@ -46,7 +46,7 @@ endfunction
 
 
 function! s:make_plain(prompt)
-	let result = deepcopy(s:base)
+	let result = s:make(a:prompt)
 	let result.prompt = a:prompt
 	call result.connect(s:module_cancel())
 	call result.connect(s:module_enter())
@@ -68,12 +68,12 @@ endfunction
 
 
 function! s:make(prompt)
-	return s:make_simple(a:prompt)
+	return deepcopy(s:base)
 endfunction
 
 
 let s:base = {
-\	"prompt" : "> ",
+\	"prompt" : "",
 \	"line" : {},
 \	"variables" : {
 \		"char" : "",
