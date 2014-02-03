@@ -10,14 +10,19 @@ call s:my.connect(s:cmdline.module_scroll())
 call s:my.connect(s:cmdline.module_cursor_move())
 
 
-" 生成したコマンドラインに対してキーマップを設定する
-call s:my.cmap("\<C-f>", "\<Right>")
-call s:my.cmap("\<C-b>", "\<Left>")
-call s:my.cmap("\<C-n>", "<Over>(scroll-e)")
-call s:my.cmap("\<C-p>", "<Over>(scroll-y)")
+" 任意のマッピングの辞書を返す
+" <C-f>, <C-b> でカーソル移動
+" <C-n>, <C-p> でスクロールする
+function! s:my.keymapping()
+	return {
+\		"\<C-f>" : "\<Right>",
+\		"\<C-b>" : "\<Left>",
+\		"\<C-n>" : "<Over>(scroll-e)",
+\		"\<C-p>" : "<Over>(scroll-y)",
+\	}
+endfunction
 
 
 " コマンドラインの開始
 call s:my.start()
-
 
