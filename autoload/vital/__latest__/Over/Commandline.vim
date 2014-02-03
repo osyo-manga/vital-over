@@ -80,6 +80,7 @@ let s:base = {
 \		"input" : "",
 \		"tap_key" : "",
 \		"exit" : 0,
+\		"keymapping" : {},
 \	},
 \	"highlights" : {
 \		"prompt" : "NONE",
@@ -190,7 +191,18 @@ endfor
 unlet s:_
 
 
-" Overridable
+function! s:base.cmap(lhs, rhs)
+	let self.variables.keymapping[a:lhs] = a:rhs
+endfunction
+
+
+function! s:base.cnoremap(lhs, rhs)
+	let self.variables.keymapping[a:lhs] = {
+\		"key"     : a:rhs,
+\		"noremap" : 1,
+\	}
+endfunction
+
 function! s:base.keymapping()
 	return {}
 endfunction
@@ -356,7 +368,7 @@ function! s:base._get_keymapping()
 			call extend(result, module.keymapping(self))
 		endif
 	endfor
-	return extend(result, self.keymapping())
+	return extend(extend(result, self.variables.keymapping), self.keymapping())
 endfunction
 
 
