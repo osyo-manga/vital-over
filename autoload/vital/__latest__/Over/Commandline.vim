@@ -54,14 +54,14 @@ function! s:make_plain(prompt)
 endfunction
 
 
-function! s:make_simple(prompt)
+function! s:make_basic(prompt)
 	let result = s:make_plain(a:prompt)
-	call result.connect(s:module_scroll())
-	call result.connect(s:module_delete())
+" 	call result.connect(s:module_scroll())
+" 	call result.connect(s:module_buffer_complete())
+	dall result.connect(s:module_delete())
 	call result.connect(s:module_cursor_move())
 	call result.connect(s:module_histadd())
 	call result.connect(s:module_history())
-	call result.connect(s:module_buffer_complete())
 	call result.connect(s:module_no_insert_special_chars())
 	return result
 endfunction
