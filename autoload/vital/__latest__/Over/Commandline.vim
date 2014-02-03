@@ -203,6 +203,12 @@ function! s:base.cnoremap(lhs, rhs)
 \	}
 endfunction
 
+
+function! s:base.cunmap(lhs)
+	unlet self.variables.keymapping[a:lhs]
+endfunction
+
+
 function! s:base.keymapping()
 	return {}
 endfunction
