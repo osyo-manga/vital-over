@@ -204,6 +204,126 @@ Example: >
 ==============================================================================
 モジュール				*Vital.Over.Commandline-modules*
 
+|Vital.Over.Commandline-object| はモジュールを追加する事でその機能を拡張する事
+ができます。
+これは以下のように利用することができます。
+
+Example: >
+	let s:cmdline     = vital#of("vital").import("Over.Commandline")
+	let s:cursor_move = vital#of("vital").import("Over.Commandline.Modules.CursorMove")
+	let s:delete      = vital#of("vital").import("Over.Commandline.Modules.Delete")
+	
+	
+	" コマンドラインのオブジェクトを生成
+	let s:my = s:cmdline.make_plain("$ ")
+	
+	
+	" 使用したいモジュールを追加
+	call s:my.connect(s:cursor_move.make())
+	call s:my.connect(s:delete.make())
+<
+特に記述がない限りは make() を使用してそのモジュールを生成します。
+また、<Over> から始まるキーは任意のキーに割り当てて使用します。
+
+
+名前			機能~
+BufferComplete		起動したバッファのワードで補完
+Cancel			コマンドラインの中断
+CursorMoved		カーソル移動
+Delete			文字の削除
+Enter			コマンドの実行
+HistAdd			|history| への追加
+History			コマンド履歴の呼び出し
+Incsearch		|incsearch| のような挙動のエミュレート
+KeyMapping		キーマッピングの提供
+NoInsert		挿入しない文字の処理
+Paste			@* の挿入
+Scroll			起動したウィンドウのスクロール
+
+
+BufferComplete			*Vital.Over.Commandline-modules-BufferComplete*
+	起動したバッファ上の単語で補完を行います。
+
+		*Vital.Over.Commandline-modules-BufferComplete-keymapping*
+	キー				機能~
+	<Over>(buffer-complete)		補完の開始
+					次の補完へ移動
+	<Right>				補完中であれば次の補完へ移動
+	<Left>				補完中であれば前の補完へ移動
+
+Cancel					*Vital.Over.Commandline-modules-Cancel*
+	コマンドラインの入力を中断します。
+
+			*Vital.Over.Commandline-modules-Cancel-keymapping*
+	キー		機能~
+	<Esc>, <C-c>	入力を中断
+	<C-h>, <BS>	入力された文字がない場合に中断
+
+CursorMove			*Vital.Over.Commandline-modules-CursorMove*
+	カーソル移動を行います。
+			*Vital.Over.Commandline-modules-CursorMove-keymapping*
+	キー		機能~
+	<Right>		カーソルを右に移動
+	<Left>		カーソルを右に移動
+	<C-b>, <Home>	カーソルを行頭へ移動
+	<C-e>, <End>	カーソルを行末へ移動
+
+Delete					*Vital.Over.Commandline-modules-Delete*
+	入力された文字の削除を行います。
+			*Vital.Over.Commandline-modules-Delete-keymapping*
+	キー		機能~
+	<C-h>, <BS>	カーソル位置より後ろの1文字を削除
+	<C-w>		カーソル位置より後ろの単語を削除
+	<C-u>		カーソル位置より後ろの文字を全て削除
+	<Del>		カーソル位置上の文字を削除
+
+Enter					*Vital.Over.Commandline-modules-Enter*
+	入力された文字を |:execute| で実行します。
+			*Vital.Over.Commandline-modules-Enter-keymapping*
+	キー			機能~
+	<CR>, <NL>, <C-j>	実行
+
+HistAdd					*Vital.Over.Commandline-modules-HistAdd*
+	入力された文字を履歴に追加します。
+			*Vital.Over.Commandline-modules-HistAdd-function*
+	make({mode})
+		{mode} に履歴を追加します。
+		{mode} の値は |histadd()| と同じです。
+
+History					*Vital.Over.Commandline-modules-History*
+	コマンド履歴を挿入します。
+			*Vital.Over.Commandline-modules-History-keymapping*
+	キー		機能~
+	<Up>		前の履歴を挿入
+	<Down>		次の履歴を挿入
+
+			*Vital.Over.Commandline-modules-History-function*
+	make({mode})
+		{mode} の履歴を挿入します。
+		{mode} の値は |histadd()| と同じです。
+
+KeyMapping			*Vital.Over.Commandline-modules-KeyMapping*
+	キーマッピングを提供します。
+			*Vital.Over.Commandline-modules-KeyMapping-function*
+	make_emacs()
+		Emacs のようなキーマッピングを提供します。
+
+NoInsert			*Vital.Over.Commandline-modules-NoInsert*
+	挿入しない文字を設定します。
+	また、挿入を行わないだけでキーの入力チェックは行われます。
+			*Vital.Over.Commandline-modules-NoInsert-function*
+	make_special_chars()
+		特殊文字を挿入しない。
+
+Scroll			*Vital.Over.Commandline-modules-Scroll*
+	起動したバッファのウィンドウをスクロールします。
+	キー			機能~
+	<Over>(scroll-y)	|CTRL-y| と同等
+	<Over>(scroll-u)	|CTRL-u| と同等
+	<Over>(scroll-f)	|CTRL-f| と同等
+	<Over>(scroll-e)	|CTRL-e| と同等
+	<Over>(scroll-d)	|CTRL-d| と同等
+	<Over>(scroll-b)	|CTRL-b| と同等
 
 
 
