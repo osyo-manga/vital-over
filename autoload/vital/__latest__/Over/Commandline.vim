@@ -15,6 +15,7 @@ let s:modules = [
 \	"Cancel",
 \	"Enter",
 \	"NoInsert",
+\	"KeyMapping",
 \]
 
 let s:modules_snake = [
@@ -29,6 +30,7 @@ let s:modules_snake = [
 \	"cancel",
 \	"enter",
 \	"no_insert",
+\	"key_mapping",
 \]
 
 
