@@ -19,6 +19,7 @@ let s:modules = [
 \	'NoInsert',
 \	'Paste',
 \	'Scroll'
+\	'Doautocmd'
 \]
 
 

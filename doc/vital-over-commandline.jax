@@ -278,6 +278,7 @@ NoInsert(*)		挿入しない文字の処理
 Paste			@* の挿入
 Scroll			起動したウィンドウのスクロール
 InsertRegister(*)	レジスタの内容を挿入
+Doautocmd		|User| の呼び出し
 
 (*) が付いているモジュールは Over.Commandline に付属します。
 それ以外のモジュールは |:Vitalize| 時に個別に指定して導入する必要があります。
@@ -376,6 +377,40 @@ InsertRegister			*Vital.Over.Commandline-modules-InsertRegister*
 	<C-r> <C-f>		カーソル下のファイル名
 	<C-r> <C-w>		カーソル下の word
 	<C-r> <C-A>		カーソル下の WORD
+
+Doautocmd			*Vital.Over.Commandline-modules-Doautocmd*
+	以下のタイミングで |autocm| |User| を呼び出します。
+	実際には make({prefix}) の {prefix} 文字が先頭に追加されます。
+			*Vital.Over.Commandline-modules-Doautocmd-autocmd*
+	名前			発生するとき ~
+	Enter			コマンドラインが開始された時
+	Leave			コマンドラインが終了した時
+	Leave			コマンドラインが終了した時
+	CharPre			文字が入力され、コマンドラインに挿入される前
+	Char			文字が入力され、コマンドラインに挿入された後
+	ExecutePre		コマンドが実行される直前
+	Execute			コマンドが実行された後
+	ExecuteFailed		コマンドを実行し、失敗した時
+	Cancel			コマンドラインがキャンセル(<Esc> 等)された時
+				exit() で終了された場合には呼ばれない
+
+			*Vital.Over.Commandline-modules-Doautocmd-function*
+	make({prefix})
+		{prefix} を追加した |autocm| |User| を呼び出します。
+Example: >
+	let s:V= vital#of("vital")
+	let s:cmdline = s:V.import("Over.Commandline")
+	let s:my = s:cmdline.make_plain("$ ")
+	
+	call s:my.connect(s:cmdline.get_module("Doautocmd").make("MyCmdline"))
+	
+	augroup test
+		autocmd!
+		" コマンドラインの起動時にプロンプトを変更する
+		autocmd User MyCmdlineEnter let s:my.prompt = "homu >"
+	augroup END
+<
+
 
 
 ==============================================================================
