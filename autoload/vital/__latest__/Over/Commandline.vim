@@ -91,10 +91,6 @@ let s:base = {
 \		"cursor" : "OverCommandLineDefaultCursor",
 \		"cursor_insert" : "OverCommandLineDefaultCursorInsert"
 \	},
-\	"keys" : {
-\		"quit"  : "\<Esc>",
-\		"enter" : "\<CR>",
-\	}
 \}
 
 
