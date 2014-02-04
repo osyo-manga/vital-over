@@ -20,7 +20,7 @@ function! s:emacs.keymapping(cmdline)
 \			"key" : "\<Down>",
 \			"noremap" : 1,
 \		},
-\		"\<C-u>" : {
+\		"\<C-p>" : {
 \			"key" : "\<Up>",
 \			"noremap" : 1,
 \		},
