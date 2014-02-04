@@ -391,7 +391,7 @@ function! s:_unmap(mapping, key)
 		return s:_as_key_config(a:key)
 	endif
 	let rhs  = s:_as_key_config(a:mapping[a:key])
-	let next = s:_unmap(a:mapping, rhs.key)
+	let next = s:_as_key_config(get(a:mapping, rhs.key, {}))
 	if rhs.noremap && next.lock == 0
 		return rhs
 	endif
