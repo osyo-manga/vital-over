@@ -21,11 +21,13 @@ function! s:_vital_loaded(V)
 	for module in s:modules
 		let s:{module} = s:V.import('Over.Commandline.Modules.' . module)
 	endfor
+	let s:String = s:V.import("Over.String")
 endfunction
 
 
 function! s:_vital_depends()
-	return map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
+	return ["Over.String"]
+\		 + map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
 endfunction
 
 
@@ -319,7 +321,7 @@ endfunction
 function! s:base._main(...)
 	try
 		call self._init()
-		let self.line = deepcopy(s:_string_with_pos(get(a:, 1, "")))
+		let self.line = deepcopy(s:String.make(get(a:, 1, "")))
 		call self._on_enter()
 
 		while !self._is_exit()
@@ -416,100 +418,6 @@ function! s:_getchar()
 	let char = getchar()
 	return type(char) == type(0) ? nr2char(char) : char
 endfunction
-
-
-
-function! s:_clamp(x, max, min)
-	return min([max([a:x, a:max]), a:min])
-endfunction
-
-
-function! s:_string_with_pos(...)
-	let default = get(a:, 1, "")
-	let self = {}
-	
-	function! self.set(item)
-		return type(a:item) == type("") ? self.set_str(a:item)
-\			 : type(a:item) == type(0)  ? self.set_pos(a:item)
-\			 : self
-	endfunction
-
-	function! self.str()
-		return join(self.list, "")
-	endfunction
-
-	function! self.set_pos(pos)
-		let self.col = s:_clamp(a:pos, 0, self.length())
-		return self
-	endfunction
-
-	function! self.backward()
-		return self.col > 0 ? join(self.list[ : self.col-1], '') : ""
-	endfunction
-
-	function! self.forward()
-		return join(self.list[self.col+1 : ], '')
-	endfunction
-
-	function! self.pos_word()
-		return get(self.list, self.col, "")
-	endfunction
-
-	function! self.set_str(str)
-		let self.list = split(a:str, '\zs')
-		let self.col  = strchars(a:str)
-		return self
-	endfunction
-
-	function! self.pos()
-		return self.col
-	endfunction
-
-	function! self.input(str)
-		call extend(self.list, split(a:str, '\zs'), self.col)
-		let self.col += len(split(a:str, '\zs'))
-		return self
-	endfunction
-
-	function! self.length()
-		return len(self.list)
-	endfunction
-
-	function! self.next()
-		return self.set_pos(self.col + 1)
-	endfunction
-
-	function! self.prev()
-		return self.set_pos(self.col - 1)
-	endfunction
-
-	function! self.remove(index)
-		if a:index < 0 || self.length() <= a:index
-			return self
-		endif
-		unlet self.list[a:index]
-		if a:index < self.col
-			call self.set(self.col - 1)
-		endif
-		return self
-	endfunction
-
-	function! self.remove_pos()
-		return self.remove(self.col)
-	endfunction
-
-	function! self.remove_prev()
-		return self.remove(self.col - 1)
-	endfunction
-
-	function! self.remove_next()
-		return self.remove(self.col + 1)
-	endfunction
-
-	call self.set(default)
-	return self
-endfunction
-
 
 
 let &cpo = s:save_cpo
