@@ -3,10 +3,15 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+augroup vital-over-commandline-doautocmd-dummy
+	autocmd!
+augroup END
+
+
 let s:cache_command = {}
 function! s:doautocmd_user(command)
 	if !has_key(s:cache_command, a:command)
-		execute "autocmd plugin-over-dummy"
+		execute "autocmd vital-over-commandline-doautocmd-dummy"
 \			. " User " . a:command." silent! execute ''"
 
 		if v:version > 703 || v:version == 703 && has("patch438")
