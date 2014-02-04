@@ -7,7 +7,6 @@ let s:modules = [
 \	"Scroll",
 \	"CursorMove",
 \	"Delete",
-\	"Paste",
 \	"HistAdd",
 \	"History",
 \	"Cancel",
