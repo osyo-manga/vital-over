@@ -50,7 +50,7 @@ function! s:make_plain(prompt)
 endfunction
 
 
-function! s:make_basic(prompt)
+function! s:make_standard(prompt)
 	let result = s:make_plain(a:prompt)
 	call result.connect("Delete")
 	call result.connect("CursorMove")

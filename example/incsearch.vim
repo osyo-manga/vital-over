@@ -1,7 +1,7 @@
 let s:cmdline = vital#of("vital").import("Over.Commandline")
 
 
-let s:search = s:cmdline.make_basic("/")
+let s:search = s:cmdline.make_standard("/")
 
 " 必要なモジュールを追加
 call s:search.connect(s:cmdline.get_module("History").make("/"))

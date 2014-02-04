@@ -14,7 +14,7 @@
 ------------------------------------------------------------------------------
 関数					*Vital.Over.Commandline-functions*
 
-make_basic({prompt})			*Vital.Over.Commandline-make_basic()*
+make_standard({prompt})			*Vital.Over.Commandline-make_standard()*
 	標準のコマンドラインの挙動に準じたコマンドラインオブジェクトを生成しま
 	す。
 	オブジェクトの内容は |Vital.Over.Commandline-object| を参照して下さ
@@ -193,7 +193,7 @@ on_cancel()			*Vital.Over.Commandline-object-on_cancel()*
 
 Example: >
 	let s:cmdline  = vital#of("vital").import("Over.Commandline")
-	let s:my = s:cmdline.make_basic("$ ")
+	let s:my = s:cmdline.make_standard("$ ")
 	
 	" キーマッピングを設定する
 	function! s:my.keymapping()
