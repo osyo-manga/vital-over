@@ -8,8 +8,14 @@ let s:my = s:cmdline.make_plain("$ ")
 
 
 " 使用したいモジュールを追加
-call s:my.connect(s:cursor_move.make())
-call s:my.connect(s:delete.make())
+" get_module() でモジュールを取得できる
+call s:my.connect(s:cmdline.get_module("Scroll").make())
+
+" 直接名前をしていする事も可能
+" この場合は
+" s:cmdline.get_module("CursorMove").make()
+" と同等
+call s:my.connect("CursorMove")
 
 
 " コマンドラインの開始

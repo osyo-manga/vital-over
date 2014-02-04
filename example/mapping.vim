@@ -6,8 +6,8 @@ let s:my = s:cmdline.make_plain("$ ")
 
 
 " 使用したいモジュールを追加
-call s:my.connect(s:cmdline.module_scroll())
-call s:my.connect(s:cmdline.module_cursor_move())
+call s:my.connect("Scroll")
+call s:my.connect("CursorMove")
 
 
 " 生成したコマンドラインに対してキーマップを設定する

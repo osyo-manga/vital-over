@@ -28,6 +28,11 @@ make({prompt})				*Vital.Over.Commandline-make()*
 	NOTE: この関数で生成したオブジェクトは何も行いません。
 	キャンセルや実行などもできないので注意して下さい。
 
+get_module({name})			*Vital.Over.Commandline-get_module()*
+	{name} の |Vital.Over.Commandline-modules| を取得します。
+	導入されていないモジュールは失敗します。
+
+
 ==============================================================================
 コマンドライン				*Vital.Over.Commandline-object*
 
@@ -73,9 +78,27 @@ backward()			*Vital.Over.Commandline-object-backward()*
 	カーソル上の文字を含みます。
 
 connect({module} [, {name}])	*Vital.Over.Commandline-object-connect()*
-	コマンドラインに {name} という名前の {module} を追加します。
+	{name} という名前の {module} を追加します。
+	{module} はモジュールの実装を記述した辞書になります。
 	{name} は disconnect() 時に使用されます。
 	{name} がなければ {module} の "name" キーの値が使用されます。
+	また、{module} が文字列の場合はその名前のモジュールが追加されます。
+Example: >
+	" コマンドラインのオブジェクトを生成
+	let s:my = s:cmdline.make_plain("$ ")
+	
+	
+	" 使用したいモジュールを追加
+	" get_module() でモジュールを取得できる
+	call s:my.connect(s:cmdline.get_module("Scroll").make())
+	
+	" 直接名前をしていする事も可能
+	" この場合は
+	" s:cmdline.get_module("CursorMove").make()
+	" と同等
+	call s:my.connect("CursorMove")
+<
+
 
 disconnect({name})		*Vital.Over.Commandline-object-disconnect()*
 	{name} のモジュールを削除します。
@@ -218,9 +241,8 @@ Example: >
 これは以下のように利用することができます。
 
 Example: >
-	let s:cmdline     = vital#of("vital").import("Over.Commandline")
-	let s:cursor_move = vital#of("vital").import("Over.Commandline.Modules.CursorMove")
-	let s:delete      = vital#of("vital").import("Over.Commandline.Modules.Delete")
+	let s:V = vital#of("vital")
+	let s:cmdline = s:V.import("Over.Commandline")
 	
 	
 	" コマンドラインのオブジェクトを生成
@@ -228,8 +250,15 @@ Example: >
 	
 	
 	" 使用したいモジュールを追加
-	call s:my.connect(s:cursor_move.make())
-	call s:my.connect(s:delete.make())
+	" 使用したいモジュールを追加
+	" get_module() でモジュールを取得できる
+	call s:my.connect(s:cmdline.get_module("Scroll").make())
+	
+	" 直接名前をしていする事も可能
+	" この場合は
+	" s:cmdline.get_module("CursorMove").make()
+	" と同等
+	call s:my.connect("CursorMove")
 <
 特に記述がない限りは make() を使用してそのモジュールを生成します。
 また、<Over> から始まるキーは任意のキーに割り当てて使用します。
@@ -237,18 +266,21 @@ Example: >
 
 名前			機能~
 BufferComplete		起動したバッファのワードで補完
-Cancel			コマンドラインの中断
-CursorMoved		カーソル移動
-Delete			文字の削除
-Enter			コマンドの実行
-HistAdd			|history| への追加
-History			コマンド履歴の呼び出し
+Cancel(*)		コマンドラインの中断
+CursorMove(*)		カーソル移動
+Delete(*)		文字の削除
+Enter(*)		コマンドの実行
+HistAdd(*)		|history| への追加
+History(*)		コマンド履歴の呼び出し
 Incsearch		|incsearch| のような挙動のエミュレート
 KeyMapping		キーマッピングの提供
-NoInsert		挿入しない文字の処理
+NoInsert(*)		挿入しない文字の処理
 Paste			@* の挿入
 Scroll			起動したウィンドウのスクロール
-InsertRegister		レジスタの内容を挿入
+InsertRegister(*)	レジスタの内容を挿入
+
+(*) が付いているモジュールは Over.Commandline に付属します。
+それ以外のモジュールは |:Vitalize| 時に個別に指定して導入する必要があります。
 
 
 BufferComplete			*Vital.Over.Commandline-modules-BufferComplete*

@@ -18,21 +18,6 @@ let s:modules = [
 \	"InsertRegister",
 \]
 
-let s:modules_snake = [
-\	"scroll",
-\	"cursor_move",
-\	"delete",
-\	"paste",
-\	"histadd",
-\	"history",
-\	"incsearch",
-\	"buffer_complete",
-\	"cancel",
-\	"enter",
-\	"no_insert",
-\	"insert_register",
-\]
-
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
@@ -47,25 +32,32 @@ function! s:_vital_depends()
 endfunction
 
 
+function! s:get_module(name)
+	if exists("s:" . a:name)
+		return s:{a:name}
+	endif
+	let s:{a:name} = s:V.import('Over.Commandline.Modules.' . a:name)
+	return s:{a:name}
+endfunction
+
+
 function! s:make_plain(prompt)
 	let result = s:make(a:prompt)
 	let result.prompt = a:prompt
-	call result.connect(s:module_cancel())
-	call result.connect(s:module_enter())
+	call result.connect("Enter")
+	call result.connect("Cancel")
 	return result
 endfunction
 
 
 function! s:make_basic(prompt)
 	let result = s:make_plain(a:prompt)
-" 	call result.connect(s:module_scroll())
-" 	call result.connect(s:module_buffer_complete())
-	call result.connect(s:module_delete())
-	call result.connect(s:module_cursor_move())
-	call result.connect(s:module_histadd())
-	call result.connect(s:module_history())
-	call result.connect(s:module_no_insert_special_chars())
-	call result.connect(s:module_insert_register())
+	call result.connect("Delete")
+	call result.connect("CursorMove")
+	call result.connect("HistAdd")
+	call result.connect("History")
+	call result.connect("InsertRegister")
+	call result.connect(s:get_module("NoInsert").make_special_chars())
 	return result
 endfunction
 
@@ -166,6 +158,9 @@ endfunction
 
 
 function! s:base.connect(module, ...)
+	if type(a:module) == type("")
+		return self.connect(s:get_module(a:module).make())
+	endif
 	let name = get(a:, 1, a:module.name)
 	let self.variables.modules[name] = a:module
 endfunction
@@ -411,20 +406,6 @@ function! s:base._get_keymapping()
 		endif
 	endfor
 	return extend(extend(result, self.variables.keymapping), self.keymapping())
-endfunction
-
-
-for s:i in range(len(s:modules_snake))
-	execute join([
-\		"function! s:module_" . s:modules_snake[s:i] . "(...)",
-\		"	return call(s:" . s:modules[s:i] . ".make, a:000, s:" . s:modules[s:i] . ")",
-\		"endfunction",
-\	], "\n")
-endfor
-unlet s:i
-
-function! s:module_no_insert_special_chars()
-	return s:NoInsert.make_special_chars()
 endfunction
 
 
