@@ -18,7 +18,7 @@ let s:modules = [
 \	'KeyMapping',
 \	'NoInsert',
 \	'Paste',
-\	'Scroll'
+\	'Scroll',
 \	'Doautocmd'
 \]
 
