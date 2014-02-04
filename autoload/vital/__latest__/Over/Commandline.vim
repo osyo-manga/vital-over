@@ -15,6 +15,7 @@ let s:modules = [
 \	"Cancel",
 \	"Enter",
 \	"NoInsert",
+\	"InsertRegister",
 \]
 
 let s:modules_snake = [
@@ -29,6 +30,7 @@ let s:modules_snake = [
 \	"cancel",
 \	"enter",
 \	"no_insert",
+\	"insert_register",
 \]
 
 
@@ -63,6 +65,7 @@ function! s:make_basic(prompt)
 	call result.connect(s:module_histadd())
 	call result.connect(s:module_history())
 	call result.connect(s:module_no_insert_special_chars())
+	call result.connect(s:module_insert_register())
 	return result
 endfunction
 
@@ -81,13 +84,13 @@ let s:base = {
 \		"tap_key" : "",
 \		"exit" : 0,
 \		"keymapping" : {},
+\		"modules" : {},
 \	},
 \	"highlights" : {
 \		"prompt" : "NONE",
 \		"cursor" : "OverCommandLineDefaultCursor",
 \		"cursor_insert" : "OverCommandLineDefaultCursorInsert"
 \	},
-\	"modules" : {},
 \	"keys" : {
 \		"quit"  : "\<Esc>",
 \		"enter" : "\<CR>",
@@ -121,7 +124,7 @@ endfunction
 
 
 function! s:base.setpos(pos)
-	return self.line.set_pos(pos)
+	return self.line.set_pos(a:pos)
 endfunction
 
 
@@ -168,19 +171,19 @@ endfunction
 
 function! s:base.connect(module, ...)
 	let name = get(a:, 1, a:module.name)
-	let self.modules[name] = a:module
+	let self.variables.modules[name] = a:module
 endfunction
 
 
 function! s:base.disconnect(name)
-	unlet self.modules[a:name] = a:module
+	unlet self.variables.modules[a:name] = a:module
 endfunction
 
 
 for s:_ in ["enter", "leave", "char", "char_pre", "execute_pre", "execute_failed", "execute", "cancel"]
 	execute join([
 \		"function! s:base._on_" . s:_ . "()",
-\		"	call map(copy(self.modules), 'has_key(v:val, \"on_" . s:_ . "\") ? v:val.on_" . s:_ . "(self) : 0')",
+\		"	call map(copy(self.variables.modules), 'has_key(v:val, \"on_" . s:_ . "\") ? v:val.on_" . s:_ . "(self) : 0')",
 \		"	call self.on_" . s:_ . "()",
 \		"endfunction",
 \	], "\n")
@@ -236,6 +239,46 @@ function! s:base.exit_code()
 endfunction
 
 
+function! s:base.hl_cursor_on()
+	if exists("self.variables.old_hi_cursor")
+		execute "highlight Cursor " . self.variables.old_hi_cursor
+		unlet self.variables.old_hi_cursor
+	endif
+	if exists("self.variables.old_t_ve")
+		let &t_ve = self.variables.old_t_ve
+		unlet self.variables.old_t_ve
+	endif
+endfunction
+
+
+function! s:base.hl_cursor_off()
+	if exists("self.variables.old_hi_cursor")
+		return self.variables.old_hi_cursor
+	endif
+	let self.variables.old_hi_cursor = "cterm=reverse"
+	if hlexists("Cursor")
+		let save_verbose = &verbose
+		let &verbose = 0
+		try
+			redir => cursor
+			silent highlight Cursor
+			redir END
+		finally
+			let &verbose = save_verbose
+		endtry
+		let hl = substitute(matchstr(cursor, 'xxx \zs.*'), '[ \t\n]\+\|cleared', ' ', 'g')
+		if !empty(substitute(hl, '\s', '', 'g'))
+			let self.variables.old_hi_cursor = hl
+		endif
+		highlight Cursor NONE
+	endif
+	let self.variables.old_t_ve = &t_ve
+	set t_ve=
+
+	return self.variables.old_hi_cursor
+endfunction
+
+
 function! s:base.start(...)
 	let exit_code = call(self._main, a:000, self)
 	if exit_code == 0
@@ -259,20 +302,18 @@ function! s:base._init()
 	let self.variables.input = ""
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
-	let hl_cursor = s:_hl_cursor_off()
+	let hl_cursor = self.hl_cursor_off()
 	if !hlexists("OverCommandLineDefaultCursor")
 		execute "highlight OverCommandLineDefaultCursor " . hl_cursor
 	endif
 	if !hlexists("OverCommandLineDefaultCursorInsert")
 		execute "highlight OverCommandLineDefaultCursorInsert " . hl_cursor . " term=underline gui=underline"
 	endif
-	let s:old_t_ve = &t_ve
-	set t_ve=
 endfunction
 
 
 function! s:base._execute()
-	call s:_redraw()
+	call s:redraw()
 	call self._on_execute_pre()
 	try
 		call self.execute()
@@ -310,19 +351,18 @@ function! s:base._main(...)
 		call self._finish()
 		call self._on_leave()
 	endtry
-	call s:_redraw()
+	call s:redraw()
 	return self.exit_code()
 endfunction
 
 
 function! s:base._finish()
-	cal s:_hl_cursor_on()
-	let &t_ve = s:old_t_ve
+	call self.hl_cursor_on()
 endfunction
 
 
 function! s:_echo_cmdline(cmdline)
-	call s:_redraw()
+	call s:redraw()
 	execute "echohl" a:cmdline.highlights.prompt
 	echon a:cmdline.prompt
 	echohl NONE
@@ -369,7 +409,7 @@ endfunction
 
 function! s:base._get_keymapping()
 	let result = {}
-	for module in values(self.modules)
+	for module in values(self.variables.modules)
 		if has_key(module, "keymapping")
 			call extend(result, module.keymapping(self))
 		endif
@@ -392,7 +432,7 @@ function! s:module_no_insert_special_chars()
 endfunction
 
 
-function! s:_redraw()
+function! s:redraw()
 	redraw
 	echo ""
 endfunction
@@ -403,38 +443,6 @@ function! s:_getchar()
 	return type(char) == type(0) ? nr2char(char) : char
 endfunction
 
-
-function! s:_hl_cursor_on()
-	if exists("s:old_hi_cursor")
-		execute "highlight Cursor " . s:old_hi_cursor
-		unlet s:old_hi_cursor
-	endif
-endfunction
-
-
-function! s:_hl_cursor_off()
-	if exists("s:old_hi_cursor")
-		return s:old_hi_cursor
-	endif
-	let s:old_hi_cursor = "cterm=reverse"
-	if hlexists("Cursor")
-		let save_verbose = &verbose
-		let &verbose = 0
-		try
-			redir => cursor
-			silent highlight Cursor
-			redir END
-		finally
-			let &verbose = save_verbose
-		endtry
-		let hl = substitute(matchstr(cursor, 'xxx \zs.*'), '[ \t\n]\+\|cleared', ' ', 'g')
-		if !empty(substitute(hl, '\s', '', 'g'))
-			let s:old_hi_cursor = hl
-		endif
-		highlight Cursor NONE
-	endif
-	return s:old_hi_cursor
-endfunction
 
 
 function! s:_clamp(x, max, min)

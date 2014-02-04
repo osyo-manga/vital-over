@@ -248,6 +248,7 @@ KeyMapping		キーマッピングの提供
 NoInsert		挿入しない文字の処理
 Paste			@* の挿入
 Scroll			起動したウィンドウのスクロール
+InsertRegister		レジスタの内容を挿入
 
 
 BufferComplete			*Vital.Over.Commandline-modules-BufferComplete*
@@ -326,6 +327,7 @@ NoInsert			*Vital.Over.Commandline-modules-NoInsert*
 
 Scroll			*Vital.Over.Commandline-modules-Scroll*
 	起動したバッファのウィンドウをスクロールします。
+			*Vital.Over.Commandline-modules-Scroll-keymapping*
 	キー			機能~
 	<Over>(scroll-y)	|CTRL-y| と同等
 	<Over>(scroll-u)	|CTRL-u| と同等
@@ -334,6 +336,14 @@ Scroll			*Vital.Over.Commandline-modules-Scroll*
 	<Over>(scroll-d)	|CTRL-d| と同等
 	<Over>(scroll-b)	|CTRL-b| と同等
 
+InsertRegister			*Vital.Over.Commandline-modules-InsertRegister*
+	レジスタの内容を挿入します。
+		*Vital.Over.Commandline-modules-InsertRegister-keymapping*
+	キー			機能~
+	<C-r> {0-9a-z"%#:-=.}	レジスタの内容を挿入 |c_CTRL-R|
+	<C-r> <C-f>		カーソル下のファイル名
+	<C-r> <C-w>		カーソル下の word
+	<C-r> <C-A>		カーソル下の WORD
 
 
 ==============================================================================
