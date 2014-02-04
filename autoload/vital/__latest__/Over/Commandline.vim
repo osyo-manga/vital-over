@@ -10,8 +10,6 @@ let s:modules = [
 \	"Paste",
 \	"HistAdd",
 \	"History",
-\	"Incsearch",
-\	"BufferComplete",
 \	"Cancel",
 \	"Enter",
 \	"NoInsert",
