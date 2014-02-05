@@ -137,7 +137,6 @@ function! s:base.is_input(key, ...)
 	let prekey = get(a:, 1, "")
 	return self.get_tap_key() == prekey
 \		&& self.char() == a:key
-" \		&& s:_unmap(self._get_keymapping(), self.char()).key == a:key
 endfunction
 
 
@@ -330,7 +329,6 @@ function! s:base._main(...)
 
 			let self.variables.char = s:_unmap(self._get_keymapping(), s:_getchar())
 
-" 			let self.variables.char = s:_getchar()
 			call self.setchar(self.variables.char)
 
 			call self._on_char_pre()
