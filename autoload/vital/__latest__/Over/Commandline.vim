@@ -140,6 +140,11 @@ function! s:base.is_input(key, ...)
 endfunction
 
 
+function! s:base.input_key()
+	return self.variables.input_key
+endfunction
+
+
 function! s:base.insert(word, ...)
 	if a:0
 		call self.line.set(a:1)
@@ -218,10 +223,10 @@ function! s:base.exit(...)
 endfunction
 
 
-function! s:base.cancel()
-	call self.exit(1)
-	call self._on_cancel()
-endfunction
+" function! s:base.cancel()
+" 	call self.exit(1)
+" 	call self._on_cancel()
+" endfunction
 
 
 function! s:base.exit_code()
@@ -327,7 +332,8 @@ function! s:base._main(...)
 		while !self._is_exit()
 			call s:_echo_cmdline(self)
 
-			let self.variables.char = s:_unmap(self._get_keymapping(), s:_getchar())
+			let self.variables.input_key = s:_getchar()
+			let self.variables.char = s:_unmap(self._get_keymapping(), self.variables.input_key)
 
 			call self.setchar(self.variables.char)
 
