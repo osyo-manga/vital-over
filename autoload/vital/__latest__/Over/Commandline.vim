@@ -136,7 +136,8 @@ endfunction
 function! s:base.is_input(key, ...)
 	let prekey = get(a:, 1, "")
 	return self.get_tap_key() == prekey
-\		&& s:_unmap(self._get_keymapping(), self.char()).key == a:key
+\		&& self.char() == a:key
+" \		&& s:_unmap(self._get_keymapping(), self.char()).key == a:key
 endfunction
 
 
@@ -327,7 +328,9 @@ function! s:base._main(...)
 		while !self._is_exit()
 			call s:_echo_cmdline(self)
 
-			let self.variables.char = s:_getchar()
+			let self.variables.char = s:_unmap(self._get_keymapping(), s:_getchar())
+
+" 			let self.variables.char = s:_getchar()
 			call self.setchar(self.variables.char)
 
 			call self._on_char_pre()
@@ -388,12 +391,12 @@ endfunction
 
 function! s:_unmap(mapping, key)
 	if !has_key(a:mapping, a:key)
-		return s:_as_key_config(a:key)
+		return a:key
 	endif
 	let rhs  = s:_as_key_config(a:mapping[a:key])
 	let next = s:_as_key_config(get(a:mapping, rhs.key, {}))
 	if rhs.noremap && next.lock == 0
-		return rhs
+		return rhs.key
 	endif
 	return s:_unmap(a:mapping, rhs.key)
 endfunction
