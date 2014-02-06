@@ -54,19 +54,32 @@ function! s:module.on_char_pre(cmdline)
 		if char =~ '^[0-9a-zA-z.%#:/"\-*]$'
  			execute "let regist = @" . char
 			call a:cmdline.setchar(regist)
-		elseif a:cmdline.is_input('=', self.prefix_key)
+		elseif char == "="
 			call a:cmdline.setchar(s:input(a:cmdline))
-		elseif a:cmdline.is_input("\<C-w>", self.prefix_key)
+		elseif char == "\<C-w>"
 			call a:cmdline.setchar(self.cword)
-		elseif a:cmdline.is_input("\<C-a>", self.prefix_key)
+		elseif char == "\<C-a>"
 			call a:cmdline.setchar(self.cWORD)
-		elseif a:cmdline.is_input("\<C-f>", self.prefix_key)
+		elseif char == "\<C-f>"
 			call a:cmdline.setchar(self.cfile)
-		elseif a:cmdline.is_input("\<C-r>", self.prefix_key)
+		elseif char == "\<C-r>"
 			call a:cmdline.setchar('"')
 		else
 			call a:cmdline.setchar("")
 		endif
+" 		elseif a:cmdline.is_input('=', self.prefix_key)
+" 			call a:cmdline.setchar(s:input(a:cmdline))
+" 		elseif a:cmdline.is_input("\<C-w>", self.prefix_key)
+" 			call a:cmdline.setchar(self.cword)
+" 		elseif a:cmdline.is_input("\<C-a>", self.prefix_key)
+" 			call a:cmdline.setchar(self.cWORD)
+" 		elseif a:cmdline.is_input("\<C-f>", self.prefix_key)
+" 			call a:cmdline.setchar(self.cfile)
+" 		elseif a:cmdline.is_input("\<C-r>", self.prefix_key)
+" 			call a:cmdline.setchar('"')
+" 		else
+" 			call a:cmdline.setchar("")
+" 		endif
 	endif
 endfunction
 
