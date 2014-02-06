@@ -172,7 +172,7 @@ endfunction
 
 
 function! s:base.disconnect(name)
-	unlet self.variables.modules[a:name] = a:module
+	unlet self.variables.modules[a:name]
 endfunction
 
 
