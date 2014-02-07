@@ -164,7 +164,7 @@ endfunction
 
 function! s:base.connect(module, ...)
 	if type(a:module) == type("")
-		return self.connect(s:get_module(a:module).make())
+		return call(self.connect, [s:get_module(a:module).make()] + a:000, self)
 	endif
 	let name = get(a:, 1, a:module.name)
 	let self.variables.modules[name] = a:module
