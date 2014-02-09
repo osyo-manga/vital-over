@@ -357,9 +357,9 @@ function! s:base._main(...)
 		return -1
 	finally
 		call self._finish()
+		call s:redraw()
 		call self.callevent("on_leave")
 	endtry
-	call s:redraw()
 	return self.exit_code()
 endfunction
 
