@@ -1,6 +1,4 @@
 let s:cmdline     = vital#of("vital").import("Over.Commandline")
-let s:cursor_move = vital#of("vital").import("Over.Commandline.Modules.CursorMove")
-let s:delete      = vital#of("vital").import("Over.Commandline.Modules.Delete")
 
 
 " コマンドラインのオブジェクトを生成
