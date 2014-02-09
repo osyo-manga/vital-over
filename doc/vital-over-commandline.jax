@@ -144,29 +144,33 @@ CALLBACK			*Vital.Over.Commandline-object-callback*
 keymapping()			*Vital.Over.Commandline-object-keymapping()*
 	キーマッピングの辞書を返します。
 
-on_enter()			*Vital.Over.Commandline-object-on_enter()*
+priority({event})		*Vital.Over.Commandline-object-priority()*
+	{event} 時に処理される優先順位を返します。
+	返す数値が低いほうが先に処理されます。
+
+on_enter({self})		*Vital.Over.Commandline-object-on_enter()*
 	コマンドラインが開始された時に呼ばれる関数です。
 
-on_leave()			*Vital.Over.Commandline-object-on_leave()*
+on_leave({self})		*Vital.Over.Commandline-object-on_leave()*
 	コマンドラインが終了された時に呼ばれる関数です
 
-on_char_pre()			*Vital.Over.Commandline-object-on_char_pre()*
+on_char_pre({self})		*Vital.Over.Commandline-object-on_char_pre()*
 	コマンドラインで文字が入力され、コマンドラインに挿入される前にに呼ばれ
 	る関数です
 
-on_char()			*Vital.Over.Commandline-object-on_char()*
+on_char({self})			*Vital.Over.Commandline-object-on_char()*
 	コマンドラインで文字が入力され、コマンドラインに挿入された後に呼ばれる
 	関数です。
 
-on_execute_pre()		*Vital.Over.Commandline-object-on_execute_pre()*
+on_execute_pre({self})	*Vital.Over.Commandline-object-on_execute_pre()*
 	コマンドラインでコマンドが実行される直前に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
 
-on_execute()			*Vital.Over.Commandline-object-on_execute()*
+on_execute({self})		*Vital.Over.Commandline-object-on_execute()*
 	コマンドラインでコマンドが実行された後に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
-
-on_execute_failed()	*Vital.Over.Commandline-object-on_execute_failed()*
+			*Vital.Over.Commandline-object-on_execute_failed()*
+on_execute_failed({self})
 	コマンドラインでコマンドを実行し、失敗した時に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
 
