@@ -10,7 +10,7 @@ let s:modules = [
 \	"HistAdd",
 \	"History",
 \	"Cancel",
-\	"Enter",
+\	"Execute",
 \	"NoInsert",
 \	"InsertRegister",
 \]
@@ -50,7 +50,7 @@ endfunction
 function! s:make_plain(prompt)
 	let result = s:make(a:prompt)
 	let result.prompt = a:prompt
-	call result.connect("Enter")
+	call result.connect("Execute")
 	call result.connect("Cancel")
 	call result.connect(result, "_")
 	return result
@@ -231,8 +231,10 @@ function! s:base.keymapping()
 endfunction
 
 
-function! s:base.execute()
-	execute self.getline()
+function! s:base.execute(...)
+	let command = get(a:, 1, self.getline())
+	call self._execute(command)
+" 	execute self.getline()
 endfunction
 
 
@@ -280,9 +282,9 @@ endfunction
 
 function! s:base.start(...)
 	let exit_code = call(self._main, a:000, self)
-	if exit_code == 0
-		call self._execute()
-	endif
+" 	if exit_code == 0
+" 		call self._execute()
+" 	endif
 endfunction
 
 
@@ -314,11 +316,12 @@ function! s:base._init()
 endfunction
 
 
-function! s:base._execute()
+function! s:base._execute(command)
 	call s:redraw()
 	call self.callevent("on_execute_pre")
 	try
-		call self.execute()
+		execute self.getline()
+" 		call self.execute()
 	catch
 		echohl ErrorMsg
 		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
@@ -354,7 +357,7 @@ function! s:base._main(...)
 		return -1
 	finally
 		call self._finish()
-		call s:redraw()
+" 		call s:redraw()
 		call self.callevent("on_leave")
 	endtry
 	return self.exit_code()
