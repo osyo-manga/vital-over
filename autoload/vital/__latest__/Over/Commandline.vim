@@ -91,6 +91,14 @@ let s:base = {
 \	},
 \}
 
+if exists("s:Signals")
+	let s:base.variables.modules = s:Signals.make()
+	function! s:base.variables.modules.get_slot(val)
+		return a:val.slot.module
+	endfunction
+endif
+
+
 
 function! s:base.getline()
 	return self.line.str()
