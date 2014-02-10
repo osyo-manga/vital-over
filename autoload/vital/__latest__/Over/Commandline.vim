@@ -320,7 +320,7 @@ function! s:base._execute(command)
 	call s:redraw()
 	call self.callevent("on_execute_pre")
 	try
-		execute self.getline()
+		execute a:command
 " 		call self.execute()
 	catch
 		echohl ErrorMsg
