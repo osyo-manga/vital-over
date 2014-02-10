@@ -20,7 +20,7 @@ function! s:module.on_char_pre(cmdline)
 		call a:cmdline.exit(0)
 	endif
 	if a:cmdline.is_input("<Over>(execute-no-exit)")
-		call self.execute()
+		call self.execute(a:cmdline)
 		call a:cmdline.setchar("")
 	endif
 endfunction
@@ -46,6 +46,21 @@ function! s:make_no_execute()
 endfunction
 
 
+let s:search = deepcopy(s:module)
+let s:search.prefix = "/"
+
+
+function! s:search.execute(cmdline)
+	let cmd = printf("call feedkeys(\"%s%s\<CR>\", 'n')", self.prefix, a:cmdline.getline())
+	call a:cmdline.execute(cmd)
+endfunction
+
+
+function! s:make_search(...)
+	let result = deepcopy(s:search)
+	let result.prefix = get(a:, 1, "/")
+	return result
+endfunction
 
 
 let &cpo = s:save_cpo

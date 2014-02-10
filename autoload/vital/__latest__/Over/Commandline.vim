@@ -201,6 +201,12 @@ function! s:base.disconnect(name)
 endfunction
 
 
+function! s:base.get_module(name)
+	let slot = self.variables.modules.find_first_by("get(v:val.slot, 'name', '') == " . string(a:name))
+	return empty(slot) ? {} : slot.slot.module
+endfunction
+
+
 function! s:base.callevent(event)
 	call self.variables.modules.sort_by("has_key(v:val.slot.module, 'priority') ? v:val.slot.module.priority('" . a:event . "') : 0")
 	return self.variables.modules.call(a:event, [self])
@@ -282,17 +288,21 @@ endfunction
 
 function! s:base.start(...)
 	let exit_code = call(self._main, a:000, self)
-" 	if exit_code == 0
-" 		call self._execute()
-" 	endif
+	return exit_code
 endfunction
 
 
 function! s:base.get(...)
-	let exit_code = call(self._main, a:000, self)
-	if exit_code == 0
-		return self.getline()
-	endif
+	let old_execute = self.get_module("Execute")
+	try
+		call self.connect(s:get_module("Execute").make_no_execute())
+		let exit_code = self.start()
+		if exit_code == 0
+			return self.getline()
+		endif
+	finally
+		call self.connect(old_execute)
+	endtry
 	return ""
 endfunction
 
