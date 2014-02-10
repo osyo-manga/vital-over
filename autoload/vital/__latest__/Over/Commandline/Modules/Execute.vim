@@ -26,7 +26,7 @@ function! s:module.on_char_pre(cmdline)
 endfunction
 
 function! s:module.execute(cmdline)
-	return a:cmdline.execute(a:cmdline)
+	return a:cmdline.execute()
 endfunction
 
 
