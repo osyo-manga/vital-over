@@ -87,7 +87,8 @@ let s:base = {
 \	"highlights" : {
 \		"prompt" : "NONE",
 \		"cursor" : "OverCommandLineDefaultCursor",
-\		"cursor_insert" : "OverCommandLineDefaultCursorInsert"
+\		"cursor_on" : "OverCommandLineDefaultCursorOn",
+\		"cursor_insert" : "OverCommandLineDefaultOnCursor",
 \	},
 \}
 
@@ -304,6 +305,9 @@ function! s:base._init()
 	if !hlexists("OverCommandLineDefaultCursor")
 		highlight link OverCommandLineDefaultCursor Cursor
 	endif
+	if !hlexists("OverCommandLineDefaultCursorOn")
+		highlight link OverCommandLineDefaultCursorOn OverCommandLineDefaultCursor
+	endif
 	if !hlexists("OverCommandLineDefaultCursorInsert")
 		highlight OverCommandLineDefaultCursorInsert cterm=underline term=underline gui=underline
 	endif
@@ -372,7 +376,7 @@ function! s:_echo_cmdline(cmdline)
 		execute "echohl" a:cmdline.highlights.cursor
 		echon  ' '
 	else
-		execute "echohl" a:cmdline.highlights.cursor_insert
+		execute "echohl" a:cmdline.highlights.cursor_on
 		echon a:cmdline.line.pos_word()
 	endif
 	echohl NONE
