@@ -30,6 +30,6 @@ call s:my.start()
 
 ##Special Thanks
 
-* @haya14busa
+* [@haya14busa](https://github.com/haya14busa)
 
 
