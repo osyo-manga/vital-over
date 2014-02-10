@@ -245,10 +245,11 @@ endfunction
 
 
 function! s:base.hl_cursor_on()
-	if exists("self.variables.old_hi_cursor")
-		execute "highlight Cursor " . self.variables.old_hi_cursor
-		unlet self.variables.old_hi_cursor
+	if exists("self.variables.old_guicursor")
+		let &guicursor = self.variables.old_guicursor
+		unlet self.variables.old_guicursor
 	endif
+
 	if exists("self.variables.old_t_ve")
 		let &t_ve = self.variables.old_t_ve
 		unlet self.variables.old_t_ve
@@ -257,30 +258,14 @@ endfunction
 
 
 function! s:base.hl_cursor_off()
-	if exists("self.variables.old_hi_cursor")
-		return self.variables.old_hi_cursor
+	if exists("self.variables.old_t_ve")
+		return
 	endif
-	let self.variables.old_hi_cursor = "cterm=reverse"
-	if hlexists("Cursor")
-		let save_verbose = &verbose
-		let &verbose = 0
-		try
-			redir => cursor
-			silent highlight Cursor
-			redir END
-		finally
-			let &verbose = save_verbose
-		endtry
-		let hl = substitute(matchstr(cursor, 'xxx \zs.*'), '[ \t\n]\+\|cleared', ' ', 'g')
-		if !empty(substitute(hl, '\s', '', 'g'))
-			let self.variables.old_hi_cursor = hl
-		endif
-		highlight Cursor NONE
-	endif
+
+	let self.variables.old_guicursor = &guicursor
+	set guicursor=a:block-NONE
 	let self.variables.old_t_ve = &t_ve
 	set t_ve=
-
-	return self.variables.old_hi_cursor
 endfunction
 
 
@@ -307,12 +292,12 @@ function! s:base._init()
 	let self.variables.input = ""
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
-	let hl_cursor = self.hl_cursor_off()
+	call self.hl_cursor_off()
 	if !hlexists("OverCommandLineDefaultCursor")
-		execute "highlight OverCommandLineDefaultCursor " . hl_cursor
+		highlight link OverCommandLineDefaultCursor Cursor
 	endif
 	if !hlexists("OverCommandLineDefaultCursorInsert")
-		execute "highlight OverCommandLineDefaultCursorInsert " . hl_cursor . " term=underline gui=underline"
+		highlight OverCommandLineDefaultCursorInsert term=underline gui=underline
 	endif
 endfunction
 
