@@ -297,7 +297,7 @@ function! s:base._init()
 		highlight link OverCommandLineDefaultCursor Cursor
 	endif
 	if !hlexists("OverCommandLineDefaultCursorInsert")
-		highlight OverCommandLineDefaultCursorInsert term=underline gui=underline
+		highlight OverCommandLineDefaultCursorInsert cterm=underline term=underline gui=underline
 	endif
 endfunction
 
