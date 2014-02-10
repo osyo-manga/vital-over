@@ -16,13 +16,17 @@ let s:module = {
 
 function! s:module.on_char_pre(cmdline)
 	if s:_is_input_enter(a:cmdline)
-		call a:cmdline.execute()
+		call self.execute(a:cmdline)
 		call a:cmdline.exit(0)
 	endif
 	if a:cmdline.is_input("<Over>(execute-no-exit)")
-		call a:cmdline.execute()
+		call self.execute()
 		call a:cmdline.setchar("")
 	endif
+endfunction
+
+function! s:module.execute(cmdline)
+	return a:cmdline.execute(a:cmdline)
 endfunction
 
 
@@ -33,16 +37,15 @@ endfunction
 
 let s:empty = deepcopy(s:module)
 
-function! s:module.on_char_pre(cmdline)
-	if s:_is_input_enter(a:cmdline)
-		call a:cmdline.exit(0)
-	endif
+function! s:empty.execute(...)
 endfunction
 
 
 function! s:make_no_execute()
-	return deepcopy(s:module)
+	return deepcopy(s:empty)
 endfunction
+
+
 
 
 let &cpo = s:save_cpo
