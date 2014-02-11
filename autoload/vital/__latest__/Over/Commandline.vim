@@ -13,14 +13,12 @@ let s:modules = [
 \	"Execute",
 \	"NoInsert",
 \	"InsertRegister",
+\	"Redraw",
 \]
 
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
-	for module in s:modules
-		let s:{module} = s:V.import('Over.Commandline.Modules.' . module)
-	endfor
 	let s:String  = s:V.import("Over.String")
 	let s:Signals = s:V.import("Over.Signals")
 	let s:base.variables.modules = s:Signals.make()
@@ -65,6 +63,7 @@ function! s:make_standard(prompt)
 	call result.connect("History")
 	call result.connect("InsertRegister")
 	call result.connect(s:get_module("NoInsert").make_special_chars())
+	call result.connect("Redraw")
 	return result
 endfunction
 
@@ -327,11 +326,9 @@ endfunction
 
 
 function! s:base._execute(command)
-	call s:redraw()
 	call self.callevent("on_execute_pre")
 	try
 		execute a:command
-" 		call self.execute()
 	catch
 		echohl ErrorMsg
 		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
@@ -367,7 +364,6 @@ function! s:base._main(...)
 		return -1
 	finally
 		call self._finish()
-" 		call s:redraw()
 		call self.callevent("on_leave")
 	endtry
 	return self.exit_code()
