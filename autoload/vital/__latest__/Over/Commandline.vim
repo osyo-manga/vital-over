@@ -45,11 +45,9 @@ function! s:get_module(name)
 endfunction
 
 
-function! s:make_plain(prompt)
-	let result = s:make(a:prompt)
+function! s:make(prompt)
+	let result = deepcopy(s:base)
 	let result.prompt = a:prompt
-	call result.connect("Execute")
-	call result.connect("Cancel")
 	call result.connect(result, "_")
 	return result
 endfunction
@@ -65,11 +63,6 @@ function! s:make_standard(prompt)
 	call result.connect(s:get_module("NoInsert").make_special_chars())
 	call result.connect("Redraw")
 	return result
-endfunction
-
-
-function! s:make(prompt)
-	return deepcopy(s:base)
 endfunction
 
 
@@ -279,7 +272,7 @@ function! s:base.hl_cursor_off()
 	endif
 
 	let self.variables.old_guicursor = &guicursor
-	set guicursor=a:block-NONE
+	set guicursor=n:block-NONE
 	let self.variables.old_t_ve = &t_ve
 	set t_ve=
 endfunction
