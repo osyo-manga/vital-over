@@ -1,21 +1,13 @@
-let s:cmdline     = vital#of("vital").import("Over.Commandline")
+let s:cmdline  = vital#of("vital").import("Over.Commandline")
 
 
 " コマンドラインのオブジェクトを生成
-let s:my = s:cmdline.make_plain("$ ")
-
-
-" 使用したいモジュールを追加
-" get_module() でモジュールを取得できる
-call s:my.connect(s:cmdline.get_module("Scroll").make())
-
-" 直接名前をしていする事も可能
-" この場合は
-" s:cmdline.get_module("CursorMove").make()
-" と同等
-call s:my.connect("CursorMove")
+" make_standard() は標準のコマンドラインの挙動に準じたコマンドラインが生成される
+" NOTE:全ての機能が実装されているわけではない
+let s:my = s:cmdline.make_standard(":")
 
 
 " コマンドラインの開始
+" <CR> でコマンドを実行したり <Esc> でコマンドラインを終了する
 call s:my.start()
 

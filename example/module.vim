@@ -2,7 +2,7 @@ let s:cmdline = vital#of("vital").import("Over.Commandline")
 
 
 " コマンドラインのオブジェクトを生成
-let s:my = s:cmdline.make_plain("$ ")
+let s:my = s:cmdline.make_standard("$ ")
 
 
 " モジュールの生成
@@ -22,7 +22,7 @@ function! s:module.on_char_pre(cmdline)
 		call a:cmdline.setchar('')
 
 	" コマンドラインを終了する
-	elseif a:cmdline.is_input("\<C-c>")
+	elseif a:cmdline.is_input("\<A-c>")
 		call a:cmdline.exit()
 	endif
 endfunction

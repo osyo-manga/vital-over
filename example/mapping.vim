@@ -2,12 +2,11 @@ let s:cmdline = vital#of("vital").import("Over.Commandline")
 
 
 " コマンドラインのオブジェクトを生成
-let s:my = s:cmdline.make_plain("$ ")
+let s:my = s:cmdline.make_standard("$ ")
 
 
 " 使用したいモジュールを追加
 call s:my.connect("Scroll")
-call s:my.connect("CursorMove")
 
 
 " 生成したコマンドラインに対してキーマップを設定する
@@ -19,5 +18,4 @@ call s:my.cmap("\<C-p>", "<Over>(scroll-y)")
 
 " コマンドラインの開始
 call s:my.start()
-
 
