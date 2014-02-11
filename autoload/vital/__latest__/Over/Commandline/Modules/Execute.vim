@@ -51,9 +51,14 @@ let s:search.prefix = "/"
 
 
 function! s:search.execute(cmdline)
-	let cmd = printf("call feedkeys(\"%s%s\<CR>\", 'n')", self.prefix, a:cmdline.getline())
+" 	let cmd = printf("call feedkeys(\"%s%s\<CR>\", 'n')", self.prefix, a:cmdline.getline())
+	let cmd = printf("call search('%s')", a:cmdline.getline())
 	call a:cmdline.execute(cmd)
+	let @/ = a:cmdline.getline()
+	let &hlsearch = &hlsearch
+	call feedkeys(":set hlsearch | set incsearch\<CR>", 'n')
 endfunction
+
 
 
 function! s:make_search(...)
