@@ -20,9 +20,6 @@ make_standard({prompt})			*Vital.Over.Commandline-make_standard()*
 	オブジェクトの内容は |Vital.Over.Commandline-object| を参照して下さ
 	い。
 
-make_plain({prompt})			*Vital.Over.Commandline-make_plain()*
-	独自のコマンドラインを作りたい場合はこれを元にするとよいでしょう。
-
 make({prompt})				*Vital.Over.Commandline-make()*
 	|Vital.Over.Commandline-object| のオブジェクトを生成します。
 	NOTE: この関数で生成したオブジェクトは何も行いません。
@@ -262,7 +259,7 @@ BufferComplete		起動したバッファのワードで補完
 Cancel(*)		コマンドラインの中断
 CursorMove(*)		カーソル移動
 Delete(*)		文字の削除
-Enter(*)		コマンドの実行
+Execute(*)		コマンドの実行
 HistAdd(*)		|history| への追加
 History(*)		コマンド履歴の呼び出し
 Incsearch		|incsearch| のような挙動のエミュレート
@@ -313,11 +310,14 @@ Delete					*Vital.Over.Commandline-modules-Delete*
 	<C-u>		カーソル位置より後ろの文字を全て削除
 	<Del>		カーソル位置上の文字を削除
 
-Enter					*Vital.Over.Commandline-modules-Enter*
+Execute					*Vital.Over.Commandline-modules-Execute*
 	入力された文字を |:execute| で実行します。
-			*Vital.Over.Commandline-modules-Enter-keymapping*
+			*Vital.Over.Commandline-modules-Execute-keymapping*
 	キー			機能~
-	<CR>, <NL>, <C-j>	実行
+	<CR>, <NL>, <C-j>	入力されているコマンドを実行し、コマンドライン
+				を終了する
+	<Over>(execute-no-exit)	入力されているコマンドを実行。コマンドラインは
+				終了しません。
 
 HistAdd					*Vital.Over.Commandline-modules-HistAdd*
 	入力された文字を履歴に追加します。
