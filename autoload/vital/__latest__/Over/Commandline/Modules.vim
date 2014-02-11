@@ -3,24 +3,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:modules = [
-\	'BufferComplete',
-\	'Cancel',
-\	'CursorMove',
-\	'Delete',
-\	'Enter',
-\	'ExecuteFailedMessage',
-\	'HighlightBufferCursor',
-\	'HistAdd',
-\	'History',
-\	'Incsearch',
-\	'InsertRegister',
-\	'KeyMapping',
-\	'NoInsert',
-\	'Paste',
-\	'Scroll',
-\	'Doautocmd'
-\]
+let s:modules =  map(split(globpath(expand("<sfile>:p:r"), "/*.vim"), "\n"), "fnamemodify(v:val, ':t:r')")
 
 
 function! s:_vital_depends()
