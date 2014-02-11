@@ -255,6 +255,7 @@ endfunction
 
 function! s:base.hl_cursor_on()
 	if exists("self.variables.old_guicursor")
+		set guicursor&
 		let &guicursor = self.variables.old_guicursor
 		unlet self.variables.old_guicursor
 	endif
