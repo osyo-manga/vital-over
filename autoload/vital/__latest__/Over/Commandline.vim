@@ -78,9 +78,9 @@ let s:base = {
 \	},
 \	"highlights" : {
 \		"prompt" : "NONE",
-\		"cursor" : "OverCommandLineDefaultCursor",
-\		"cursor_on" : "OverCommandLineDefaultCursorOn",
-\		"cursor_insert" : "OverCommandLineDefaultOnCursor",
+\		"cursor" : "OverCommandLineCursor",
+\		"cursor_on" : "OverCommandLineCursorOn",
+\		"cursor_insert" : "OverCommandLineOnCursor",
 \	},
 \}
 
