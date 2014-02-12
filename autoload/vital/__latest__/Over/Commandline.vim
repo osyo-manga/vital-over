@@ -3,20 +3,6 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:modules = [
-\	"Scroll",
-\	"CursorMove",
-\	"Delete",
-\	"HistAdd",
-\	"History",
-\	"Cancel",
-\	"Execute",
-\	"NoInsert",
-\	"InsertRegister",
-\	"Redraw",
-\]
-
-
 function! s:_vital_loaded(V)
 	let s:V = a:V
 	let s:String  = s:V.import("Over.String")
@@ -32,7 +18,8 @@ function! s:_vital_depends()
 	return [
 \		"Over.String",
 \		"Over.Signals",
-\	] + map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
+\	]
+"+ map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
 endfunction
 
 
@@ -45,25 +32,11 @@ function! s:get_module(name)
 endfunction
 
 
-function! s:make(prompt)
+function! s:make(...)
+	let prompt = get(a:, 1, ":")
 	let result = deepcopy(s:base)
-	let result.prompt = a:prompt
+	let result.prompt = prompt
 	call result.connect(result, "_")
-	return result
-endfunction
-
-
-function! s:make_standard(prompt)
-	let result = s:make(a:prompt)
-	call result.connect("Execute")
-	call result.connect("Cancel")
-	call result.connect("Delete")
-	call result.connect("CursorMove")
-	call result.connect("HistAdd")
-	call result.connect("History")
-	call result.connect("InsertRegister")
-	call result.connect(s:get_module("NoInsert").make_special_chars())
-	call result.connect("Redraw")
 	return result
 endfunction
 
