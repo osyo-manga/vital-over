@@ -54,7 +54,9 @@ endfunction
 
 
 function! s:make_standard(prompt)
-	let result = s:make_plain(a:prompt)
+	let result = s:make(a:prompt)
+	call result.connect("Execute")
+	call result.connect("Cancel")
 	call result.connect("Delete")
 	call result.connect("CursorMove")
 	call result.connect("HistAdd")
@@ -307,14 +309,14 @@ function! s:base._init()
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
 	call self.hl_cursor_off()
-	if !hlexists("OverCommandLineDefaultCursor")
-		highlight link OverCommandLineDefaultCursor Cursor
+	if !hlexists(self.highlights.cursor)
+		execute "highlight link " . self.highlights.cursor . " Cursor"
 	endif
-	if !hlexists("OverCommandLineDefaultCursorOn")
-		highlight link OverCommandLineDefaultCursorOn OverCommandLineDefaultCursor
+	if !hlexists(self.highlights.cursor_on)
+		execute "highlight link " . self.highlights.cursor_on . " " . self.highlights.cursor
 	endif
-	if !hlexists("OverCommandLineDefaultCursorInsert")
-		highlight OverCommandLineDefaultCursorInsert cterm=underline term=underline gui=underline
+	if !hlexists(self.highlights.cursor_insert)
+		execute "highlight " . self.highlights.cursor_insert . " cterm=underline term=underline gui=underline"
 	endif
 endfunction
 
