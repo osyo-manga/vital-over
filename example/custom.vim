@@ -4,7 +4,7 @@ let s:cmdline     = vital#of("vital").import("Over.Commandline")
 " コマンドラインのオブジェクトを生成
 " このオブジェクトは何も行わないので
 " 自分で Modules を追加してカスタマイズしていく
-let s:my = s:cmdline.make("$ ")
+let s:my = s:cmdline.make_default("$ ")
 
 
 " 使用したいモジュールを追加する
