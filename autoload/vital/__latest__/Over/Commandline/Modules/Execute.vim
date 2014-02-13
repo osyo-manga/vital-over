@@ -17,6 +17,7 @@ let s:module = {
 function! s:module.on_char_pre(cmdline)
 	if s:_is_input_enter(a:cmdline)
 		call self.execute(a:cmdline)
+		call a:cmdline.setchar("")
 		call a:cmdline.exit(0)
 	endif
 	if a:cmdline.is_input("<Over>(execute-no-exit)")
