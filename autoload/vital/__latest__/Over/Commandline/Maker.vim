@@ -18,7 +18,8 @@ let s:modules = [
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
-	let s:Cmdline  = s:V.import("Over.Commandline")
+	let s:Cmdline = s:V.import("Over.Commandline.Base")
+	let s:Modules = s:V.import("Over.Commandline.Modules")
 	let s:base.variables.modules = s:Signals.make()
 	function! s:base.variables.modules.get_slot(val)
 		return a:val.slot.module
@@ -28,8 +29,14 @@ endfunction
 
 function! s:_vital_depends()
 	return [
-\		"Over.Commandline",
+\		"Over.Commandline.Base",
+\		"Over.Commandline.Modules",
 \	] + map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
+endfunction
+
+
+function! s:default(...)
+	return call(s:Cmdline.make, a:000, s:Cmdline)
 endfunction
 
 
@@ -42,7 +49,7 @@ function! s:standard(...)
 	call result.connect("HistAdd")
 	call result.connect("History")
 	call result.connect("InsertRegister")
-	call result.connect(s:Cmdline.get_module("NoInsert").make_special_chars())
+	call result.connect(s:Modules.get("NoInsert").make_special_chars())
 	call result.connect("Redraw")
 	return result
 endfunction
