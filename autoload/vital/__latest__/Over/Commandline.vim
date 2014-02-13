@@ -19,7 +19,6 @@ function! s:_vital_depends()
 \		"Over.String",
 \		"Over.Signals",
 \	]
-"+ map(copy(s:modules), "'Over.Commandline.Modules.' . v:val")
 endfunction
 
 
