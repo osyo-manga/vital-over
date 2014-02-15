@@ -140,6 +140,9 @@ function! s:base.connect(module, ...)
 	if type(a:module) == type("")
 		return call(self.connect, [s:Module.make(a:module)] + a:000, self)
 	endif
+	if empty(a:module)
+		return
+	endif
 	let name = a:0 > 0 ? a:1 : a:module.name
 	let slot = self.variables.modules.find_first_by("get(v:val.slot, 'name', '') == " . string(name))
 	if empty(slot)
@@ -254,7 +257,9 @@ endfunction
 function! s:base.get(...)
 	let old_execute = self.get_module("Execute")
 	try
-		call self.connect(s:Module.get("Execute").make_no_execute())
+		if !empty(old_execute)
+			call self.connect(s:Module.get("Execute").make_no_execute())
+		endif
 		let exit_code = self.start()
 		if exit_code == 0
 			return self.getline()
