@@ -33,6 +33,11 @@ function! s:make(...)
 endfunction
 
 
+function! s:make_plain()
+	return deepcpy(s:base)
+endfunction
+
+
 let s:base = {
 \	"prompt" : "",
 \	"line" : {},
@@ -254,18 +259,20 @@ function! s:base.start(...)
 endfunction
 
 
+function! s:base.__empty(...)
+endfunction
+
+
 function! s:base.get(...)
-	let old_execute = self.get_module("Execute")
+	let Old_execute = self.execute
+	let self.execute = self.__empty
 	try
-		if !empty(old_execute)
-			call self.connect(s:Module.get("Execute").make_no_execute())
-		endif
 		let exit_code = self.start()
 		if exit_code == 0
 			return self.getline()
 		endif
 	finally
-		call self.connect(old_execute)
+		let self.execute = Old_execute
 	endtry
 	return ""
 endfunction

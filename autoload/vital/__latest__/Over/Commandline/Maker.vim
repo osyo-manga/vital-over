@@ -40,6 +40,11 @@ function! s:default(...)
 endfunction
 
 
+function! s:plain()
+	return s:Cmdline.plain()
+endfunction
+
+
 function! s:standard(...)
 	let result = call(s:Cmdline.make, a:000, s:Cmdline)
 	call result.connect("Execute")
