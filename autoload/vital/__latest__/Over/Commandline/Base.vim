@@ -79,8 +79,13 @@ function! s:base.char()
 endfunction
 
 
-function! s:base.setchar(char)
-	let self.variables.input = a:char
+function! s:base.setchar(char, ...)
+	" 1 の場合は既に設定されていても上書きする
+	" 0 の場合は既に設定されていれば上書きしない
+	let overwrite = get(a:, 1, 1)
+	if overwrite || self.variables.input == self.char()
+		let self.variables.input = a:char
+	endif
 endfunction
 
 
