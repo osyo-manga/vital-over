@@ -46,6 +46,7 @@ let s:base = {
 \		"tap_key" : "",
 \		"exit" : 0,
 \		"keymapping" : {},
+\		"suffix" : "",
 \	},
 \	"highlights" : {
 \		"prompt" : "NONE",
@@ -136,6 +137,16 @@ endfunction
 
 function! s:base.get_prompt()
 	return self.variables.prompt
+endfunction
+
+
+function! s:base.set_suffix(str)
+	let self.variables.suffix = a:str
+endfunction
+
+
+function! s:base.get_suffix()
+	return self.variables.suffix
 endfunction
 
 
@@ -361,6 +372,14 @@ function! s:base._finish()
 endfunction
 
 
+function! s:suffix(left, suffix)
+	let left_len = strdisplaywidth(a:left)
+	let len = &columns - left_len % &columns
+	let len = len + (&columns * (strdisplaywidth(a:suffix) > (len))) - 1
+	return printf("%" . len . "S", a:suffix)
+endfunction
+
+
 function! s:_echo_cmdline(cmdline)
 	call s:redraw()
 	execute "echohl" a:cmdline.highlights.prompt
@@ -376,6 +395,7 @@ function! s:_echo_cmdline(cmdline)
 	endif
 	echohl NONE
 	echon a:cmdline.forward()
+	echon s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix())
 endfunction
 
 
@@ -425,7 +445,6 @@ endfunction
 
 function! s:redraw()
 	redraw
-	echo ""
 endfunction
 
 
