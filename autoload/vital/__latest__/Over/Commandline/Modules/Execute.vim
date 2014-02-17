@@ -36,17 +36,6 @@ function! s:make()
 endfunction
 
 
-let s:empty = deepcopy(s:module)
-
-function! s:empty.execute(...)
-endfunction
-
-
-function! s:make_no_execute()
-	return deepcopy(s:empty)
-endfunction
-
-
 let s:search = deepcopy(s:module)
 let s:search.prefix = "/"
 
