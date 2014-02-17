@@ -5,7 +5,9 @@
 
 インターフェース		|Vital.Over.Commandline-interface|
   関数				  |Vital.Over.Commandline-functions|
-  commandline			  |Vital.Over.Commandline-object|
+コマンドライン			|Vital.Over.Commandline-object|
+キーマッピング			|Vital.Over.Commandline-keymapping|
+モジュール			|Vital.Over.Commandline-modules|
 
 
 ==============================================================================
@@ -19,8 +21,19 @@ make_standard({prompt})			*Vital.Over.Commandline-make_standard()*
 	す。
 	オブジェクトの内容は |Vital.Over.Commandline-object| を参照して下さ
 	い。
+				*Vital.Over.Commandline-make_standard_search()*
+make_standard_search({prompt})
+	標準の検索コマンドラインの挙動に準じたコマンドラインオブジェクトを生成
+	します。
+	前方検索します。
 
-make({prompt})				*Vital.Over.Commandline-make()*
+			*Vital.Over.Commandline-make_standard_search_back()*
+make_standard_search_back({prompt})
+	標準の検索コマンドラインの挙動に準じたコマンドラインオブジェクトを生成
+	します。
+	後方検索します。
+
+make_default({prompt})			*Vital.Over.Commandline-make_default()*
 	|Vital.Over.Commandline-object| のオブジェクトを生成します。
 	NOTE: この関数で生成したオブジェクトは何も行いません。
 	キャンセルや実行などもできないので注意して下さい。
@@ -29,6 +42,9 @@ get_module({name})			*Vital.Over.Commandline-get_module()*
 	{name} の |Vital.Over.Commandline-modules| を取得します。
 	導入されていないモジュールは失敗します。
 
+make_module({name}[, {args...}])	*Vital.Over.Commandline-make_module()*
+	{name} の |Vital.Over.Commandline-modules| を生成します。
+	導入されていないモジュールは失敗します。
 
 ==============================================================================
 コマンドライン				*Vital.Over.Commandline-object*
@@ -295,6 +311,7 @@ BufferComplete			*Vital.Over.Commandline-modules-BufferComplete*
 
 Cancel					*Vital.Over.Commandline-modules-Cancel*
 	コマンドラインの入力を中断します。
+	このモジュールで終了した場合は終了コードが 1 になります。
 
 			*Vital.Over.Commandline-modules-Cancel-keymapping*
 	キー		機能~
@@ -327,6 +344,12 @@ Execute					*Vital.Over.Commandline-modules-Execute*
 				を終了する
 	<Over>(execute-no-exit)	入力されているコマンドを実行。コマンドラインは
 				終了しません。
+
+Exit					*Vital.Over.Commandline-modules-Exit*
+	コマンドラインを終了します。
+			*Vital.Over.Commandline-modules-Exit-keymapping*
+	キー			機能~
+	<Over>(exit)	コマンドラインを終了します。
 
 HistAdd					*Vital.Over.Commandline-modules-HistAdd*
 	入力された文字を履歴に追加します。

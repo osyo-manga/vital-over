@@ -39,5 +39,14 @@ function! s:make_standard(...)
 endfunction
 
 
+function! s:make_standard_search(...)
+	return call(s:Maker.standard_search, a:000, s:Maker)
+endfunction
+
+
+function! s:make_standard_search_back(...)
+	return call(s:Maker.standard_search_back, a:000, s:Maker)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

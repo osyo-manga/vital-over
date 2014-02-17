@@ -60,5 +60,23 @@ function! s:standard(...)
 endfunction
 
 
+function! s:standard_search(...)
+	let result = s:standard(get(a:, 1, "/"))
+	call result.connect(s:Modules.get("Execute").make_search("/"))
+	call result.connect(s:Modules.make("HistAdd", "/"))
+	call result.connect(s:Modules.make("History", "/"))
+	return result
+endfunction
+
+
+function! s:standard_search_back(...)
+	let result = s:standard(get(a:, 1, "?"))
+	call result.connect(s:Modules.get("Execute").make_search("?"))
+	call result.connect(s:Modules.make("HistAdd", "/"))
+	call result.connect(s:Modules.make("History", "/"))
+	return result
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
