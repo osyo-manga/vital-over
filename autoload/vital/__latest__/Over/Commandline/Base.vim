@@ -26,7 +26,7 @@ endfunction
 
 function! s:make(...)
 	let result = deepcopy(s:base)
-	let result.set_prompt(get(a:, 1, ":"))
+	call result.set_prompt(get(a:, 1, ":"))
 	call result.connect(result, "_")
 	return result
 endfunction
@@ -317,7 +317,7 @@ function! s:base._execute(command)
 		execute a:command
 	catch
 		echohl ErrorMsg
-		echo matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
+		echom matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
 		echohl None
 		call self.callevent("on_execute_failed")
 	finally
@@ -346,7 +346,7 @@ function! s:base._main(...)
 			call self.callevent("on_char")
 		endwhile
 	catch
-		echohl ErrorMsg | echo v:throwpoint . " " . v:exception | echohl None
+		echohl ErrorMsg | echom v:throwpoint . " " . v:exception | echohl None
 		return -1
 	finally
 		call self._finish()
