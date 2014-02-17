@@ -107,6 +107,8 @@ start()				*Vital.Over.Commandline-object-start()*
 
 get()				*Vital.Over.Commandline-object-get()*
 	コマンドラインの入力を開始します。
+	|Vital.Over.Commandline-object-start()| とは違い入力されたコマンドは実
+	行されません。
 	コマンドラインが正常終了した場合に入力された文字列を返します。
 	異常終了した場合は空の文字列を返します。
 
@@ -134,6 +136,13 @@ cnoremap({lhs}, {rhs})		*Vital.Over.Commandline-object-cnoremap()*
 
 cunmap({lhs})			*Vital.Over.Commandline-object-cunmap()*
 	{lhs} に割り当てられたキーマップを削除します。
+
+
+set_prompt({string})		*Vital.Over.Commandline-object-set_prompt()*
+	プロンプトに {string} を設定します。
+
+get_prompt()			*Vital.Over.Commandline-object-get_prompt()*
+	現在のプロンプトの文字列を返します。
 
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
