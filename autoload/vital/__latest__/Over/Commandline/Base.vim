@@ -380,22 +380,26 @@ function! s:suffix(left, suffix)
 endfunction
 
 
+function! s:echon(expr)
+	echon strtrans(a:expr)
+endfunction
+
 function! s:_echo_cmdline(cmdline)
 	call s:redraw()
 	execute "echohl" a:cmdline.highlights.prompt
-	echon a:cmdline.get_prompt()
+	call s:echon(a:cmdline.get_prompt())
 	echohl NONE
-	echon a:cmdline.backward()
+	call s:echon(a:cmdline.backward())
 	if empty(a:cmdline.line.pos_word())
 		execute "echohl" a:cmdline.highlights.cursor
-		echon  ' '
+		call s:echon(' ')
 	else
 		execute "echohl" a:cmdline.highlights.cursor_on
-		echon a:cmdline.line.pos_word()
+		call s:echon(a:cmdline.line.pos_word())
 	endif
 	echohl NONE
-	echon a:cmdline.forward()
-	echon s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix())
+	call s:echon(a:cmdline.forward())
+	call s:echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
 endfunction
 
 
