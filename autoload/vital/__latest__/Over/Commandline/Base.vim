@@ -375,7 +375,7 @@ endfunction
 function! s:suffix(left, suffix)
 	let left_len = strdisplaywidth(a:left)
 	let len = &columns - left_len % &columns
-	let len = len + (&columns * (strdisplaywidth(a:suffix) > (len))) - 1
+	let len = len + (&columns * (strdisplaywidth(a:suffix) > (len - 1))) - 1
 	return printf("%" . len . "S", a:suffix)
 endfunction
 
@@ -385,7 +385,7 @@ function! s:echon(expr)
 endfunction
 
 function! s:_echo_cmdline(cmdline)
-	call s:redraw()
+	call a:cmdline.redraw()
 	execute "echohl" a:cmdline.highlights.prompt
 	call s:echon(a:cmdline.get_prompt())
 	echohl NONE
@@ -446,9 +446,15 @@ function! s:base._get_keymapping()
 	return extend(extend(result, self.variables.keymapping), self.keymapping())
 endfunction
 
-
-function! s:redraw()
+function! s:_redraw()
+" 	normal! :
 	redraw
+" 	echo ""
+endfunction
+
+
+function! s:base.redraw()
+	call s:_redraw()
 endfunction
 
 
