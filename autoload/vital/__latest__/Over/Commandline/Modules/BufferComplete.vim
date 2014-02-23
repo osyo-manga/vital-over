@@ -99,10 +99,6 @@ endfunction
 
 
 function! s:module.on_char_pre(cmdline)
-" 	echom "-----"
-" 	echom a:cmdline.char()
-" 	echom "Completion\<Tab>"
-" 	echom "Completion\<Tab>" == a:cmdline.char()
 	if a:cmdline.is_input("<Over>(buffer-complete)")
 		if self.complete(a:cmdline) == -1
 			call s:_finish()
@@ -127,7 +123,7 @@ function! s:module.on_char_pre(cmdline)
 		endif
 	else
 		if a:cmdline.untap_keyinput("Completion")
-" 			call a:cmdline._on_char_pre()
+			call a:cmdline.callevent("on_char_pre")
 		endif
 		call s:_finish()
 		return
