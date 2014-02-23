@@ -376,7 +376,8 @@ function! s:suffix(left, suffix)
 	let left_len = strdisplaywidth(a:left)
 	let len = &columns - left_len % &columns
 	let len = len + (&columns * (strdisplaywidth(a:suffix) > (len - 1))) - 1
-	return printf("%" . len . "S", a:suffix)
+	return repeat(" ", len - strdisplaywidth(a:suffix)) . a:suffix
+" 	return printf("%" . len . "S", a:suffix)
 endfunction
 
 
@@ -399,7 +400,9 @@ function! s:_echo_cmdline(cmdline)
 	endif
 	echohl NONE
 	call s:echon(a:cmdline.forward())
-	call s:echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
+	if	a:cmdline.get_suffix() != ""
+		call s:echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
+	endif
 endfunction
 
 
