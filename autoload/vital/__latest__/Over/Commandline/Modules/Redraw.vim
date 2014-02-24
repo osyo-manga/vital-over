@@ -29,8 +29,13 @@ function! s:module.on_leave(cmdline)
 	endif
 endfunction
 
+function! s:module.on_draw_pre(cmdline)
+	call self.redraw(a:cmdline)
+endfunction
+
+
 function! s:module.redraw(cmdline)
-	call a:cmdline.redraw()
+	redraw
 endfunction
 
 function! s:make()

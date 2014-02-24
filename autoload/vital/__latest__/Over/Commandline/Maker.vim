@@ -13,6 +13,7 @@ let s:modules = [
 \	"NoInsert",
 \	"InsertRegister",
 \	"Redraw",
+\	"DrawCommandline",
 \]
 
 
@@ -56,6 +57,7 @@ function! s:standard(...)
 	call result.connect("InsertRegister")
 	call result.connect(s:Modules.get("NoInsert").make_special_chars())
 	call result.connect("Redraw")
+	call result.connect("DrawCommandline")
 	return result
 endfunction
 
