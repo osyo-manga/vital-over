@@ -94,6 +94,7 @@ function! s:_finish()
 	if exists("s:old_statusline")
 		let &statusline = s:old_statusline
 		unlet s:old_statusline
+		redrawstatus
 	endif
 endfunction
 
@@ -132,6 +133,7 @@ function! s:module.on_char_pre(cmdline)
 	call a:cmdline.insert(s:complete_list[s:count], s:pos)
 	if len(s:complete_list) > 1
 		let &statusline = s:_as_statusline(s:complete_list, s:count)
+		redrawstatus
 	endif
 	if len(s:complete_list) == 1
 		call a:cmdline.untap_keyinput("Completion")
@@ -140,7 +142,7 @@ endfunction
 
 
 function! s:module.on_draw_pre(...)
-	redrawstatus
+" 	redrawstatus
 endfunction
 
 
