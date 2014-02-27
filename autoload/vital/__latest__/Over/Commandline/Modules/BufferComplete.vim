@@ -139,6 +139,11 @@ function! s:module.on_char_pre(cmdline)
 endfunction
 
 
+function! s:module.on_draw_pre(...)
+	redrawstatus
+endfunction
+
+
 function! s:module.on_leave(cmdline)
 	call s:_finish()
 	unlet! s:complete

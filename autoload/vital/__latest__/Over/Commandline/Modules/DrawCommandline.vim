@@ -21,7 +21,19 @@ function! s:echon(expr)
 endfunction
 
 
+function! s:redraw()
+" 	execute "normal! \<C-g>\<Esc>"
+	normal! :
+endfunction
+
+
+function! s:module.on_draw_pre(...)
+	call s:redraw()
+endfunction
+
+
 function! s:module.on_draw(cmdline)
+" 	call s:echon(a:cmdline.backward())
 	execute "echohl" a:cmdline.highlights.prompt
 	call s:echon(a:cmdline.get_prompt())
 	echohl NONE

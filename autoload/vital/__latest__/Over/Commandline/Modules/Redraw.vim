@@ -26,12 +26,13 @@ endfunction
 function! s:module.on_leave(cmdline)
 	if self.is_execute == 0
 		call self.redraw(a:cmdline)
+		redraw
 	endif
 endfunction
 
-function! s:module.on_draw_pre(cmdline)
-	call self.redraw(a:cmdline)
-endfunction
+" function! s:module.on_draw_pre(cmdline)
+" 	call self.redraw(a:cmdline)
+" endfunction
 
 
 function! s:module.redraw(cmdline)
