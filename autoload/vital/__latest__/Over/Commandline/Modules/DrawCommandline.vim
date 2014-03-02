@@ -16,13 +16,28 @@ function! s:suffix(left, suffix)
 endfunction
 
 
-function! s:redraw()
-" 	execute "normal! \<C-g>\<Esc>"
-	normal! :
+let s:old_width = 0
+function! s:_redraw(cmdline)
+	let left = a:cmdline.get_prompt() . a:cmdline.getline() . (empty(a:cmdline.line.pos_word()) ? " " : "")
+	let width = len(left) + 1
+
+	if	a:cmdline.get_suffix() != ""
+		let width += len(s:suffix(left, a:cmdline.get_suffix())) - 1
+	endif
+
+	if &columns >= width && &columns <= s:old_width && s:old_width >= width
+		redraw
+		normal! :
+	elseif &columns <= width
+		normal! :
+	else
+		redraw
+	endif
+	let s:old_width = width
 endfunction
 
 
-function! s:as_echon(str)
+function! s:_as_echon(str)
 	return "echon " . string(a:str)
 endfunction
 
@@ -31,29 +46,28 @@ function! s:module.on_draw_pre(cmdline)
 	if empty(a:cmdline.line.pos_word())
 		let cursor = "echohl " . a:cmdline.highlights.cursor . " | echon ' '"
 	else
-		let cursor = "echohl " . a:cmdline.highlights.cursor_on . " | " . s:as_echon(a:cmdline.line.pos_word())
+		let cursor = "echohl " . a:cmdline.highlights.cursor_on . " | " . s:_as_echon(a:cmdline.line.pos_word())
 	endif
 	let suffix = ""
 	if	a:cmdline.get_suffix() != ""
-		let suffix = s:as_echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
+		let suffix = s:_as_echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
 	endif
-
 	let self.draw_command  = join([
 \		"echohl " . a:cmdline.highlights.prompt,
-\		s:as_echon(a:cmdline.get_prompt()),
+\		s:_as_echon(a:cmdline.get_prompt()),
 \		"echohl NONE",
-\		s:as_echon(a:cmdline.backward()),
+\		s:_as_echon(a:cmdline.backward()),
 \		cursor,
 \		"echohl NONE",
-\		s:as_echon(a:cmdline.forward()),
+\		s:_as_echon(a:cmdline.forward()),
 \		suffix,
 \	], " | ")
 
-	call s:redraw()
+	call s:_redraw(a:cmdline)
 endfunction
 
 
-function! s:echon(expr)
+function! s:_echon(expr)
 	echon strtrans(a:expr)
 endfunction
 
