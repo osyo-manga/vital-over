@@ -6,6 +6,27 @@ let s:module = {
 \	"name" : "DrawCommandline"
 \}
 
+let s:cmdheight = {}
+
+function! s:cmdheight.save()
+	if has_key(self, "value")
+		return
+	endif
+	let self.value = &cmdheight
+endfunction
+
+function! s:cmdheight.restore()
+	if has_key(self, "value")
+		let &cmdheight = self.value
+		unlet self.value
+	endif
+endfunction
+
+
+function! s:cmdheight.get()
+	return self.value
+endfunction
+
 
 function! s:suffix(left, suffix)
 	let left_len = strdisplaywidth(a:left)
@@ -34,6 +55,13 @@ function! s:_redraw(cmdline)
 		redraw
 	endif
 	let s:old_width = width
+
+	call s:cmdheight.save()
+	let height = max([(width - 1) / (&columns) + 1, s:cmdheight.get()])
+	if height > &cmdheight || &cmdheight > height
+		let &cmdheight = height
+		redraw
+	endif
 endfunction
 
 
@@ -90,6 +118,16 @@ function! s:module.on_draw(cmdline)
 " 	if	a:cmdline.get_suffix() != ""
 " 		call s:echon(s:suffix(a:cmdline.get_prompt() . a:cmdline.getline() . repeat(" ", empty(a:cmdline.line.pos_word())), a:cmdline.get_suffix()))
 " 	endif
+endfunction
+
+
+function! s:module.on_execute_pre(...)
+	call s:cmdheight.restore()
+endfunction
+
+
+function! s:module.on_leave(...)
+	call s:cmdheight.restore()
 endfunction
 
 
