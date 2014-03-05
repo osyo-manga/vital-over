@@ -24,7 +24,7 @@ function! s:module.on_execute_failed(...)
 endfunction
 
 function! s:module.on_leave(cmdline)
-	if self.is_execute == 0
+	if self.is_execute == 0 && a:cmdline.exit_code() != -1
 		call self.redraw(a:cmdline)
 	endif
 endfunction

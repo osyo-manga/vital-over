@@ -58,6 +58,9 @@ function! s:standard(...)
 	call result.connect(s:Modules.get("NoInsert").make_special_chars())
 	call result.connect("Redraw")
 	call result.connect("DrawCommandline")
+	call result.connect("ExceptionExit")
+	call result.connect("ExceptionMessage")
+
 	return result
 endfunction
 

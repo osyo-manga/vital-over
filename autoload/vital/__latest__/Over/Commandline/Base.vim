@@ -350,8 +350,8 @@ function! s:base._main(...)
 		call self.callevent("on_enter")
 
 		while !self._is_exit()
+			try
 			call self.draw()
-" 			call s:_echo_cmdline(self)
 
 			let self.variables.input_key = s:_getchar()
 			let self.variables.char = s:_unmap(self._get_keymapping(), self.variables.input_key)
@@ -362,10 +362,13 @@ function! s:base._main(...)
 			call self.callevent("on_char_pre")
 			call self.insert(self.variables.input)
 			call self.callevent("on_char")
+			catch
+				call self.callevent("on_exception")
+			endtry
 		endwhile
 	catch
 		echohl ErrorMsg | echom v:throwpoint . " " . v:exception | echohl None
-		return -1
+		let self.variables.exit_code = -1
 	finally
 		call self._finish()
 		call self.callevent("on_leave")
