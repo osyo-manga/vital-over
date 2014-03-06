@@ -9,6 +9,10 @@ let s:my = s:cmdline.make_default("$ ")
 
 " 使用したいモジュールを追加する
 " get_module() でモジュールを取得できる
+" "DrawCommandline" はコマンドラインに出力を行う
+call s:my.connect(s:cmdline.get_module("DrawCommandline").make())
+
+
 " "Execute" は <CR> で入力されたコマンドを実行する
 call s:my.connect(s:cmdline.get_module("Execute").make())
 
