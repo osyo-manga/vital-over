@@ -433,6 +433,19 @@ Example: >
 	augroup END
 <
 
+Redraw					*Vital.Over.Commandline-modules-Redraw*
+	コマンドラインの再描画を行います。
+
+DrawCommandline		*Vital.Over.Commandline-modules-DrawCommandline*
+	コマンドラインへ描画します。
+
+ExceptionExit		*Vital.Over.Commandline-modules-ExceptionExit*
+	いずれかのタイミングで例外が発生した場合に中断します。
+
+ExceptionMessage	*Vital.Over.Commandline-modules-ExceptionMessage*
+	発生した例外の内容を出力します。
+
+
 
 
 ==============================================================================
