@@ -152,9 +152,9 @@ endfunction
 
 function! s:base.insert(word, ...)
 	if a:0
-		call self.line.set(a:1)
+		call self.line.set(tr(a:1, "\n", "\r"))
 	endif
-	call self.line.input(a:word)
+	call self.line.input(tr(a:word, "\n", "\r"))
 endfunction
 
 function! s:base.forward()
