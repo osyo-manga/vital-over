@@ -49,28 +49,31 @@ make_module({name}[, {args...}])	*Vital.Over.Commandline-make_module()*
 ==============================================================================
 コマンドライン				*Vital.Over.Commandline-object*
 
+|Vital.Over.Commandline-make_standard()| 等で生成したオブジェクトが保持する関
+数です。
+
 CORE					*Vital.Over.Commandline-object-core*
 
-getline()			*Vital.Over.Commandline-object-getline()*
+object.getline()		*Vital.Over.Commandline-object-getline()*
 	コマンドラインの文字列を返します
 
-setline({line})			*Vital.Over.Commandline-object-setline()*
+object.setline({line})			*Vital.Over.Commandline-object-setline()*
     コマンドラインに {line} を設定します
 
-char()					*Vital.Over.Commandline-object-char()*
+object.char()				*Vital.Over.Commandline-object-char()*
 	入力された文字を返します
 
-setchar({char})			*Vital.Over.Commandline-object-setchar()*
+object.setchar({char})			*Vital.Over.Commandline-object-setchar()*
 	コマンドラインに挿入される文字{char}を設定します
 	コマンドラインに文字を挿入したくない場合は空の文字を設定して下さい
 
-getpos()			*Vital.Over.Commandline-object-getpos()*
+object.getpos()			*Vital.Over.Commandline-object-getpos()*
     コマンドラインのカーソル位置を返します
 
-setpos({col})			*Vital.Over.Commandline-object-setpos()*
+object.setpos({col})			*Vital.Over.Commandline-object-setpos()*
     コマンドラインのカーソル位置を {col} 設定します
 
-is_input({key})			*Vital.Over.Commandline-object-input()*
+object.is_input({key})			*Vital.Over.Commandline-object-input()*
 	{key} が入力されたかどうかを判定します。
 	入力されたかどうかの判定は char() と比較するのではなくて is_input() を
 	使用して下さい。
@@ -82,15 +85,15 @@ Example: >
     is_input("\<C-c>")
 <
 
-forward()			*Vital.Over.Commandline-object-forward()*
+object.forward()		*Vital.Over.Commandline-object-forward()*
 	カーソル位置より前方のコマンドラインの文字列を返します。
 	カーソル上の文字は含みません。
 
-backward()			*Vital.Over.Commandline-object-backward()*
+object.backward()		*Vital.Over.Commandline-object-backward()*
 	カーソル位置より後方のコマンドラインの文字列を返します。
 	カーソル上の文字を含みます。
 
-connect({module} [, {name}])	*Vital.Over.Commandline-object-connect()*
+object.connect({module} [, {name}])	*Vital.Over.Commandline-object-connect()*
 	{name} という名前の {module} を追加します。
 	{module} はモジュールの実装を記述した辞書になります。
 	{name} は disconnect() 時に使用されます。
@@ -113,15 +116,15 @@ Example: >
 <
 
 
-disconnect({name})		*Vital.Over.Commandline-object-disconnect()*
+object.disconnect({name})	*Vital.Over.Commandline-object-disconnect()*
 	{name} のモジュールを削除します。
 
-start()				*Vital.Over.Commandline-object-start()*
+object.start()			*Vital.Over.Commandline-object-start()*
 	コマンドラインの入力を開始します。
 	コマンドラインが正常終了した場合、入力した文字列を |:execute| で実行し
 	ます。
 
-get()				*Vital.Over.Commandline-object-get()*
+object.get()				*Vital.Over.Commandline-object-get()*
 	コマンドラインの入力を開始します。
 	|Vital.Over.Commandline-object-start()| とは違い入力されたコマンドは実
 	行されません。
@@ -129,70 +132,70 @@ get()				*Vital.Over.Commandline-object-get()*
 	異常終了した場合は空の文字列を返します。
 
 
-exit([{exitcode}])		*Vital.Over.Commandline-object-exit()*
+object.exit([{exitcode}])		*Vital.Over.Commandline-object-exit()*
 	コマンドラインを終了します。
 	{exitcode} は exit_code() が返す値になります。
 	引数がなければ 0 が設定されます。
 
-exit_code()			*Vital.Over.Commandline-object-exit_code()*
+object.exit_code()		*Vital.Over.Commandline-object-exit_code()*
 	終了コードを返します。
 	0	: 正常終了
 	0 以外	: 異常終了(e.g. <Esc> や <C-c> で終了した場合)
 
-cmap({lhs}, {rhs})		*Vital.Over.Commandline-object-cmap()*
+object.cmap({lhs}, {rhs})		*Vital.Over.Commandline-object-cmap()*
 	{lhs} に {rhs} のキーを割り当てます。
 Example: >
 	call s:my.cmap("\<C-f>", "\<Right>")
 	call s:my.cmap("\<C-b>", "\<Left>")
 <
 
-cnoremap({lhs}, {rhs})		*Vital.Over.Commandline-object-cnoremap()*
+object.cnoremap({lhs}, {rhs})	*Vital.Over.Commandline-object-cnoremap()*
 	{lhs} に {rhs} のキーを割り当てます。
 	cmap() とは違い再マップされません。
 
-cunmap({lhs})			*Vital.Over.Commandline-object-cunmap()*
+object.cunmap({lhs})			*Vital.Over.Commandline-object-cunmap()*
 	{lhs} に割り当てられたキーマップを削除します。
 
 
-set_prompt({string})		*Vital.Over.Commandline-object-set_prompt()*
+object.set_prompt({string})	*Vital.Over.Commandline-object-set_prompt()*
 	プロンプトに {string} を設定します。
 
-get_prompt()			*Vital.Over.Commandline-object-get_prompt()*
+object.get_prompt()		*Vital.Over.Commandline-object-get_prompt()*
 	現在のプロンプトの文字列を返します。
 
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
 
-keymapping()			*Vital.Over.Commandline-object-keymapping()*
+object.keymapping()		*Vital.Over.Commandline-object-keymapping()*
 	キーマッピングの辞書を返します。
 
-priority({event})		*Vital.Over.Commandline-object-priority()*
+object.priority({event})	*Vital.Over.Commandline-object-priority()*
 	{event} 時に処理される優先順位を返します。
 	返す数値が低いほうが先に処理されます。
 
-on_enter({self})		*Vital.Over.Commandline-object-on_enter()*
+object.on_enter({self})		*Vital.Over.Commandline-object-on_enter()*
 	コマンドラインが開始された時に呼ばれる関数です。
 
-on_leave({self})		*Vital.Over.Commandline-object-on_leave()*
+object.on_leave({self})		*Vital.Over.Commandline-object-on_leave()*
 	コマンドラインが終了された時に呼ばれる関数です
 
-on_char_pre({self})		*Vital.Over.Commandline-object-on_char_pre()*
+object.on_char_pre({self})	*Vital.Over.Commandline-object-on_char_pre()*
 	コマンドラインで文字が入力され、コマンドラインに挿入される前にに呼ばれ
 	る関数です
 
-on_char({self})			*Vital.Over.Commandline-object-on_char()*
+object.on_char({self})		*Vital.Over.Commandline-object-on_char()*
 	コマンドラインで文字が入力され、コマンドラインに挿入された後に呼ばれる
 	関数です。
 
-on_execute_pre({self})	*Vital.Over.Commandline-object-on_execute_pre()*
+object.on_execute_pre({self})	*Vital.Over.Commandline-object-on_execute_pre()*
 	コマンドラインでコマンドが実行される直前に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
 
-on_execute({self})		*Vital.Over.Commandline-object-on_execute()*
+object.on_execute({self})	*Vital.Over.Commandline-object-on_execute()*
 	コマンドラインでコマンドが実行された後に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
 			*Vital.Over.Commandline-object-on_execute_failed()*
-on_execute_failed({self})
+object.on_execute_failed({self})
 	コマンドラインでコマンドを実行し、失敗した時に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
 
