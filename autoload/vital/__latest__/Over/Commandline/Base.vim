@@ -491,7 +491,11 @@ function! s:_split_keystring(str, pats, ...)
 	if !exists("+regexpengine")
 \	|| index > len(pats)
 \	|| len(filter(copy(pats), 'a:str =~ ''\%#=2'' . v:val')) == 0
-		return split(a:str, '\zs')
+		if len(filter(copy(pats), 'a:str ==# v:val')) == 0
+			return split(a:str, '\zs')
+		else
+			return a:str
+		endif
 	endif
 	if len(filter(copy(pats), 'a:str == v:val')) == 1
 		return [a:str]
@@ -500,7 +504,6 @@ function! s:_split_keystring(str, pats, ...)
 	let result = []
 	let pat = pats[index]
 	let list = s:_split(a:str, pat)
-	echo list
 	let result += eval(join(map(list, "s:_split_keystring(v:val, pats, index+1)"), "+"))
 	return result
 endfunction
