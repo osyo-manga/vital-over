@@ -486,6 +486,9 @@ endfunction
 
 
 function! s:_split_keystring(str, pats, ...)
+	if a:str =~ '^<Over>(.\{-})$'
+		return [a:str]
+	endif
 	let pats = a:pats
 	let index = get(a:, 1, 0)
 	if !exists("+regexpengine")
@@ -494,7 +497,7 @@ function! s:_split_keystring(str, pats, ...)
 		if len(filter(copy(pats), 'a:str ==# v:val')) == 0
 			return split(a:str, '\zs')
 		else
-			return a:str
+			return [a:str]
 		endif
 	endif
 	if len(filter(copy(pats), 'a:str == v:val')) == 1
