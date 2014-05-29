@@ -176,6 +176,20 @@ object.set_prompt({string})	*Vital.Over.Commandline-object-set_prompt()*
 object.get_prompt()		*Vital.Over.Commandline-object-get_prompt()*
 	現在のプロンプトの文字列を返します。
 
+object.enable_keymapping()	*Vital.Over.Commandline-object-enable_keymapping()*
+	キーマッピングを有効にします。
+	コマンドラインを開始した時に自動的に有効になります。
+	
+object.disable_keymapping()	*Vital.Over.Commandline-object-disable_keymapping()*
+	キーマッピングを無効にします。
+	コマンドラインの開始時にキーマッピングを無効にしたい場合は、
+	|Vital.Over.Commandline-object-on_enter()|
+	でこの関数を呼ぶ必要があります。
+
+			*Vital.Over.Commandline-object-is_enable_keymapping()*
+object.is_enable_keymapping()
+	キーマッピングが有効なら 1 を返し、無効なら 0 を返します。
+
 
 CALLBACK			*Vital.Over.Commandline-object-callback*
 
