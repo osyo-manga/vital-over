@@ -506,7 +506,9 @@ function! s:_split_keystring(str, pats, ...)
 endfunction
 
 
-let s:s_keys = [
+
+
+let s:special_keys = [
 \	"\<BS>",
 \	"\<Down>",
 \	"\<Up>",
@@ -553,6 +555,7 @@ let s:s_keys = [
 \	"\<A-F10>",
 \	"\<A-F11>",
 \	"\<A-F12>",
+\	"\<A-Tab>",
 \	"\<C-BS>",
 \	"\<C-Down>",
 \	"\<C-Up>",
@@ -564,6 +567,7 @@ let s:s_keys = [
 \	"\<C-Delete>",
 \	"\<C-PageUp>",
 \	"\<C-PageDown>",
+\	"\<C-Tab>",
 \	"\<C-F1>",
 \	"\<C-F2>",
 \	"\<C-F3>",
@@ -576,10 +580,34 @@ let s:s_keys = [
 \	"\<C-F10>",
 \	"\<C-F11>",
 \	"\<C-F12>",
+\	"\<BS>",
+\	"\<S-Down>",
+\	"\<S-Up>",
+\	"\<S-Left>",
+\	"\<S-Right>",
+\	"\<S-Home>",
+\	"\<S-End>",
+\	"\<S-Insert>",
+\	"\<S-Delete>",
+\	"\<S-PageUp>",
+\	"\<S-PageDown>",
+\	"\<S-F1>",
+\	"\<S-F2>",
+\	"\<S-F3>",
+\	"\<S-F4>",
+\	"\<S-F5>",
+\	"\<S-F6>",
+\	"\<S-F7>",
+\	"\<S-F8>",
+\	"\<S-F9>",
+\	"\<S-F10>",
+\	"\<S-F11>",
+\	"\<S-F12>",
+\	"\<S-Tab>",
 \]
 
 function! s:_split_keys(str)
-	return s:_split_keystring(a:str, s:s_keys)
+	return s:_split_keystring(a:str, s:special_keys)
 endfunction
 
 
