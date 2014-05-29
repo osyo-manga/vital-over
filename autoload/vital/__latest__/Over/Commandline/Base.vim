@@ -582,6 +582,7 @@ let s:s_keys = [
 \	"\<C-F10>",
 \	"\<C-F11>",
 \	"\<C-F12>",
+\	"\<S-Tab>",
 \]
 
 function! s:_split_keys(str)
