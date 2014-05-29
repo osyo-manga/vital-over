@@ -148,6 +148,19 @@ Example: >
 	call s:my.cmap("\<C-f>", "\<Right>")
 	call s:my.cmap("\<C-b>", "\<Left>")
 <
+	NOTE: {rhs} には複数の文字も設定できるが一部特殊文字が含まれている場
+	合は |NFA| が組み込まれている必要がある
+Example: >
+	" 1文字ならば問題ない
+	call s:my.cmap("\<C-f>", "\<Right>")
+	call s:my.cmap("\<C-b>", "\<Left>")
+
+	" 複数の文字は NFA が使用できる場合のみ機能する
+	call s:my.cmap("\<A-f>", "\<Right>\<Right>")
+	call s:my.cmap("\<A-b>", "\<Left>\<Left>")
+<
+
+
 
 object.cnoremap({lhs}, {rhs})	*Vital.Over.Commandline-object-cnoremap()*
 	{lhs} に {rhs} のキーを割り当てます。
@@ -205,9 +218,25 @@ object.on_execute_failed({self})
 
 コマンドライン上での独自のキーマッピングを cmap()/cnoremap()、もしくは辞書で定
 義することができます。
+
+Example: >
+ 	let s:cmdline  = vital#of("vital").import("Over.Commandline")
+	let s:my = s:cmdline.make_standard("$ ")
+	
+	" カーソル移動を別のキーに割り当てる
+	call s:my.cnoremap("\<C-f>", "\<Right>")
+	call s:my.cnoremap("\<C-b>", "\<Left>")
+	call s:my.cnoremap("\<C-n>", "<Over>(scroll-e)")
+	call s:my.cnoremap("\<C-p>", "<Over>(scroll-y)")
+
+	" レジスタ "+" の挿入
+	call s:my.cnoremap("\<C-a>", "\<C-r>+")
+
+
+
 定義した辞書は各コマンドラインの |Vital.Over.Commandline-object-keymapping()|
 で返すことでそのコマンドラインに反映されます。
-辞書はキーに {lrh} を値に {rhs} を設定します。
+以下のように辞書を使用する場合はキーに {lrh} を値に {rhs} を設定します。
 
 Example: >
 	let s:cmdline  = vital#of("vital").import("Over.Commandline")
