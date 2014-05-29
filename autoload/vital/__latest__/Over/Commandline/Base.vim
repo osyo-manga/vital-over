@@ -249,6 +249,20 @@ function! s:base.exit(...)
 endfunction
 
 
+function! s:base.enable_keymapping()
+	let self.variables.enable_keymapping = 1
+endfunction
+
+
+function! s:base.disable_keymapping()
+	let self.variables.enable_keymapping = 0
+endfunction
+
+
+function! s:base.is_enable_keymapping()
+	return self.variables.enable_keymapping
+endfunction
+
 " function! s:base.cancel()
 " 	call self.exit(1)
 " 	call self._on_cancel()
@@ -317,6 +331,7 @@ function! s:base._init()
 	let self.variables.input = ""
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
+	let self.variables.enable_keymapping = 1
 	call self.hl_cursor_off()
 	if !hlexists(self.highlights.cursor)
 		execute "highlight link " . self.highlights.cursor . " Cursor"
@@ -346,16 +361,8 @@ endfunction
 
 
 function! s:base._input(input, ...)
-" 	let char = s:_unmap(self._get_keymapping(), a:input)
-" 	let self.variables.input_key = char
-" 	let self.variables.char = char
-" 	call self.setchar(self.variables.char)
-" 	call self.callevent("on_char_pre")
-" 	call self.insert(self.variables.input)
-" 	call self.callevent("on_char")
-
 	let self.variables.input_key = a:input
-	if self.get_tap_key() == ""
+	if self.is_enable_keymapping()
 		let key = s:_unmap(self._get_keymapping(), a:input)
 	else
 		let key = a:input
@@ -369,26 +376,6 @@ function! s:base._input(input, ...)
 		call self.insert(self.variables.input)
 		call self.callevent("on_char")
 	endfor
-
-" 	let loop = get(a:, 1, 1)
-" 	if len(a:input) > 1
-" 		return map(split(a:input, '\zs'), "self._input(v:val, loop)")
-" 	else
-" 		if self.get_tap_key() == ""
-" 			let char = s:_unmap(self._get_keymapping(), a:input)
-" 			if loop
-" 				return self._input(char, 0)
-" 			endif
-" 		else
-" 			let char = a:input
-" 		endif
-" 		let self.variables.input_key = a:input
-" 		let self.variables.char = char
-" 		call self.setchar(self.variables.char)
-" 		call self.callevent("on_char_pre")
-" 		call self.insert(self.variables.input)
-" 		call self.callevent("on_char")
-" 	endif
 endfunction
 
 
@@ -398,11 +385,18 @@ function! s:base._main(...)
 		let self.line = deepcopy(s:String.make(get(a:, 1, "")))
 		call self.callevent("on_enter")
 
+		call self.draw()
 		while !self._is_exit()
 			try
-			call self.draw()
-
-			call self._input(s:_getchar())
+" 				call self.callevent("on_update")
+" 				if !getchar(1)
+" 					continue
+" 				endif
+"
+" 				call self._input(s:_getchar(0))
+" 				call self.draw()
+				call self._input(s:_getchar())
+				call self.draw()
 			catch
 				call self.callevent("on_exception")
 			endtry
@@ -471,8 +465,8 @@ function! s:base._get_keymapping()
 endfunction
 
 
-function! s:_getchar()
-	let char = getchar()
+function! s:_getchar(...)
+	let char = call("getchar", a:000)
 	return type(char) == type(0) ? nr2char(char) : char
 endfunction
 
