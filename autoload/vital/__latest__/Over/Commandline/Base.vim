@@ -424,7 +424,7 @@ endfunction
 
 function! s:_as_key_config(config)
 	let base = {
-\		"noremap" : 0,
+/		"noremap" : 0,
 \		"lock"    : 0,
 \	}
 	return type(a:config) == type({}) ? extend(base, a:config)
@@ -580,7 +580,6 @@ let s:special_keys = [
 \	"\<C-F10>",
 \	"\<C-F11>",
 \	"\<C-F12>",
-\	"\<BS>",
 \	"\<S-Down>",
 \	"\<S-Up>",
 \	"\<S-Left>",
