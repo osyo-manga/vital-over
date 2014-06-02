@@ -424,7 +424,7 @@ endfunction
 
 function! s:_as_key_config(config)
 	let base = {
-/		"noremap" : 0,
+\		"noremap" : 0,
 \		"lock"    : 0,
 \	}
 	return type(a:config) == type({}) ? extend(base, a:config)
