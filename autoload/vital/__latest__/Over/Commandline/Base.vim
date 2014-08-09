@@ -466,8 +466,13 @@ endfunction
 
 
 function! s:_getchar(...)
-	let char = call("getchar", a:000)
-	return type(char) == type(0) ? nr2char(char) : char
+	while 1
+		let char = call("getchar", a:000)
+		" Workaround for the <expr> mappings
+		if char !=# "\x80\xfd`"
+			return type(char) == type(0) ? nr2char(char) : char
+		endif
+	endwhile
 endfunction
 
 
