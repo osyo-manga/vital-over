@@ -396,6 +396,9 @@ function! s:base._main(...)
 " 				call self._input(s:_getchar(0))
 " 				call self.draw()
 				call self._input(s:_getchar())
+				if self._is_exit()
+					breack
+				endif
 				call self.draw()
 			catch
 				call self.callevent("on_exception")
