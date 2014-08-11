@@ -397,7 +397,7 @@ function! s:base._main(...)
 " 				call self.draw()
 				call self._input(s:_getchar())
 				if self._is_exit()
-					breack
+					break
 				endif
 				call self.draw()
 			catch
