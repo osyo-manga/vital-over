@@ -25,7 +25,11 @@ endfunction
 
 function! s:module.on_leave(cmdline)
 	if self.is_execute == 0 && a:cmdline.exit_code() != -1
-		call self.redraw(a:cmdline)
+		" Workaround for the :set cedit=<C-c>
+		" https://github.com/osyo-manga/vital-over/issues/52
+		if &cedit != "<C-c>"
+			call self.redraw(a:cmdline)
+		endif
 	endif
 endfunction
 
