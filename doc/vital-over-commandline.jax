@@ -225,7 +225,9 @@ object.on_execute({self})	*Vital.Over.Commandline.object-on_execute()*
 object.on_execute_failed({self})
 	コマンドラインでコマンドを実行し、失敗した時に呼ばれる関数です。
 	コマンドラインが空でも呼ばれます。
-
+				*Vital.Over.Commandline.object-on_update()*
+object.on_update({self})
+	キー入力の処理を行う直前に呼ばれる関数です。
 
 ==============================================================================
 キーマッピング				*Vital.Over.Commandline-keymapping*
