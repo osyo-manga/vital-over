@@ -379,6 +379,24 @@ function! s:base._input(input, ...)
 endfunction
 
 
+function! s:base._update()
+" 	call self.callevent("on_update")
+" 	if !getchar(1)
+" 		continue
+" 	endif
+"
+" 	call self._input(s:getchar(0))
+" 	call self.draw()
+
+	call self.callevent("on_update")
+	call self._input(s:getchar())
+	if self._is_exit()
+		return -1
+	endif
+	call self.draw()
+endfunction
+
+
 function! s:base._main(...)
 	try
 		call self._init()
@@ -388,18 +406,9 @@ function! s:base._main(...)
 		call self.draw()
 		while !self._is_exit()
 			try
-" 				call self.callevent("on_update")
-" 				if !getchar(1)
-" 					continue
-" 				endif
-"
-" 				call self._input(s:_getchar(0))
-" 				call self.draw()
-				call self._input(s:_getchar())
-				if self._is_exit()
+				if self._update()
 					break
 				endif
-				call self.draw()
 			catch
 				call self.callevent("on_exception")
 			endtry
@@ -468,7 +477,7 @@ function! s:base._get_keymapping()
 endfunction
 
 
-function! s:_getchar(...)
+function! s:getchar(...)
 	while 1
 		let char = call("getchar", a:000)
 		" Workaround for the <expr> mappings
@@ -477,7 +486,6 @@ function! s:_getchar(...)
 		endif
 	endwhile
 endfunction
-
 
 
 function! s:_split(str, pat)
