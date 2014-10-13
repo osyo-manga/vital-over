@@ -479,7 +479,12 @@ endfunction
 
 function! s:getchar(...)
 	while 1
-		let char = call("getchar", a:000)
+		" Workaround for https://github.com/osyo-manga/vital-over/issues/53
+		try
+			let char = call("getchar", a:000)
+		catch /^Vim:Interrupt$/
+			return 3
+		endtry
 		" Workaround for the <expr> mappings
 		if char !=# "\x80\xfd`"
 			return type(char) == type(0) ? nr2char(char) : char
