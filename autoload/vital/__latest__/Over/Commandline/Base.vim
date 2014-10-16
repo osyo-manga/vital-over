@@ -482,7 +482,7 @@ function! s:getchar(...)
 	while 1
 		" Workaround for https://github.com/osyo-manga/vital-over/issues/53
 		try
-			let char = getchar(mode)
+			let char = call("getchar", a:000)
 		catch /^Vim:Interrupt$/
 			let char = 3 " <C-c>
 		endtry
