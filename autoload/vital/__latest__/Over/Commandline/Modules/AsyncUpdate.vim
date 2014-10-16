@@ -4,6 +4,7 @@ set cpo&vim
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
+	let s:Base = s:V.import("Over.Commandline.Base")
 endfunction
 
 
@@ -14,11 +15,16 @@ let s:module = {
 function! s:module.on_enter(cmdline)
 	function! a:cmdline._update()
 		call self.callevent("on_update")
-		if !getchar(1)
-			return
-		endif
+		try
+			if !getchar(1)
+				return
+			endif
+			let key = s:Base.getchar(0)
+		catch /^Vim:Interrupt$/
+			let key = "\<C-c>"
+		endtry
 
-		call self._input(s:V.import("Over.Commandline.Base").getchar(0))
+		call self._input(key)
 		call self.draw()
 	endfunction
 endfunction
