@@ -486,8 +486,8 @@ function! s:getchar(...)
 		catch /^Vim:Interrupt$/
 			let char = 3 " <C-c>
 		endtry
-		" Workaround for the <expr> mappings
-		if string(char) !=# "\x80\xfd`"
+		" Workaround for the <expr> mappings. Ignore special key sequence
+		if string(char) !~# "\x80\xfd"
 			return mode == 1 ? !!char
 \				 : type(char) == type(0) ? nr2char(char) : char
 		endif
