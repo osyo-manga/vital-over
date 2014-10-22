@@ -625,6 +625,9 @@ let s:special_keys = [
 \	"\<S-F11>",
 \	"\<S-F12>",
 \	"\<S-Tab>",
+\	"\<LeftMouse>",
+\	"\<RightMouse>",
+\	"\<LeftRelease>",
 \]
 " Issues #45
 " \	"\<S-End>",
