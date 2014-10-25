@@ -531,6 +531,21 @@ endfunction
 
 
 
+" h: mouse-overview in :h term.txt
+" generate mouse related special key like RightMouse, 2-LeftRelease, 4-A-X2Drag, etc...
+function! s:_mousekeys()
+	let r = []
+	for cnt in [""] + map(range(2,4), "v:val . '-'")
+		for prefix in ["", "A-", "S-", "C-"]
+			for key in ["Left", "Right", "Middle", "X1", "X2"]
+				for suffix in ["Mouse", "Release", "Drag"]
+					let r += [eval('"' . printf("\\<%s%s%s%s>", cnt, prefix, key, suffix) . '"')]
+				endfor
+			endfor
+		endfor
+	endfor
+	return r
+endfunction
 
 let s:special_keys = [
 \	"\<BS>",
@@ -625,7 +640,7 @@ let s:special_keys = [
 \	"\<S-F11>",
 \	"\<S-F12>",
 \	"\<S-Tab>",
-\]
+\] + s:_mousekeys()
 " Issues #45
 " \	"\<S-End>",
 " \	"\<S-Delete>",
