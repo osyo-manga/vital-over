@@ -8,7 +8,6 @@ function! s:_vital_loaded(V)
 	let s:String  = s:V.import("Over.String")
 	let s:Signals = s:V.import("Over.Signals")
 	let s:Module = s:V.import("Over.Commandline.Modules")
-	let s:List = s:V.import("Data.List")
 	let s:base.variables.modules = s:Signals.make()
 	function! s:base.variables.modules.get_slot(val)
 		return a:val.slot.module
@@ -21,7 +20,6 @@ function! s:_vital_depends()
 \		"Over.String",
 \		"Over.Signals",
 \		"Over.Commandline.Modules",
-\		"Data.List",
 \	]
 endfunction
 
