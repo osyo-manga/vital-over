@@ -58,5 +58,55 @@ endfunction
 
 
 
+let s:cmap = {
+\	"name" : "KeyMapping_cmap"
+\}
+
+function! s:_auto_cmap()
+	let verbose_save = &verbose
+	let &verbose = 0
+	try
+		redir => redir_cmaps
+		silent! cnoremap
+		redir END
+	finally
+		let &verbose = verbose_save
+	endtry
+	let cmap_list = map(split(redir_cmaps, '\n'), "split(v:val, '\\s\\+')")
+	let cmaps = {}
+	for x in cmap_list
+		unlet x[0]
+		let is_noremap = (x[1] ==# '*')
+		if is_noremap
+			unlet x[1]
+		endif
+		let cmaps[s:as_keymapping(x[0])] = {
+		\   'noremap' : is_noremap,
+		\   'key' : s:as_keymapping(join(x[1:], ' ')),
+		\ }
+	endfor
+	return cmaps
+endfunction
+
+function! s:as_keymapping(key)
+	execute 'let result = "' . substitute(a:key, '\(<.\{-}>\)', '\\\1', 'g') . '"'
+	return result
+endfunction
+
+function! s:filter_cmap(cmaps)
+	" workaround: avoid <expr> mappings...
+	" It just assume there would be spaces with most <expr> mappings
+	return filter(a:cmaps, "v:val['key'] !~# ' '")
+endfunction
+
+function! s:cmap.keymapping(cmdline)
+	return s:filter_cmap(s:_auto_cmap())
+endfunction
+
+function! s:make_cmap()
+	return deepcopy(s:cmap)
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
