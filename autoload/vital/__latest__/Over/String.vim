@@ -245,10 +245,22 @@ let s:special_keys = [
 " \	"\<S-Delete>",
 
 
-function! s:split_by_keys(str)
-	return s:_split_keystring(a:str, s:special_keys)
-endfunction
+" Workaround
+" https://github.com/osyo-manga/vital-over/pull/63
+" http://lingr.com/room/vim/archives/2014/10/29#message-20492403
+if exists("+regexpengine")
+	function! s:_split_keystring(str, ...)
+		return split(a:str, '\%#=2' . "\\m\\%(" . get(a:, 1, '') . "\x80\xfc.\\%(\x80..\\|.\\)\\zs\\|\x80..\\zs\\|.\\zs\\)")
+	endfunction
 
+	function! s:split_by_keys(str)
+		return s:_split_keystring(a:str, "\\%(\<Plug>\\|<Over>\\)(.\\{-})\\zs\\|")
+	endfunction
+else
+	function! s:split_by_keys(str)
+		return s:_split_keystring(a:str, s:special_keys)
+	endfunction
+endif
 
 
 let &cpo = s:save_cpo
