@@ -9,11 +9,11 @@ endfunction
 
 
 let s:base = {}
-	
+
 function! s:base.set(item)
 	return type(a:item) == type("") ? self.set_str(a:item)
-\			 : type(a:item) == type(0)  ? self.set_pos(a:item)
-\			 : self
+\		 : type(a:item) == type(0)  ? self.set_pos(a:item)
+\		 : self
 endfunction
 
 function! s:base.str()
