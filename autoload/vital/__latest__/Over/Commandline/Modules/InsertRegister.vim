@@ -31,20 +31,15 @@ let s:module = {
 \}
 
 
-function! s:module.on_enter(...)
-	let self.cword = expand("<cword>")
-	let self.cWORD = expand("<cWORD>")
-	let self.cfile = expand("<cfile>")
-" 	let self.prefix_key = ""
-endfunction
-
-
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-r>")
 		call a:cmdline.setchar('"')
 		let self.prefix_key = a:cmdline.input_key()
 		let self.old_line = a:cmdline.getline()
 		let self.old_pos  = a:cmdline.getpos()
+		let self.cword = expand("<cword>")
+		let self.cWORD = expand("<cWORD>")
+		let self.cfile = expand("<cfile>")
 		return
 	elseif exists("self.prefix_key")
 \		&& a:cmdline.get_tap_key() == self.prefix_key
