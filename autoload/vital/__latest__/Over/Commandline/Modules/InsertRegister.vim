@@ -41,7 +41,7 @@ endfunction
 
 function! s:get_cmdline_cword(backword, cword)
 	let backword = matchstr(a:backword, '.\{-}\zs\w\+$')
-	if a:cword == "" || a:backword == "" || stridx(a:cword, backword) != 0
+	if &incsearch == 0 || a:cword == "" || a:backword == "" || stridx(a:cword, backword) != 0
 		return a:cword
 	endif
 	return a:cword[len(backword) : ]
