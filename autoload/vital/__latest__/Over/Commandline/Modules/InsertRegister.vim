@@ -118,5 +118,18 @@ function! s:make()
 	return deepcopy(s:module)
 endfunction
 
+let s:resettable = deepcopy(s:module)
+
+function! s:resettable.on_char_pre(cmdline)
+	call call(s:module.on_char_pre, [a:cmdline], self)
+	if a:cmdline.is_input("\<C-r>") && &incsearch
+		call self.reset()
+	endif
+endfunction
+
+function! s:make_resettable()
+	return deepcopy(s:resettable)
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
