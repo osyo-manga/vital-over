@@ -39,6 +39,17 @@ function! s:module.on_enter(...)
 endfunction
 
 
+function! s:get_cmdline_cword(backword, cword)
+	let backword = matchstr(a:backword, '.\{-}\zs\w\+$')
+	if a:cword == "" || a:backword == "" || stridx(a:cword, backword) != 0
+		return a:cword
+	endif
+	return a:cword[len(backword) : ]
+endfunction
+
+echo s:get_cmdline_cword("abb aa bb", "bbcc")
+
+
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-r>")
 		call a:cmdline.setchar('"')
@@ -57,7 +68,7 @@ function! s:module.on_char_pre(cmdline)
 		elseif char == "="
 			call a:cmdline.setchar(s:input(a:cmdline))
 		elseif char == "\<C-w>"
-			call a:cmdline.setchar(self.cword)
+			call a:cmdline.setchar(s:get_cmdline_cword(a:cmdline.backward(), self.cword))
 		elseif char == "\<C-a>"
 			call a:cmdline.setchar(self.cWORD)
 		elseif char == "\<C-f>"
