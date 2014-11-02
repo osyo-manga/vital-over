@@ -72,17 +72,13 @@ function! s:_auto_cmap()
 	finally
 		let &verbose = verbose_save
 	endtry
-	let cmap_list = map(split(redir_cmaps, '\n'), "split(v:val, '\\s\\+')")
+	let cmap_info = map(split(redir_cmaps, '\n'), "maparg(split(v:val, '\\s\\+')[1], 'c', 0, 1)")
 	let cmaps = {}
-	for x in cmap_list
-		unlet x[0]
-		let is_noremap = (x[1] ==# '*')
-		if is_noremap
-			unlet x[1]
-		endif
-		let cmaps[s:as_keymapping(x[0])] = {
-		\   'noremap' : is_noremap,
-		\   'key' : s:as_keymapping(join(x[1:], ' ')),
+	" vital-over currently doesn't support <expr> nor <buffer> mappings
+	for c in filter(cmap_info, "v:val['expr'] ==# 0 && v:val['buffer'] ==# 0")
+		let cmaps[s:as_keymapping(c['lhs'])] = {
+		\   'noremap' : c['expr'],
+		\   'key' : s:as_keymapping(c['rhs']),
 		\ }
 	endfor
 	return cmaps
@@ -93,14 +89,8 @@ function! s:as_keymapping(key)
 	return result
 endfunction
 
-function! s:filter_cmap(cmaps)
-	" workaround: avoid <expr> mappings...
-	" It just assume there would be spaces with most <expr> mappings
-	return filter(a:cmaps, "v:val['key'] !~# ' '")
-endfunction
-
 function! s:cmap.keymapping(cmdline)
-	return s:filter_cmap(s:_auto_cmap())
+	return s:_auto_cmap()
 endfunction
 
 function! s:make_cmap()
