@@ -357,11 +357,38 @@ function! s:base._execute(command)
 	endtry
 endfunction
 
+function! s:base._should_wait_next_key(key)
+	let keys = filter(keys(self._get_keymapping()), "v:val =~# '\\V\\^' . a:key")
+	return len(keys) > 1 || (len(keys) == 1 && len(s:String.split_by_keys(keys[0])) > len(a:key))
+endfunction
 
 function! s:base._input(input, ...)
 	let self.variables.input_key = a:input
 	if self.is_enable_keymapping()
-		let key = s:_unmap(self._get_keymapping(), a:input)
+		let input = a:input
+		let old_line = self.getline()
+		let old_pos  = self.getpos()
+		if self._should_wait_next_key(input)
+			call self.insert(input)
+			call self.setpos(self.getpos()-1)
+			call self.draw()
+		endif
+		let t = reltime()
+		while self._should_wait_next_key(input)
+		\	&& str2nr(reltimestr(reltime(t))) * 1000 < &timeoutlen
+			" XXX: it should use s:getchar(0)
+			try
+				let c = getchar(0)
+			catch /^Vim:Interrupt$/
+				let c = 3 " <C-c>
+			endtry
+			if c
+				let input .= nr2char(c)
+			endif
+		endwhile
+		call self.setline(old_line)
+		call self.setpos(old_pos)
+		let key = s:_unmap(self._get_keymapping(), input)
 	else
 		let key = a:input
 	endif
@@ -444,16 +471,25 @@ function! s:_as_key_config(config)
 endfunction
 
 
-function! s:_unmap(mapping, key)
+function! s:_unmap(mapping, key, ...)
+	let should_be_lock_only = get(a:, 1, 0) " For recursive {rhs} remappings
 	let keys = s:String.split_by_keys(a:key)
-	if len(keys) > 1
+	if len(keys) > 1 && !has_key(a:mapping, a:key)
 		return join(map(keys, 's:_unmap(a:mapping, v:val)'), '')
 	endif
 	if !has_key(a:mapping, a:key)
 		return a:key
 	endif
-	let rhs  = s:_as_key_config(a:mapping[a:key])
+	let rhs = s:_as_key_config(a:mapping[a:key])
+	if should_be_lock_only
+		return rhs.lock ? s:_unmap(a:mapping, rhs.key) : a:key
+	endif
 	let next = s:_as_key_config(get(a:mapping, rhs.key, {}))
+	let rhs_keys = s:String.split_by_keys(rhs.key)
+	if len(rhs_keys) > 1
+		" noremap == 1 なら {rhs} をlockだけ展開, mapなら普通に展開する
+		return join(map(rhs_keys, 's:_unmap(a:mapping, v:val, rhs.noremap)'), '')
+	endif
 	if rhs.noremap && next.lock == 0
 		return rhs.key
 	endif
