@@ -369,11 +369,13 @@ Cancel					*Vital.Over.Commandline-modules-Cancel*
 CursorMove			*Vital.Over.Commandline-modules-CursorMove*
 	カーソル移動を行います。
 			*Vital.Over.Commandline-modules-CursorMove-keymapping*
-	キー		機能~
-	<Right>		カーソルを右に移動
-	<Left>		カーソルを右に移動
-	<C-b>, <Home>	カーソルを行頭へ移動
-	<C-e>, <End>	カーソルを行末へ移動
+	キー			機能~
+	<Right>			カーソルを右に移動
+	<Left>			カーソルを右に移動
+	<C-b>, <Home>		カーソルを行頭へ移動
+	<C-e>, <End>		カーソルを行末へ移動
+	<C-Left>, <S-Left>	カーソルを 1WORD 分左へ移動
+	<C-Right>, <S-Right>	カーソルを 1WORD 分右へ移動
 
 Delete					*Vital.Over.Commandline-modules-Delete*
 	入力された文字の削除を行います。
