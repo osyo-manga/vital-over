@@ -47,8 +47,6 @@ function! s:get_cmdline_cword(backword, cword)
 	return a:cword[len(backword) : ]
 endfunction
 
-echo s:get_cmdline_cword("abb aa bb", "bbcc")
-
 
 function! s:module.on_char_pre(cmdline)
 	if a:cmdline.is_input("\<C-r>")
