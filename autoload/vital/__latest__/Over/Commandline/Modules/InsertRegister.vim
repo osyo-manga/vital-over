@@ -25,6 +25,33 @@ function! s:input(cmdline)
 	return input
 endfunction
 
+" Get first index of uncommon char in a:str between `a:line` and `a:str`
+" echo s:first_uncommon_index('str', 'string') ==# 3
+" echo s:first_uncommon_index('mami str', 'string') ==# 3
+" echo s:first_uncommon_index('mami', 'string') ==# 0
+function! s:first_uncommon_index(line, str)
+	if empty(a:line)
+		return 0
+	endif
+	let last_line_pos = len(a:line) - 1
+	let index = stridx(a:str, a:line[last_line_pos])
+	if index ==# -1
+		return 0
+	endif
+	" Make sure the index is valid, otherwise return 0 with early return
+	for i in range(len(a:str[:index]))
+		if stridx(a:str, a:line[last_line_pos - i]) !=# (index - i)
+			return 0
+		endif
+	endfor
+	return index + 1
+endfunction
+
+
+function! s:get_insert_string(line, cword)
+	return a:cword[s:first_uncommon_index(a:line, a:cword):]
+endfunction
+
 
 let s:module = {
 \	"name" : "InsertRegister"
@@ -52,7 +79,7 @@ function! s:module.on_char_pre(cmdline)
 		elseif char == "="
 			call a:cmdline.setchar(s:input(a:cmdline))
 		elseif char == "\<C-w>"
-			call a:cmdline.setchar(self.cword)
+			call a:cmdline.setchar(s:get_insert_string(a:cmdline.backward(), self.cword))
 		elseif char == "\<C-a>"
 			call a:cmdline.setchar(self.cWORD)
 		elseif char == "\<C-f>"
