@@ -31,10 +31,15 @@ let s:module = {
 \}
 
 
-function! s:module.on_enter(...)
+
+function! s:module.reset()
 	let self.cword = expand("<cword>")
 	let self.cWORD = expand("<cWORD>")
 	let self.cfile = expand("<cfile>")
+endfunction
+
+function! s:module.on_enter(...)
+	call self.reset()
 " 	let self.prefix_key = ""
 endfunction
 
