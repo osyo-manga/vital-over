@@ -85,7 +85,7 @@ function! s:_auto_cmap()
 endfunction
 
 function! s:as_keymapping(key)
-	execute 'let result = "' . substitute(a:key, '\(<.\{-}>\)', '\\\1', 'g') . '"'
+	execute 'let result = "' . substitute(escape(a:key, '\'), '\(<.\{-}>\)', '\\\1', 'g') . '"'
 	return result
 endfunction
 
