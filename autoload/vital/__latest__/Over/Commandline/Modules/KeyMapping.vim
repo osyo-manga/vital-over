@@ -77,7 +77,7 @@ function! s:_auto_cmap()
 	" vital-over currently doesn't support <expr> nor <buffer> mappings
 	for c in filter(cmap_info, "v:val['expr'] ==# 0 && v:val['buffer'] ==# 0")
 		let cmaps[s:as_keymapping(c['lhs'])] = {
-		\   'noremap' : c['expr'],
+		\   'noremap' : c['noremap'],
 		\   'key' : s:as_keymapping(c['rhs']),
 		\ }
 	endfor
