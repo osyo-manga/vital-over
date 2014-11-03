@@ -61,6 +61,7 @@ endfunction
 let s:cmap = {
 \	"name" : "KeyMapping_cmap"
 \}
+let s:cmaps = {}
 
 function! s:_auto_cmap()
 	let verbose_save = &verbose
@@ -89,8 +90,12 @@ function! s:as_keymapping(key)
 	return result
 endfunction
 
+function! s:cmap.on_enter(cmdline)
+	let s:cmaps = s:_auto_cmap()
+endfunction
+
 function! s:cmap.keymapping(cmdline)
-	return s:_auto_cmap()
+	return s:cmaps
 endfunction
 
 function! s:make_cmap()
