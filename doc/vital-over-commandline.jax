@@ -424,8 +424,8 @@ KeyMapping			*Vital.Over.Commandline-modules-KeyMapping*
 	make_emacs()
 		Emacs のようなキーマッピングを提供します。
 	make_cmap()
-		Vimデフォルトの |:cmap| を展開して適用したキーマッピングを提供
-		します。
+		Vimデフォルトの |:cmap|, |:cnoremap| で定義されたマッピングを展開
+		して適用したキーマッピングを提供します。
 
 NoInsert			*Vital.Over.Commandline-modules-NoInsert*
 	挿入しない文字を設定します。
