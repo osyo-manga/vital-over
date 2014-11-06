@@ -58,8 +58,8 @@ endfunction
 
 
 
-let s:cmap = {
-\	"name" : "KeyMapping_cmap"
+let s:vim_cmdline_mapping = {
+\	"name" : "KeyMapping_vim_cmdline_mapping"
 \}
 let s:cmaps = {}
 
@@ -90,16 +90,16 @@ function! s:as_keymapping(key)
 	return result
 endfunction
 
-function! s:cmap.on_enter(cmdline)
+function! s:vim_cmdline_mapping.on_enter(cmdline)
 	let s:cmaps = s:_auto_cmap()
 endfunction
 
-function! s:cmap.keymapping(cmdline)
+function! s:vim_cmdline_mapping.keymapping(cmdline)
 	return s:cmaps
 endfunction
 
-function! s:make_cmap()
-	return deepcopy(s:cmap)
+function! s:make_vim_cmdline_mapping()
+	return deepcopy(s:vim_cmdline_mapping)
 endfunction
 
 
