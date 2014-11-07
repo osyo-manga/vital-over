@@ -73,6 +73,9 @@ function! s:_auto_cmap()
 	finally
 		let &verbose = verbose_save
 	endtry
+	if substitute(redir_cmaps, '\n', '', 'g') ==# 'No mapping found'
+		return {}
+	endif
 	let cmap_info = map(split(redir_cmaps, '\n'), "maparg(split(v:val, '\\s\\+')[1], 'c', 0, 1)")
 	let cmaps = {}
 	" vital-over currently doesn't support <expr> nor <buffer> mappings
