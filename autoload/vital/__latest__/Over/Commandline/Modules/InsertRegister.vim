@@ -5,13 +5,13 @@ set cpo&vim
 
 function! s:_vital_loaded(V)
 	let s:V = a:V
-	let s:Prelude  = s:V.import("Prelude")
+	let s:String  = s:V.import("Over.String")
 endfunction
 
 
 function! s:_vital_depends()
 	return [
-\		"Prelude",
+\		"Over.String",
 \	]
 endfunction
 
@@ -58,7 +58,7 @@ endfunction
 
 function! s:get_cmdline_cword(backword, cword)
 	let backword = matchstr(a:backword, '.\{-}\zs\k\+$')
-	if &incsearch == 0 || a:cword == "" || a:backword == "" || match(a:cword, s:Prelude.escape_pattern(backword)) != 0
+	if &incsearch == 0 || a:cword == "" || a:backword == "" || s:String.index(a:cword, backword) != 0
 		return a:cword
 	endif
 	return a:cword[len(backword) : ]
