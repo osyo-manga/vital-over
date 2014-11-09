@@ -3,6 +3,18 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+function! s:_vital_loaded(V)
+	let s:V = a:V
+	let s:Prelude  = s:V.import("Prelude")
+endfunction
+
+
+function! s:_vital_depends()
+	return [
+\		"Prelude",
+\	]
+endfunction
+
 
 function! s:to_string(expr)
 	return type(a:expr) == type("") ? a:expr : string(a:expr)
@@ -45,12 +57,13 @@ endfunction
 
 
 function! s:get_cmdline_cword(backword, cword)
-	let backword = matchstr(a:backword, '.\{-}\zs\w\+$')
-	if &incsearch == 0 || a:cword == "" || a:backword == "" || match(a:cword, backword) != 0
+	let backword = matchstr(a:backword, '.\{-}\zs\k\+$')
+	if &incsearch == 0 || a:cword == "" || a:backword == "" || match(a:cword, s:Prelude.escape_pattern(backword)) != 0
 		return a:cword
 	endif
 	return a:cword[len(backword) : ]
 endfunction
+echo s:get_cmdline_cword('.*', "cursor")
 
 
 function! s:module.on_char_pre(cmdline)
