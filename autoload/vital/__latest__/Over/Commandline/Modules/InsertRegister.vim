@@ -63,7 +63,6 @@ function! s:get_cmdline_cword(backword, cword)
 	endif
 	return a:cword[len(backword) : ]
 endfunction
-echo s:get_cmdline_cword('.*', "cursor")
 
 
 function! s:module.on_char_pre(cmdline)
