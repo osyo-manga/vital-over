@@ -113,5 +113,53 @@ endfunction
 
 
 
+let s:vim_cmdline_mapping = {
+\	"name" : "KeyMapping_vim_cmdline_mapping"
+\}
+let s:cmaps = {}
+
+function! s:_auto_cmap()
+	let verbose_save = &verbose
+	let &verbose = 0
+	try
+		redir => redir_cmaps
+		silent! cnoremap
+		redir END
+	finally
+		let &verbose = verbose_save
+	endtry
+	if substitute(redir_cmaps, '\n', '', 'g') ==# 'No mapping found'
+		return {}
+	endif
+	let cmap_info = map(split(redir_cmaps, '\n'), "maparg(split(v:val, '\\s\\+')[1], 'c', 0, 1)")
+	let cmaps = {}
+	" vital-over currently doesn't support <expr> nor <buffer> mappings
+	for c in filter(cmap_info, "v:val['expr'] ==# 0 && v:val['buffer'] ==# 0")
+		let cmaps[s:as_keymapping(c['lhs'])] = {
+		\   'noremap' : c['noremap'],
+		\   'key' : s:as_keymapping(c['rhs']),
+		\ }
+	endfor
+	return cmaps
+endfunction
+
+function! s:as_keymapping(key)
+	execute 'let result = "' . substitute(escape(a:key, '\'), '\(<.\{-}>\)', '\\\1', 'g') . '"'
+	return result
+endfunction
+
+function! s:vim_cmdline_mapping.on_enter(cmdline)
+	let s:cmaps = s:_auto_cmap()
+endfunction
+
+function! s:vim_cmdline_mapping.keymapping(cmdline)
+	return s:cmaps
+endfunction
+
+function! s:make_vim_cmdline_mapping()
+	return deepcopy(s:vim_cmdline_mapping)
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
