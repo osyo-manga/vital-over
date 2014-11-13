@@ -325,13 +325,19 @@ function! s:base.get(...)
 endfunction
 
 
-function! s:base._init()
+function! s:base._init_variables()
 	let self.variables.tap_key = ""
 	let self.variables.char = ""
 	let self.variables.input = ""
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
 	let self.variables.enable_keymapping = 1
+	let self.line = deepcopy(s:String.make(get(a:, 1, "")))
+endfunction
+
+
+function! s:base._init()
+	call self._init_variables()
 	call self.hl_cursor_off()
 	if !hlexists(self.highlights.cursor)
 		execute "highlight link " . self.highlights.cursor . " Cursor"
@@ -400,7 +406,7 @@ endfunction
 function! s:base._main(...)
 	try
 		call self._init()
-		let self.line = deepcopy(s:String.make(get(a:, 1, "")))
+" 		let self.line = deepcopy(s:String.make(get(a:, 1, "")))
 		call self.callevent("on_enter")
 
 		call self.draw()
