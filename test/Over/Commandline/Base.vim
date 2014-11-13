@@ -11,13 +11,12 @@ function! s:test_backward_word()
 	OwlCheck cmdline.backward_word() == "__bbb"
 	OwlCheck cmdline.backward_word('[a-z]\+') == "bbb"
 
-	call cmdline._input("bbb  ")
+	call cmdline._input(" bbb  ")
 	OwlCheck cmdline.backward_word() == "bbb  "
 
 	call cmdline._input("(")
 	OwlCheck cmdline.backward_word() == "("
 endfunction
-call s:test_backward_word()
 
 
 
