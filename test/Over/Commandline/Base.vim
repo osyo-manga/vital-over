@@ -17,4 +17,7 @@ function! s:test_backward_word()
 	call cmdline._input("(")
 	OwlCheck cmdline.backward_word() == "("
 endfunction
+call s:test_backward_word()
+
+
 
