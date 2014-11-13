@@ -169,8 +169,8 @@ endfunction
 
 
 function! s:base.backward_word(...)
-	let pat = get(a:, 1, '\%(\k\+\s*\|.\)$')
-	return matchstr(self.backward(), pat)
+	let pat = get(a:, 1, '\k\+\s*\|.')
+	return matchstr(self.backward(), '\%(' . pat . '\)$')
 endfunction
 
 
