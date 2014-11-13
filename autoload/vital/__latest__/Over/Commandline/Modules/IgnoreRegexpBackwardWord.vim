@@ -2,9 +2,9 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-" Improved backward word detection
+" Improved backward word detection which ignore regular expression
 let s:module = {
-\	"name" : "Backword"
+\	"name" : "IgnoreRegexpBackwardWord"
 \}
 
 let s:non_escaped_backslash = '\m\%(\%(^\|[^\\]\)\%(\\\\\)*\)\@<=\\'
