@@ -327,21 +327,22 @@ Example: >
 また、<Over> から始まるキーは任意のキーに割り当てて使用します。
 
 
-名前			機能~
-BufferComplete		起動したバッファのワードで補完
-Cancel(*)		コマンドラインの中断
-CursorMove(*)		カーソル移動
-Delete(*)		文字の削除
-Execute(*)		コマンドの実行
-HistAdd(*)		|history| への追加
-History(*)		コマンド履歴の呼び出し
-Incsearch		|incsearch| のような挙動のエミュレート
-KeyMapping		キーマッピングの提供
-NoInsert(*)		挿入しない文字の処理
-Paste			@* の挿入
-Scroll			起動したウィンドウのスクロール
-InsertRegister(*)	レジスタの内容を挿入
-Doautocmd		|User| の呼び出し
+名前			        機能~
+BufferComplete		        起動したバッファのワードで補完
+Cancel(*)		        コマンドラインの中断
+CursorMove(*)		        カーソル移動
+Delete(*)		        文字の削除
+Execute(*)		        コマンドの実行
+HistAdd(*)		        |history| への追加
+History(*)		        コマンド履歴の呼び出し
+Incsearch		        |incsearch| のような挙動のエミュレート
+KeyMapping		        キーマッピングの提供
+NoInsert(*)		        挿入しない文字の処理
+Paste			        @* の挿入
+Scroll			        起動したウィンドウのスクロール
+InsertRegister(*)	        レジスタの内容を挿入
+Doautocmd		        |User| の呼び出し
+IgnoreRegexpBackwardWord	カーソル前の単語の検出で正規表現を無視
 
 (*) が付いているモジュールは Over.Commandline に付属します。
 それ以外のモジュールは |:Vitalize| 時に個別に指定して導入する必要があります。
@@ -498,6 +499,17 @@ ExceptionExit		*Vital.Over.Commandline-modules-ExceptionExit*
 ExceptionMessage	*Vital.Over.Commandline-modules-ExceptionMessage*
 	発生した例外の内容を出力します。
 
+IgnoreRegexpBackwardWord
+		    *Vital.Over.Commandline-modules-IgnoreRegexpBackwardWord*
+	|Vital.Over.Commandline-modules-Delete| モジュールにおける <C-w>
+	の単語の削除や, |Vital.Over.Commandline-modules-InsertRegister|
+	における <C-r><C-w> による単語の挿入時に使用する単語において正規表現を
+	無視するようにします。
+
+	コマンドライン	WORD(デフォルト)	IgnoreRegexpBackwardWord~
+	>hi word	"hi word"		"word"
+	>\vword		"vword"			"word"
+	>\\vword	"vword"			"vword"
 
 
 
