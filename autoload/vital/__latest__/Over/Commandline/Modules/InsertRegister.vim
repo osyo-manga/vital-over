@@ -57,7 +57,8 @@ endfunction
 
 
 function! s:get_cmdline_cword(backward, cword)
-	let backward = matchstr(a:backward, '.\{-}\zs\k\+$')
+" 	let backward = matchstr(a:backward, '.\{-}\zs\k\+$')
+	let backward = a:backward
 	if &incsearch == 0 || a:cword == "" || a:backward == "" || s:String.index(a:cword, backward) != 0
 		return a:cword
 	endif
@@ -83,7 +84,7 @@ function! s:module.on_char_pre(cmdline)
 		elseif char == "="
 			call a:cmdline.setchar(s:input(a:cmdline))
 		elseif char == "\<C-w>"
-			call a:cmdline.setchar(s:get_cmdline_cword(a:cmdline.backward(), self.cword))
+			call a:cmdline.setchar(s:get_cmdline_cword(a:cmdline.backward_word(), self.cword))
 		elseif char == "\<C-a>"
 			call a:cmdline.setchar(self.cWORD)
 		elseif char == "\<C-f>"

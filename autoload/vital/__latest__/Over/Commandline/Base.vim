@@ -168,6 +168,12 @@ function! s:base.backward()
 endfunction
 
 
+function! s:base.backward_word(...)
+	let pat = get(a:, 1, '\%(\w\+\s*\|.\)$')
+	return matchstr(self.backward(), pat)
+endfunction
+
+
 function! s:base.connect(module, ...)
 	if type(a:module) == type("")
 		return call(self.connect, [s:Module.make(a:module)] + a:000, self)
