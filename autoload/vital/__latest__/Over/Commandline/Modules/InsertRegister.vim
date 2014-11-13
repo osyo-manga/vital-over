@@ -56,12 +56,12 @@ function! s:module.on_enter(...)
 endfunction
 
 
-function! s:get_cmdline_cword(backword, cword)
-	let backword = matchstr(a:backword, '.\{-}\zs\k\+$')
-	if &incsearch == 0 || a:cword == "" || a:backword == "" || s:String.index(a:cword, backword) != 0
+function! s:get_cmdline_cword(backward, cword)
+	let backward = matchstr(a:backward, '.\{-}\zs\k\+$')
+	if &incsearch == 0 || a:cword == "" || a:backward == "" || s:String.index(a:cword, backward) != 0
 		return a:cword
 	endif
-	return a:cword[len(backword) : ]
+	return a:cword[len(backward) : ]
 endfunction
 
 
