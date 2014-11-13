@@ -19,8 +19,9 @@ function! s:module.on_enter(cmdline)
 		\   '\|' . "%'[a-Z]" .
 		\   '\|' . '%#=\d' .
 		\   '\|' . 'z\=\d' .
-		\   '\)\ze.'
-		return matchstr(substitute(self.backward(), flags, '', 'g'), '\%(' . pat . '\)$')
+		\   '\)'
+		return matchstr(get(split(self.backward(), flags . '\zs'), -1, ""),
+		\   '\%(' . flags . '\|' . pat . '\)$')
 	endfunction
 endfunction
 
