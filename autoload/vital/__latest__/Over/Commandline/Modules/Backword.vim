@@ -19,7 +19,7 @@ function! s:module.on_enter(cmdline)
 		\   '\|' . "%'[a-Z]" .
 		\   '\|' . '%#=\d' .
 		\   '\|' . 'z\=\d' .
-		\   '\)'
+		\   '\)\ze.'
 		return matchstr(substitute(self.backward(), flags, '', 'g'), '\%(' . pat . '\)$')
 	endfunction
 endfunction
