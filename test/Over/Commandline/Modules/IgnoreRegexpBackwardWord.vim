@@ -33,6 +33,7 @@ function! s:test_free_backward_word()
 	OwlCheck s:func('\v  ') == '\v  '
 	OwlCheck s:func('\\zs  ') == 'zs  '
 	OwlCheck s:func('\') == '\'
+	OwlCheck s:func('\%''mmark') == 'mark'
 endfunction
 
 
