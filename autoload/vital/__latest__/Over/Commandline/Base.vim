@@ -338,7 +338,8 @@ function! s:base._init_variables()
 	let self.variables.exit = 0
 	let self.variables.exit_code = 1
 	let self.variables.enable_keymapping = 1
-	let self.line = deepcopy(s:String.make(get(a:, 1, "")))
+	let self.variables.input_key_stack = []
+	let self.line = deepcopy(s:String.make())
 endfunction
 
 
@@ -412,9 +413,9 @@ endfunction
 function! s:base._main(...)
 	try
 		call self._init()
-" 		let self.line = deepcopy(s:String.make(get(a:, 1, "")))
 		call self.callevent("on_enter")
 
+		call self._input(get(a:, 1, ""))
 		call self.draw()
 		while !self._is_exit()
 			try
