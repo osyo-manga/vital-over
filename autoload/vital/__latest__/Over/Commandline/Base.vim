@@ -331,6 +331,22 @@ function! s:base.get(...)
 endfunction
 
 
+function! s:base.input_key_stack()
+	return self.variables.input_key_stack
+endfunction
+
+
+function! s:base.input_key_stack_string()
+	return join(self.variables.input_key_stack, "")
+endfunction
+
+
+function! s:base.set_input_key_stack(stack)
+	let self.variables.input_key_stack = a:stack
+	return self.variables.input_key_stack
+endfunction
+
+
 function! s:base._init_variables()
 	let self.variables.tap_key = ""
 	let self.variables.char = ""
@@ -373,6 +389,17 @@ function! s:base._execute(command)
 endfunction
 
 
+function! s:base._input_char(char)
+	let char = a:char
+	let self.variables.input_key = char
+	let self.variables.char = char
+	call self.setchar(self.variables.char)
+	call self.callevent("on_char_pre")
+	call self.insert(self.variables.input)
+	call self.callevent("on_char")
+endfunction
+
+
 function! s:base._input(input, ...)
 	let self.variables.input_key = a:input
 	if self.is_enable_keymapping()
@@ -380,15 +407,14 @@ function! s:base._input(input, ...)
 	else
 		let key = a:input
 	endif
+	if key == ""
+		return
+	endif
 
-	for char in s:String.split_by_keys(key)
-		let self.variables.input_key = char
-		let self.variables.char = char
-		call self.setchar(self.variables.char)
-		call self.callevent("on_char_pre")
-		call self.insert(self.variables.input)
-		call self.callevent("on_char")
-	endfor
+	call self.set_input_key_stack(s:String.split_by_keys(key))
+	while !(empty(self.input_key_stack()) || self._is_exit())
+		call self._input_char(remove(self.input_key_stack(), 0))
+	endwhile
 endfunction
 
 
