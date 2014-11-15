@@ -1,4 +1,9 @@
 
+call vital#of("vital").unload()
+let s:Base = vital#of("vital").import("Over.Commandline.Base")
+let s:Cmdline = vital#of("vital").import("Over.Commandline")
+
+
 function! s:owl_begin()
 	let g:owl_success_message_format = ""
 	call vital#of("vital").unload()
@@ -26,5 +31,15 @@ function! s:test_get_cmdline_cword()
 	finally
 		let &ignorecase = ignorecase
 	endtry
+endfunction
+
+
+function! s:test_input_issues_83()
+	let cmdline = s:Cmdline.make_standard()
+
+	call cmdline.start("\<C-r>=1+2\<CR>homu\<Esc>")
+	OwlCheck cmdline.getline() == "3homu"
+
+" 	call cmdline.start("\<C-r>=Homu")
 endfunction
 
