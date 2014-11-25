@@ -355,6 +355,8 @@ BufferComplete			*Vital.Over.Commandline-modules-BufferComplete*
 	キー				機能~
 	<Over>(buffer-complete)		補完の開始
 					次の補完へ移動
+	<Over>(buffer-complete-prev)	補完の開始
+					前の補完へ移動
 	<Right>				補完中であれば次の補完へ移動
 	<Left>				補完中であれば前の補完へ移動
 
