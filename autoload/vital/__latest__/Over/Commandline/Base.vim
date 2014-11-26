@@ -432,6 +432,10 @@ endfunction
 
 
 function! s:base._inputting()
+	if !self.is_enable_keymapping()
+		return self._input(s:Input.getchar())
+	else
+
 	let input = s:Input.getchar()
 	let old_line = self.getline()
 	let old_pos  = self.getpos()
