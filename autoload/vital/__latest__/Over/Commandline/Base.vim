@@ -8,6 +8,7 @@ function! s:_vital_loaded(V)
 	let s:String  = s:V.import("Over.String")
 	let s:Signals = s:V.import("Over.Signals")
 	let s:Input = s:V.import("Over.Input")
+	let s:Keymapping = s:V.import("Over.Keymapping")
 	let s:Module = s:V.import("Over.Commandline.Modules")
 	let s:base.variables.modules = s:Signals.make()
 	function! s:base.variables.modules.get_slot(val)
@@ -21,6 +22,7 @@ function! s:_vital_depends()
 \		"Over.String",
 \		"Over.Signals",
 \		"Over.Input",
+\		"Over.Keymapping",
 \		"Over.Commandline.Modules",
 \	]
 endfunction
@@ -402,8 +404,13 @@ endfunction
 
 function! s:base._input(input, ...)
 	let self.variables.input_key = a:input
+	if a:0 == 0
+		let keymapping = self._get_keymapping()
+	else
+		let keymapping = a:1
+	endif
 	if self.is_enable_keymapping()
-		let key = s:_unmap(self._get_keymapping(), a:input)
+		let key = s:Keymapping.unmapping(keymapping, a:input)
 	else
 		let key = a:input
 	endif
@@ -418,6 +425,34 @@ function! s:base._input(input, ...)
 endfunction
 
 
+function! s:is_waiting(keymapping, input)
+	let num = len(filter(copy(a:keymapping), 'v:key =~ ''^'' . a:input'))
+	return num > 1 || (num == 1 && !has_key(a:keymapping, a:input))
+endfunction
+
+
+function! s:base._inputting()
+	let input = s:Input.getchar()
+	let old_line = self.getline()
+	let old_pos  = self.getpos()
+	let keymapping = self._get_keymapping()
+	try
+		let t = reltime()
+		while s:is_waiting(keymapping, input)
+\		&& str2nr(reltimestr(reltime(t))) * 1000 < &timeoutlen
+			call self.setline(old_line . input)
+			call self.setpos(old_pos)
+			call self.draw()
+			let input .= s:Input.getchar(0)
+		endwhile
+	finally
+		call self.setline(old_line)
+		call self.setpos(old_pos)
+	endtry
+	call self._input(input)
+endfunction
+
+
 function! s:base._update()
 " 	call self.callevent("on_update")
 " 	if !getchar(1)
@@ -428,7 +463,8 @@ function! s:base._update()
 " 	call self.draw()
 
 	call self.callevent("on_update")
-	call self._input(s:Input.getchar())
+	call self._inputting()
+" 	call self._input(s:Input.getchar())
 	if self._is_exit()
 		return -1
 	endif
