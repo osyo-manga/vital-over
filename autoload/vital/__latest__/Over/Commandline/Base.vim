@@ -453,7 +453,7 @@ function! s:base._inputting()
 		call self.setline(old_line)
 		call self.setpos(old_pos)
 	endtry
-	call self._input(input)
+	call self._input(input, keymapping)
 endfunction
 
 
