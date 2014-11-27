@@ -426,7 +426,7 @@ endfunction
 
 
 function! s:is_waiting(keymapping, input)
-	let num = len(filter(copy(a:keymapping), 'v:key =~ ''^'' . a:input'))
+	let num = len(filter(copy(a:keymapping), 'v:key =~# ''^'' . a:input'))
 	return num > 1 || (num == 1 && !has_key(a:keymapping, a:input))
 endfunction
 

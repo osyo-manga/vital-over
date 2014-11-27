@@ -139,7 +139,16 @@ function! s:test_unmapping_lock()
 endfunction
 
 
+function! s:test_BS_S_Tab()
+	let Keymapping = s:Keymapping
+	let map = {
+\		"\<BS>" : "a",
+\		"\<S-Tab>" : "b"
+\	}
+	OwlCheck Keymapping.unmapping(map, "\<BS>") is "a"
+	OwlCheck Keymapping.unmapping(map, "\<S-Tab>") is "b"
 
+endfunction
 
 
 

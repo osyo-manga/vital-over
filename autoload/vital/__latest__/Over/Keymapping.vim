@@ -81,7 +81,7 @@ endfunction
 
 function! s:match_key(keymapping, key)
 	let keys = sort(keys(a:keymapping))
-	return get(filter(keys, 'a:key =~ ''^'' . v:val'), -1, '')
+	return get(filter(keys, 'a:key =~# ''^'' . v:val'), -1, '')
 endfunction
 
 
