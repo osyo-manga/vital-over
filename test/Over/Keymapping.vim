@@ -152,3 +152,21 @@ endfunction
 
 
 
+function! s:test_expr()
+	let Keymapping = s:Keymapping
+	let map = {
+\		"a" : {
+\			"expr" : 1,
+\			"key" : "1 + 2",
+\		},
+\		"b" : "aa",
+\		"3" : "h",
+\	}
+
+	OwlCheck Keymapping.unmapping(map, "a") is "h"
+	OwlCheck Keymapping.unmapping(map, "b") is "hh"
+
+endfunction
+
+
+

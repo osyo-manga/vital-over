@@ -221,10 +221,9 @@ endfunction
 
 
 function! s:base.cnoremap(lhs, rhs)
-	let self.variables.keymapping[a:lhs] = {
-\		"key"     : a:rhs,
-\		"noremap" : 1,
-\	}
+	let key = s:Keymapping.as_key_config(a:rhs)
+	let key.noremap = 1
+	let self.variables.keymapping[a:lhs] = key
 endfunction
 
 
@@ -510,35 +509,6 @@ endfunction
 
 function! s:base._is_exit()
 	return self.variables.exit
-endfunction
-
-
-function! s:_as_key_config(config)
-	let base = {
-\		"noremap" : 0,
-\		"lock"    : 0,
-\	}
-	return type(a:config) == type({}) ? extend(base, a:config)
-\		 : extend(base, {
-\		 	"key" : a:config,
-\		 })
-endfunction
-
-
-function! s:_unmap(mapping, key)
-	let keys = s:String.split_by_keys(a:key)
-	if len(keys) > 1
-		return join(map(keys, 's:_unmap(a:mapping, v:val)'), '')
-	endif
-	if !has_key(a:mapping, a:key)
-		return a:key
-	endif
-	let rhs  = s:_as_key_config(a:mapping[a:key])
-	let next = s:_as_key_config(get(a:mapping, rhs.key, {}))
-	if rhs.noremap && next.lock == 0
-		return rhs.key
-	endif
-	return s:_unmap(a:mapping, rhs.key)
 endfunction
 
 
