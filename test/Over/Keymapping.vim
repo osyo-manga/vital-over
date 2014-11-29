@@ -165,7 +165,24 @@ function! s:test_expr()
 
 	OwlCheck Keymapping.unmapping(map, "a") is "h"
 	OwlCheck Keymapping.unmapping(map, "b") is "hh"
+endfunction
 
+
+function! s:test_expr_reference_self()
+	let Keymapping = s:Keymapping
+	let map = {
+\		"a" : {
+\			"expr" : 1,
+\			"key" : "self.value + self.value2",
+\			"value"  : 1,
+\			"value2" : 2
+\		},
+\		"b" : "aa",
+\		"3" : "h",
+\	}
+
+	OwlCheck Keymapping.unmapping(map, "a") is "h"
+	OwlCheck Keymapping.unmapping(map, "b") is "hh"
 endfunction
 
 

@@ -87,6 +87,8 @@ endfunction
 
 
 function! s:_get_key(conf)
+" 	call extend(l:, a:conf)
+	let self = a:conf
 	return get(a:conf, "expr", 0) ? eval(a:conf.key) : a:conf.key
 endfunction
 
