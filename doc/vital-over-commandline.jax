@@ -343,6 +343,7 @@ Scroll			        起動したウィンドウのスクロール
 InsertRegister(*)	        レジスタの内容を挿入
 Doautocmd		        |User| の呼び出し
 IgnoreRegexpBackwardWord	カーソル前の単語の検出で正規表現を無視
+Digraphs			|digraph| 機能
 
 (*) が付いているモジュールは Over.Commandline に付属します。
 それ以外のモジュールは |:Vitalize| 時に個別に指定して導入する必要があります。
@@ -513,6 +514,10 @@ IgnoreRegexpBackwardWord
 	>\vword		"vword"			"word"
 	>\\vword	"vword"			"vword"
 
+Digraphs			*Vital.Over.Commandline-modules-Digraphs*
+	Vim の |digraphs| 機能を有効化します
+	キー			機能~
+	<C-k>{char1}{char2}	ダイグラフの入力 (|c_CTRL-K| を参照)
 
 
 ==============================================================================
