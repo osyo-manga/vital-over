@@ -15,6 +15,7 @@ function! s:test_match_key()
 \		"e" : "aa",
 \		"ef" : "aa",
 \		"efg" : "aa",
+\		'.*' : "aa",
 \	}
 
 " 	echo Keymapping.match_key(map, "b")
@@ -38,6 +39,7 @@ function! s:test_match_key()
 	OwlCheck Keymapping.match_key(map, "ef") is "ef"
 	OwlCheck Keymapping.match_key(map, "efg") is "efg"
 	OwlCheck Keymapping.match_key(map, "efga") is "efg"
+	OwlCheck Keymapping.match_key(map, '.*') is ".*"
 endfunction
 
 
@@ -52,7 +54,9 @@ function! s:test_unmapping()
 \		"\<Down>\<Up>" : "\<Left>",
 \		"\<Left>" : "\<Right>",
 \		"\<Right>\<Left>" : "\<Up>",
-\		"gh" : "b"
+\		"gh" : "b",
+\		'.*' : "l",
+\		'\w\+' : '.*.*',
 \	}
 	OwlCheck Keymapping.unmapping(map, "bc") is "11"
 	OwlCheck Keymapping.unmapping(map, "bb") is "0000"
@@ -62,6 +66,7 @@ function! s:test_unmapping()
 	OwlCheck Keymapping.unmapping(map, "\<Right>\<Left>\<Left>") is "\<Up>\<Right>"
 	OwlCheck Keymapping.unmapping(map, "\<Right>\<Right>") is "\<Right>\<Right>"
 	OwlCheck Keymapping.unmapping(map, "gh") is "00"
+	OwlCheck Keymapping.unmapping(map, '\w\+') is "ll"
 endfunction
 
 

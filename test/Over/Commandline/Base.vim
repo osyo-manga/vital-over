@@ -36,3 +36,22 @@ function! s:test_issues_73()
 	OwlCheck cmdline.input_key_stack_string() == "mu"
 endfunction
 
+
+function! s:test_is_input_watting()
+	let Base = s:Base
+	let mapping = {
+\		"a" : "b",
+\		"aa" : "b",
+\		"abc" : "b",
+\		"c" : "d",
+\	}
+
+	OwlCheck  Base.is_input_waiting(mapping, "a")
+	OwlCheck !Base.is_input_waiting(mapping, "bc")
+	OwlCheck !Base.is_input_waiting(mapping, "aa")
+	OwlCheck !Base.is_input_waiting(mapping, "c")
+	OwlCheck !Base.is_input_waiting(mapping, ".")
+	OwlCheck !Base.is_input_waiting(mapping, '\w')
+endfunction
+
+
