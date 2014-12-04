@@ -82,7 +82,7 @@ endfunction
 
 function! s:match_key(keymapping, key)
 	let keys = sort(keys(a:keymapping))
-	return get(filter(keys, 's:String.index(a:key, v:val) == 0'), -1, '')
+	return get(filter(keys, 'stridx(a:key, v:val) == 0'), -1, '')
 endfunction
 
 

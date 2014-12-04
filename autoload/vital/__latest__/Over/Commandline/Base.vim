@@ -425,7 +425,7 @@ endfunction
 
 
 function! s:is_input_waiting(keymapping, input)
-	let num = len(filter(copy(a:keymapping), 's:String.index(v:key, a:input) == 0'))
+	let num = len(filter(copy(a:keymapping), 'stridx(v:key, a:input) == 0'))
 	return num > 1 || (num == 1 && !has_key(a:keymapping, a:input))
 endfunction
 

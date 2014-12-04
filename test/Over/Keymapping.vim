@@ -2,6 +2,7 @@
 call vital#of("vital").unload()
 let s:Keymapping = vital#of("vital").import("Over.Keymapping")
 
+
 function! s:test_match_key()
 	let Keymapping = s:Keymapping
 
@@ -16,6 +17,7 @@ function! s:test_match_key()
 \		"ef" : "aa",
 \		"efg" : "aa",
 \		'.*' : "aa",
+\		"E" : "BB",
 \	}
 
 " 	echo Keymapping.match_key(map, "b")
@@ -40,6 +42,7 @@ function! s:test_match_key()
 	OwlCheck Keymapping.match_key(map, "efg") is "efg"
 	OwlCheck Keymapping.match_key(map, "efga") is "efg"
 	OwlCheck Keymapping.match_key(map, '.*') is ".*"
+	OwlCheck Keymapping.match_key(map, 'EE') is "E"
 endfunction
 
 

@@ -44,6 +44,7 @@ function! s:test_is_input_watting()
 \		"aa" : "b",
 \		"abc" : "b",
 \		"c" : "d",
+\		"A" : "d",
 \	}
 
 	OwlCheck  Base.is_input_waiting(mapping, "a")
@@ -52,6 +53,7 @@ function! s:test_is_input_watting()
 	OwlCheck !Base.is_input_waiting(mapping, "c")
 	OwlCheck !Base.is_input_waiting(mapping, ".")
 	OwlCheck !Base.is_input_waiting(mapping, '\w')
+	OwlCheck !Base.is_input_waiting(mapping, 'A')
 endfunction
 
 
