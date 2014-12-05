@@ -33,13 +33,19 @@ function! s:capture(cmd)
 endfunction
 
 function! s:digraph() abort
-	let x = split(s:capture(':digraph'), '\s\d\+\s\+\zs')
+	let x = split(substitute(s:capture(':digraph'), "\n", '', 'g'), '\s\d\+\s\+\zs')
 	let digraphs = map(x, "split(v:val, '\\s\\+')")
 	let r = {}
 	for d in digraphs
-		let r[d[0]] = d[1]
+		let r[d[0]] = s:real_key(d[1])
 	endfor
 	return r
+endfunction
+
+function! s:real_key(x) abort
+	return a:x is '^@' ? "\<C-j>"
+	\	: len(a:x) is 2 && a:x[0] is '^' ? eval('"\<C-' . a:x[1] . '>"')
+	\	: a:x
 endfunction
 
 
