@@ -63,7 +63,12 @@ function! s:module.on_char_pre(cmdline)
 		call a:cmdline.setpos(self.old_pos)
 		let x = a:cmdline.input_key()
 		let y = s:Input.getchar()
-		call a:cmdline.setchar(get(self.digraphs, x . y, y))
+		" For CTRL-K, there is one general digraph: CTRL-K <Space> {char} will
+		" enter {char} with the highest bit set.  You can use this to enter
+		" meta-characters.
+		let char = x ==# "\<Space>" ?
+		\	nr2char(char2nr(y) + 128) : get(self.digraphs, x . y, y)
+		call a:cmdline.setchar(char)
 	endif
 endfunction
 
