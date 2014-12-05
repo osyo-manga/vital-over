@@ -33,19 +33,16 @@ function! s:capture(cmd)
 endfunction
 
 function! s:digraph() abort
-	let x = split(substitute(s:capture(':digraph'), "\n", '', 'g'), '\s\d\+\s\+\zs')
-	let digraphs = map(x, "split(v:val, '\\s\\+')")
+	let x = split(substitute(s:capture(':digraph'), "\n", ' ', 'g'),
+	\   '[[:graph:]]\{2}\s.\{1,4}\s\+\d\+\s*\zs')
+	let digraphs = map(x, "split(v:val, ' \\+')")
 	let r = {}
 	for d in digraphs
-		let r[d[0]] = s:real_key(d[1])
+		let r[d[0]] = len(d) is 3 && d[2] =~# '\d\+' ? nr2char(str2nr(d[2],10))
+		\   : len(d) is 2 && d[1] =~# '32' ? nr2char(str2nr(d[1],10))
+		\   : ''
 	endfor
 	return r
-endfunction
-
-function! s:real_key(x) abort
-	return a:x is '^@' ? "\<C-j>"
-	\	: len(a:x) is 2 && a:x[0] is '^' ? nr2char(char2nr(a:x[1]) - 64)
-	\	: a:x
 endfunction
 
 
