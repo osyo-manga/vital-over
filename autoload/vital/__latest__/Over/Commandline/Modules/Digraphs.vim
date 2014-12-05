@@ -44,7 +44,7 @@ endfunction
 
 function! s:real_key(x) abort
 	return a:x is '^@' ? "\<C-j>"
-	\	: len(a:x) is 2 && a:x[0] is '^' ? eval('"\<C-' . a:x[1] . '>"')
+	\	: len(a:x) is 2 && a:x[0] is '^' ? nr2char(char2nr(a:x[1]) - 64)
 	\	: a:x
 endfunction
 
