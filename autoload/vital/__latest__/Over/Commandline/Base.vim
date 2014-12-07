@@ -402,6 +402,10 @@ endfunction
 
 
 function! s:base._input(input, ...)
+	if a:input == ""
+		return
+	endif
+
 	let self.variables.input_key = a:input
 	if a:0 == 0
 		let keymapping = self._get_keymapping()
@@ -425,7 +429,7 @@ endfunction
 
 
 function! s:is_input_waiting(keymapping, input)
-	let num = len(filter(copy(a:keymapping), 'stridx(v:key, a:input) == 0'))
+ 	let num = len(filter(copy(a:keymapping), 'stridx(v:key, a:input) == 0'))
 	return num > 1 || (num == 1 && !has_key(a:keymapping, a:input))
 endfunction
 
