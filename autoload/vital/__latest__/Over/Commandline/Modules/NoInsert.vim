@@ -12,6 +12,9 @@ function! s:module.is_no_insert(char)
 	return index(self.chars, a:char) >= 0
 endfunction
 
+function! s:module.priority(event)
+	return a:event is "on_char_pre" ? -10 : 0
+endfunction
 
 function! s:module.on_char_pre(cmdline)
 	if self.is_no_insert(a:cmdline.char())
