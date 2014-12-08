@@ -386,7 +386,7 @@ function! s:base._init()
 		if s:_is_valid_highlight("Cursor")
 			execute "highlight link " . self.highlights.cursor . " Cursor"
 		else
-			" Workaround by CUI Vim Cursor highlight.
+			" Workaround by CUI Vim Cursor Highlight
 			" issues #92
 			" https://github.com/osyo-manga/vital-over/issues/92
 			execute "highlight " . self.highlights.cursor . " term=reverse cterm=reverse gui=reverse"
@@ -455,7 +455,7 @@ endfunction
 
 
 function! s:is_input_waiting(keymapping, input)
- 	let num = len(filter(copy(a:keymapping), 'stridx(v:key, a:input) == 0'))
+	let num = len(filter(copy(a:keymapping), 'stridx(v:key, a:input) == 0'))
 	return num > 1 || (num == 1 && !has_key(a:keymapping, a:input))
 endfunction
 
