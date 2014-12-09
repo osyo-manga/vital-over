@@ -207,8 +207,8 @@ object.on_leave({self})		*Vital.Over.Commandline.object-on_leave()*
 	コマンドラインが終了された時に呼ばれる関数です
 
 object.on_char_pre({self})	*Vital.Over.Commandline.object-on_char_pre()*
-	コマンドラインで文字が入力され、コマンドラインに挿入される前に呼ばれ
-	る関数です
+	コマンドラインで文字が入力され、コマンドラインに挿入される前に呼ばれる
+	関数です
 
 object.on_char({self})		*Vital.Over.Commandline.object-on_char()*
 	コマンドラインで文字が入力され、コマンドラインに挿入された後に呼ばれる
