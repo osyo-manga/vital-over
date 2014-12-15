@@ -54,6 +54,7 @@ let s:base = {
 \		"exit" : 0,
 \		"keymapping" : {},
 \		"suffix" : "",
+\		"is_setted" : 0,
 \	},
 \	"highlights" : {
 \		"prompt" : "NONE",
@@ -90,8 +91,9 @@ function! s:base.setchar(char, ...)
 	" 1 の場合は既に設定されていても上書きする
 	" 0 の場合は既に設定されていれば上書きしない
 	let overwrite = get(a:, 1, 1)
-	if overwrite || self.variables.input == self.char()
+	if overwrite || self.variables.is_setted == 0
 		let self.variables.input = a:char
+		let self.variables.is_setted = 1
 	endif
 endfunction
 
@@ -421,6 +423,7 @@ function! s:base._input_char(char)
 	let self.variables.input_key = char
 	let self.variables.char = char
 	call self.setchar(self.variables.char)
+	let self.variables.is_setted = 0
 	call self.callevent("on_char_pre")
 	call self.insert(self.variables.input)
 	call self.callevent("on_char")
