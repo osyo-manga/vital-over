@@ -7,6 +7,7 @@ set cpo&vim
 function! s:_vital_loaded(V)
 	let s:V = a:V
 	let s:String  = s:V.import("Over.String")
+	let s:List    = s:V.import("Data.List")
 endfunction
 
 
@@ -17,12 +18,24 @@ function! s:_vital_depends()
 endfunction
 
 
+let s:keyconf_base = {
+\	"noremap" : 0,
+\	"lock"    : 0,
+\	"expr"    : 0,
+\	"regex_match" : 0,
+\}
+
+
+function! s:keyconf_base.is_match(key, input)
+	return self.regex_match
+\		 ? a:input =~ '^' . a:key
+\		 : stridx(a:input, a:key) == 0
+
+endfunction
+
+
 function! s:as_key_config(config)
-	let base = {
-\		"noremap" : 0,
-\		"lock"    : 0,
-\		"expr"    : 0,
-\	}
+	let base = deepcopy(s:keyconf_base)
 	return type(a:config) == type({}) ? extend(base, a:config)
 \		 : extend(base, {
 \		 	"key" : a:config,
@@ -30,9 +43,22 @@ function! s:as_key_config(config)
 endfunction
 
 
+function! s:_is_match(config, key, input)
+	return get(a:config, "regex_match", 0)
+\		 ? a:input =~ '^' . a:key
+\		 : stridx(a:input, a:key) == 0
+endfunction
+
+
+function! s:match_key_conf(keymapping, key)
+	return get(s:List.sort_by(items(filter(map(copy(a:keymapping), "s:as_key_config(v:val)"), "v:val.is_match(v:key, a:key)")), "v:val[0]"), -1, ["", {}])
+endfunction
+
+
 function! s:match_key(keymapping, key)
-	let keys = sort(keys(a:keymapping))
-	return get(filter(keys, 'stridx(a:key, v:val) == 0'), -1, '')
+	return get(s:match_key_conf(a:keymapping, a:key), 0, "")
+" 	let keys = sort(keys(a:keymapping))
+" 	return get(filter(keys, 'stridx(a:key, v:val) == 0'), -1, '')
 endfunction
 
 
@@ -57,12 +83,10 @@ endfunction
 
 function! s:unmapping(keymapping, key, ...)
 	let is_locking = get(a:, 1, 0)
-	let key = s:match_key(a:keymapping, a:key)
+	let [key, map_conf] = s:match_key_conf(a:keymapping, a:key)
 	if key == ""
 		return s:String.length(a:key) <= 1 ? a:key : s:unmapping(a:keymapping, a:key[0], is_locking) . s:unmapping(a:keymapping, a:key[1:], is_locking)
 	endif
-
-	let map_conf = s:as_key_config(a:keymapping[key])
 
 	let next_input = s:unmapping(a:keymapping, a:key[len(key) : ], is_locking)
 	if map_conf.lock == 0 && is_locking
