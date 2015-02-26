@@ -57,3 +57,21 @@ function! s:test_is_input_watting()
 endfunction
 
 
+function! s:test_setchar()
+	let cmdline = s:Base.make()
+	call cmdline._init_variables()
+	
+	let cmdline._input_char("b")
+	call cmdline.setchar("b")
+	OwlCheck cmdline.variables.input ==# "b"
+	call cmdline.setchar("c")
+	OwlCheck cmdline.variables.input ==# "c"
+
+	let cmdline._input_char("b")
+	call cmdline.setchar("b")
+	OwlCheck cmdline.variables.input ==# "b"
+	call cmdline.setchar("c", 0)
+	OwlCheck cmdline.variables.input ==# "b"
+endfunction
+
+
