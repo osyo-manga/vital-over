@@ -6,7 +6,7 @@ let s:Keymapping = vital#of("vital").import("Over.Keymapping")
 function! s:test_match_key()
 	let Keymapping = s:Keymapping
 
-	let map = {
+	let map = Keymapping.as_keymapping({
 \		"a" : "bc",
 \		"b" : "00",
 \		"bc" : "11",
@@ -18,12 +18,11 @@ function! s:test_match_key()
 \		"efg" : "aa",
 \		'.*' : "aa",
 \		"E" : "BB",
-\	}
+\	})
 
-" 	echo Keymapping.match_key(map, "b")
+" 	echo Keymapping.match_key(map, "a")
 " 	echo Keymapping.match_key(map, "bc")
 " 	echo Keymapping.match_key(map, "bcd")
-
 	OwlCheck Keymapping.match_key(map, "") is ""
 	OwlCheck Keymapping.match_key(map, "a") is "a"
 	OwlCheck Keymapping.match_key(map, "ab") is "a"
@@ -46,6 +45,21 @@ function! s:test_match_key()
 endfunction
 
 
+function! s:test_match_key_regex_match()
+	let Keymapping = s:Keymapping
+
+	let map = {
+\		"a" : "a",
+\		"." : { "key" : "b", "regex_match" : 1 },
+\	}
+
+	OwlCheck Keymapping.match_key(map, "a") is "a"
+	OwlCheck Keymapping.match_key(map, "b") is "."
+	OwlCheck Keymapping.match_key(map, "c") is "."
+	OwlCheck Keymapping.match_key(map, "dd") is "."
+endfunction
+
+
 function! s:test_unmapping()
 	let Keymapping = s:Keymapping
 
@@ -61,6 +75,7 @@ function! s:test_unmapping()
 \		'.*' : "l",
 \		'\w\+' : '.*.*',
 \	}
+
 	OwlCheck Keymapping.unmapping(map, "bc") is "11"
 	OwlCheck Keymapping.unmapping(map, "bb") is "0000"
 	OwlCheck Keymapping.unmapping(map, "abc") is "1111"
@@ -192,6 +207,4 @@ function! s:test_expr_reference_self()
 	OwlCheck Keymapping.unmapping(map, "a") is "h"
 	OwlCheck Keymapping.unmapping(map, "b") is "hh"
 endfunction
-
-
 

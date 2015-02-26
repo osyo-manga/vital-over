@@ -43,6 +43,11 @@ function! s:as_key_config(config)
 endfunction
 
 
+function! s:as_keymapping(data)
+	return map(copy(a:data), "s:as_key_config(v:val)")
+endfunction
+
+
 function! s:_is_match(config, key, input)
 	return get(a:config, "regex_match", 0)
 \		 ? a:input =~ '^' . a:key
@@ -51,6 +56,7 @@ endfunction
 
 
 function! s:match_key_conf(keymapping, key)
+" 	return get(s:List.sort_by(items(filter(copy(a:keymapping), "v:val.is_match(v:key, a:key)")), "v:val[0]"), -1, ["", {}])
 	return get(s:List.sort_by(items(filter(map(copy(a:keymapping), "s:as_key_config(v:val)"), "v:val.is_match(v:key, a:key)")), "v:val[0]"), -1, ["", {}])
 endfunction
 
@@ -64,13 +70,13 @@ endfunction
 
 function! s:_safe_eval(expr, ...)
 	call extend(l:, get(a:, 1, {}))
-	let result = get(a:, 2, "")
+	let vital_over_result = get(a:, 2, "")
 	try
-		let result = eval(a:expr)
+		let vital_over_result = eval(a:expr)
 	catch
 		echohl ErrorMsg | echom v:exception | echohl None
 	endtry
-	return result
+	return vital_over_result
 endfunction
 
 
@@ -81,23 +87,33 @@ function! s:_get_key(conf)
 endfunction
 
 
-function! s:unmapping(keymapping, key, ...)
+function! s:_unmapping(keymapping, key, ...)
+	if has_key(s:cache, a:key)
+		return s:cache[a:key]
+	endif
 	let is_locking = get(a:, 1, 0)
 	let [key, map_conf] = s:match_key_conf(a:keymapping, a:key)
 	if key == ""
-		return s:String.length(a:key) <= 1 ? a:key : s:unmapping(a:keymapping, a:key[0], is_locking) . s:unmapping(a:keymapping, a:key[1:], is_locking)
+		return s:String.length(a:key) <= 1 ? a:key : s:_unmapping(a:keymapping, a:key[0], is_locking) . s:_unmapping(a:keymapping, a:key[1:], is_locking)
 	endif
 
-	let next_input = s:unmapping(a:keymapping, a:key[len(key) : ], is_locking)
+	let next_input = s:_unmapping(a:keymapping, a:key[len(key) : ], is_locking)
 	if map_conf.lock == 0 && is_locking
-		return key . next_input
+		let result = key . next_input
 	elseif map_conf.lock
-		return s:unmapping(a:keymapping, s:_get_key(map_conf), is_locking) . next_input
+		let result = s:_unmapping(a:keymapping, s:_get_key(map_conf), is_locking) . next_input
 	else
-		return s:unmapping(a:keymapping, s:_get_key(map_conf), map_conf.noremap) . next_input
+		let result = s:_unmapping(a:keymapping, s:_get_key(map_conf), map_conf.noremap) . next_input
 	endif
+	let s:cache[a:key] = result
+	return s:cache[a:key]
 endfunction
 
+
+function! s:unmapping(keymapping, key, ...)
+	let s:cache = {}
+	return s:_unmapping(s:as_keymapping(a:keymapping), a:key, get(a:, 1, 0))
+endfunction
 
 
 let &cpo = s:save_cpo
