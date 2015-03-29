@@ -34,6 +34,17 @@ function! s:test_get_cmdline_cword()
 endfunction
 
 
+function! s:test_input_expr()
+	let cmdline = s:Cmdline.make_standard()
+
+	call cmdline.cnoremap("\<A-c>", "\<C-r>=1+2\<CR>")
+	call cmdline.start("\<A-C>homu\<Esc>")
+	OwlCheck cmdline.getline() == "3homu"
+
+" 	call cmdline.start("\<C-r>=Homu")
+endfunction
+
+
 function! s:test_input_issues_83()
 	let cmdline = s:Cmdline.make_standard()
 
