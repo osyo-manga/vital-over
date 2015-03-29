@@ -13,16 +13,6 @@ function! s:owl_end()
 endfunction
 
 
-function! Test()
-	let cmdline = s:Cmdline.make_standard("$ ")
-	call cmdline.connect("LiteralInsert")
-
-	call cmdline.cnoremap("\<C-v>", "\<C-v>")
-	call cmdline.cnoremap("\<A-c>", "\<C-v>\<Esc>")
-	call cmdline.start()
-endfunction
-
-
 function! s:test_remap()
 	let cmdline = s:Cmdline.make_default()
 	call cmdline.connect("Cancel")
