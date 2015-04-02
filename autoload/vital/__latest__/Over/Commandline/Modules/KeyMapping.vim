@@ -92,7 +92,7 @@ function! s:_auto_cmap()
 	for c in filter(cmap_info, "v:val['buffer'] ==# 0")
 		let cmaps[s:Keymapping.escape_special_key(c['lhs'])] = {
 		\   'noremap' : c['noremap'],
-		\   'key'  : s:Keymapping.escape_special_key(c['rhs']),
+		\   'key'  : s:Keymapping.escape_special_key(s:Keymapping.convert_sid(c['rhs'], c['sid'])),
 		\   'expr' : s:Keymapping.escape_special_key(c['expr']),
 		\ }
 	endfor
