@@ -1,7 +1,8 @@
 
 call vital#of("vital").unload()
-let s:Base = vital#of("vital").import("Over.Commandline.Base")
-let s:Cmdline = vital#of("vital").import("Over.Commandline")
+let s:V = vital#of("vital")
+let s:Base = s:V.import("Over.Commandline.Base")
+let s:Cmdline = s:V.import("Over.Commandline")
 
 
 function! s:owl_begin()
