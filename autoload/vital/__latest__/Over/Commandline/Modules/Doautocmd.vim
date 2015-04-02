@@ -66,7 +66,9 @@ endfor
 
 
 function! s:make(prefix)
-	unlet! s:cache_command[a:prefix]
+	if has_key(s:cache_command, a:prefix)
+		unlet! s:cache_command[a:prefix]
+	endif
 	execute "augroup " a:prefix . "-vital-over-commandline-doautocmd-dummy"
 		autocmd!
 	augroup END
