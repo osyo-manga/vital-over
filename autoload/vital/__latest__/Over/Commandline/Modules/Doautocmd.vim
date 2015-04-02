@@ -24,6 +24,7 @@ function! s:doautocmd_user(prefix, command)
 	execute s:cache_command[a:prefix][a:command]
 endfunction
 
+
 let s:hooks = [
 \	"enter",
 \	"leave",
@@ -66,7 +67,9 @@ endfor
 
 
 function! s:make(prefix)
-	unlet! s:cache_command[a:prefix]
+	if has_key(s:cache_command, a:prefix)
+		unlet! s:cache_command[a:prefix]
+	endif
 	execute "augroup " a:prefix . "-vital-over-commandline-doautocmd-dummy"
 		autocmd!
 	augroup END
@@ -77,5 +80,3 @@ function! s:make(prefix)
 endfunction
 
 
-let &cpo = s:save_cpo
-unlet s:save_cpo
