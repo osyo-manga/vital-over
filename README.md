@@ -3,7 +3,7 @@
 Vim commandline frame work
 
 
-##Requirement
+## Requirement
 
 * __[vim-jp/vital.vim](https://github.com/vim-jp/vital.vim)__
 
