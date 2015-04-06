@@ -360,7 +360,7 @@ endfunction
 
 function! s:base.getchar(...)
 	if empty(self.input_key_stack())
-		return s:Input.getchar()
+		return call(s:Input.getchar, a:000, s:Input)
 	endif
 	return self.input_key_stack_pop()
 endfunction

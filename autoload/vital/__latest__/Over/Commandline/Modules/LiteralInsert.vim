@@ -2,15 +2,6 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:_vital_loaded(V)
-	let s:Input = a:V.import("Over.Input")
-endfunction
-
-function! s:_vital_depends()
-	return [
-\		"Over.Input",
-\	]
-endfunction
 
 let s:module = {
 \	"name" : "LiteralInsert",
