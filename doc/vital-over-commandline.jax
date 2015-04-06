@@ -190,6 +190,10 @@ object.disable_keymapping()	*Vital.Over.Commandline.object-disable_keymapping()*
 object.is_enable_keymapping()
 	キーマッピングが有効なら 1 を返し、無効なら 0 を返します。
 
+object.getchar()		*Vital.Over.Commandline.object-getchar()*
+	|getchar()| と同等ですが、スタックにキーが積まれていればそちらを優先
+	して使用します。
+
 
 CALLBACK			*Vital.Over.Commandline.object-callback*
 
