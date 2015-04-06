@@ -116,9 +116,11 @@ endfunction
 " :echo "\x80" =~ "\\%#=1[\x80]" | " => 1
 " http://lingr.com/room/vim/archives/2015/02/13#message-21261450
 let s:_engine = exists("+regexpengine") ? '\%#=2' : ''
+" \<A-]> => Û\xfdQ
+" \<A-@> => À\xfeX
 let s:_regex = exists("+regexpengine")
-\	? "\x80\xfc.\\%(\x80..\\|.\\)\\zs\\|\x80..\\zs\\|.\\zs"
-\	: "[\x80][\xfc].\\%([\x80]..\\|.\\)\\zs\\|[\x80]..\\zs\\|.\\zs"
+\	? "\\%(Û\xfdQ\\|À\xfeX\\|\x80\xfc.\\%(\x80..\\|.\\)\\|\x80..\\|.\\)\\zs"
+\	: "\\%(Û[\xfd]Q\\|À[\xfe]X\\|[\x80][\xfc].\\%([\x80]..\\|.\\)\\|[\x80]..\\|.\\)\\zs"
 function! s:_split_keystring(str, ...)
 	return split(a:str, s:_engine . '\m\%(' . get(a:, 1, '') . s:_regex . '\)')
 endfunction

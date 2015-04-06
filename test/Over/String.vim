@@ -22,6 +22,8 @@ function! s:_test_split()
 	OwlCheck s:split_by_keys("\<A-Space>\<CR>\<A-Down>") == ["\<A-Space>", "\<CR>", "\<A-down>"]
 	OwlCheck s:split_by_keys("234567") == ["2", "3", "4", "5", "6", "7"]
 	OwlCheck s:split_by_keys("<Over>(exit)aa") == ["<Over>(exit)", "a", "a"]
+	OwlCheck s:split_by_keys("aa\<A-[>aa\<C-a>") == ['a', 'a', "\<A-[>", 'a', 'a', "\<C-a>"]
+	OwlCheck s:split_by_keys("aa\<A-@>aa\<C-a>") == ['a', 'a', "\<A-@>", 'a', 'a', "\<C-a>"]
 endfunction
 
 
