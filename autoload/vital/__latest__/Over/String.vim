@@ -80,13 +80,14 @@ endfunction
 
 function! s:base.remove(index)
 	if a:index < 0 || self.length() <= a:index
-		return self
+		return ""
 	endif
+	let result = self.list[a:index]
 	unlet self.list[a:index]
 	if a:index < self.col
 		call self.set(self.col - 1)
 	endif
-	return self
+	return result
 endfunction
 
 function! s:base.remove_pos()
