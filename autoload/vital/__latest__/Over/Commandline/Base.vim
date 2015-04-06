@@ -128,8 +128,8 @@ endfunction
 
 function! s:base.is_input(key, ...)
 	let prekey = get(a:, 1, "")
-	return self.get_tap_key() == prekey
-\		&& self.char() == a:key
+	return self.get_tap_key() ==# prekey
+\		&& self.char() ==# a:key
 " \		&& self.char() == (prekey . a:key)
 endfunction
 
