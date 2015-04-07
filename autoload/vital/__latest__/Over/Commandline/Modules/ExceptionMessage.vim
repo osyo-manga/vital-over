@@ -37,7 +37,7 @@ endfunction
 function! s:make(...)
 	let result = deepcopy(s:module)
 	let result.prefix = get(a:, 1, "vital-over:")
-	let result.command = get(a:, 2, "echo")
+	let result.command = get(a:, 2, "echom")
 	return result
 endfunction
 
