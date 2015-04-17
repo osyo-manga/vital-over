@@ -51,6 +51,19 @@ make_module({name}[, {args...}])	*Vital.Over.Commandline.make_module()*
 
 |Vital.Over.Commandline-make_standard()| 等で生成したオブジェクトが保持する関
 数です。
+また、このオブジェクトは "_" + 英数字から始まる要素を定義しないことが保証され
+ています。
+このオブジェクトに対して、ユーザ側で変数や関数を定義したい場合は "_" + 英数字
+からはじまる名前を使うことを推奨します。
+
+>
+	let cmdline = make_standard()
+	" オブジェクトに変数を定義する場合は
+	" let cmdline.my_value = 10
+	" _ から始めることを推奨
+	let cmdline._my_value = 10
+
+<
 
 CORE					*Vital.Over.Commandline.object-core*
 
