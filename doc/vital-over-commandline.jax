@@ -210,9 +210,6 @@ object.getchar()		*Vital.Over.Commandline.object-getchar()*
 
 CALLBACK			*Vital.Over.Commandline.object-callback*
 
-object.keymapping()		*Vital.Over.Commandline.object-keymapping()*
-	キーマッピングの辞書を返します。
-
 object.priority({event})	*Vital.Over.Commandline.object-priority()*
 	{event} 時に処理される優先順位を返します。
 	返す数値が低いほうが先に処理されます。
@@ -245,6 +242,21 @@ object.on_execute_failed({self})
 				*Vital.Over.Commandline.object-on_update()*
 object.on_update({self})
 	キー入力の処理を行う直前に呼ばれる関数です。
+
+
+OVERRIDE			*Vital.Over.Commandline.object-override*
+ユーザ側で定義することで処理を変更するための関数です
+
+object.__execute__({command})
+	入力確定時に {command} を実行する関数です。
+	デフォルトでは {command} を |:execute| します。
+
+			*Vital.Over.Commandline.object-__keymapping__()*
+object.__keymapping__()
+	キーマッピングの辞書を返します。
+				*Vital.Over.Commandline.object-keymapping()*
+	以前の名前は keymapping()
+
 
 ==============================================================================
 キーマッピング				*Vital.Over.Commandline-keymapping*

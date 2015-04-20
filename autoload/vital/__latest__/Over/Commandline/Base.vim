@@ -238,6 +238,11 @@ endfunction
 
 
 function! s:base.keymapping()
+	return self.__keymapping__()
+endfunction
+
+
+function! s:base.__keymapping__()
 	return {}
 endfunction
 
@@ -245,7 +250,6 @@ endfunction
 function! s:base.execute(...)
 	let command = get(a:, 1, self.getline())
 	call self.__execute(command)
-" 	execute self.getline()
 endfunction
 
 
@@ -419,7 +423,7 @@ endfunction
 function! s:base.__execute(command)
 	call self.callevent("on_execute_pre")
 	try
-		execute a:command
+		call self.__execute__(a:command)
 	catch
 		echohl ErrorMsg
 		echom matchstr(v:exception, 'Vim\((\w*)\)\?:\zs.*\ze')
@@ -428,6 +432,11 @@ function! s:base.__execute(command)
 	finally
 		call self.callevent("on_execute")
 	endtry
+endfunction
+
+
+function! s:base.__execute__(cmd)
+	execute a:cmd
 endfunction
 
 
