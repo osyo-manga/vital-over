@@ -55,7 +55,7 @@ make_module({name}[, {args...}])	*Vital.Over.Commandline.make_module()*
 ています。
 このオブジェクトに対して、ユーザ側で変数や関数を定義したい場合は "_" + 英数字
 からはじまる名前を使うことを推奨します。
-
+NOTE https://github.com/osyo-manga/vital-over/issues/128
 >
 	let cmdline = make_standard()
 	" オブジェクトに変数を定義する場合は
