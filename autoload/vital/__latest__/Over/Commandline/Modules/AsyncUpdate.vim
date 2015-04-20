@@ -13,7 +13,7 @@ let s:module = {
 \}
 
 function! s:module.on_enter(cmdline)
-	function! a:cmdline.___update()
+	function! a:cmdline.__update()
 		call self.callevent("on_update")
 		try
 			if !getchar(1)
