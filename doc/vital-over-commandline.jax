@@ -132,17 +132,19 @@ Example: >
 object.disconnect({name})	*Vital.Over.Commandline.object-disconnect()*
 	{name} のモジュールを削除します。
 
-object.start()			*Vital.Over.Commandline.object-start()*
+object.start([{pattern}])		*Vital.Over.Commandline.object-start()*
 	コマンドラインの入力を開始します。
 	コマンドラインが正常終了した場合、入力した文字列を |:execute| で実行し
 	ます。
+	{pattern} を指定した場合，{pattern}が入力された状態で開始します．
 
-object.get()				*Vital.Over.Commandline.object-get()*
+object.get([{pattern}])			*Vital.Over.Commandline.object-get()*
 	コマンドラインの入力を開始します。
 	|Vital.Over.Commandline.object-start()| とは違い入力されたコマンドは実
 	行されません。
 	コマンドラインが正常終了した場合に入力された文字列を返します。
 	異常終了した場合は空の文字列を返します。
+	{pattern} を指定した場合，{pattern}が入力された状態で開始します．
 
 
 object.exit([{exitcode}])		*Vital.Over.Commandline.object-exit()*
