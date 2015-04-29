@@ -155,6 +155,11 @@ object.exit_code()		*Vital.Over.Commandline.object-exit_code()*
 	0	: 正常終了
 	0 以外	: 異常終了(e.g. <Esc> や <C-c> で終了した場合)
 
+object.is_exit()		*Vital.Over.Commandline.object-is_exit()*
+	いずれかのタイミングでコマンドラインが終了していた時に 1 が返ってきま
+	す。
+	それ以外は 0 が返ってきます。
+
 object.cmap({lhs}, {rhs})		*Vital.Over.Commandline.object-cmap()*
 	{lhs} に {rhs} のキーを割り当てます。
 Example: >
