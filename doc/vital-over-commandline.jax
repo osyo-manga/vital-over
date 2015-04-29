@@ -179,7 +179,6 @@ Example: >
 <
 
 
-
 object.cnoremap({lhs}, {rhs})	*Vital.Over.Commandline.object-cnoremap()*
 	{lhs} に {rhs} のキーを割り当てます。
 	cmap() とは違い再マップされません。
@@ -211,6 +210,15 @@ object.is_enable_keymapping()
 object.getchar()		*Vital.Over.Commandline.object-getchar()*
 	|getchar()| と同等ですが、スタックにキーが積まれていればそちらを優先
 	して使用します。
+
+object.execute([{cmd}])		*Vital.Over.Commandline.object-execute()*
+	{cmd} の実行を行ないます。
+	{cmd} が渡されなかった時は現在入力されている文字列が使用されます。
+	この関数が呼ばれた時に
+	|Vital.Over.Commandline.object-on_execute()| 等が呼ばれます。
+	また、この時のコマンドの実行方法は
+	|Vital.Over.Commandline.object-__execute__()| に依存します。
+	デフォルトでは |:execute| が呼び出されます。
 
 
 CALLBACK			*Vital.Over.Commandline.object-callback*
@@ -252,6 +260,7 @@ object.on_update({self})
 OVERRIDE			*Vital.Over.Commandline.object-override*
 ユーザ側で定義することで処理を変更するための関数です
 
+			*Vital.Over.Commandline.object-__execute__()*
 object.__execute__({command})
 	入力確定時に {command} を実行する関数です。
 	デフォルトでは {command} を |:execute| します。
@@ -425,7 +434,8 @@ Delete					*Vital.Over.Commandline-modules-Delete*
 	<Del>		カーソル位置上の文字を削除
 
 Execute					*Vital.Over.Commandline-modules-Execute*
-	入力された文字を |:execute| で実行します。
+	|Vital.Over.Commandline.object-execute()| を呼び出し、コマンドの実行を
+	行ないます。
 			*Vital.Over.Commandline-modules-Execute-keymapping*
 	キー			機能~
 	<CR>, <NL>, <C-j>	入力されているコマンドを実行し、コマンドライン
