@@ -106,6 +106,22 @@ endfunction
 
 function! s:vim_cmdline_mapping.on_enter(cmdline)
 	let self._cmaps = s:_auto_cmap()
+	if exists("*execute")
+		let self._old_cmap = execute("cmap")
+	endif
+endfunction
+
+
+function! s:vim_cmdline_mapping.on_update(cmdline)
+	if !exists("*execute")
+		return
+	endif
+
+	let cmap_ = execute("cmap")
+	if self._old_cmap != cmap_
+		let self._cmaps = s:_auto_cmap()
+		let self._old_cmap = cmap_
+	endif
 endfunction
 
 
