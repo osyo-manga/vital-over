@@ -52,7 +52,7 @@ endfunction
 
 function! s:base.set_str(str)
 	let self.list = split(a:str, '\zs')
-	let self.col  = strchars(a:str)
+	let self.col  = strchars(a:str, 1)
 	return self
 endfunction
 
